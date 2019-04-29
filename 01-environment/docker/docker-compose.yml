@@ -83,12 +83,15 @@ services:
     restart: always
 
   cassandra-web:
-    image: metavige/cassandra-web
+    image: trivadis/cassandra-web
     container_name: cassandra-web
     ports:
       - "3000:3000"
     environment:
-      - CASSANDRA_HOST=172.19.0.1
+      - CASSANDRA_HOSTNAME=cassandra-1
+      - CASSANDRA_PORT=9042
+      - CASSANDRA_USERNAME=cassandra
+      - CASSANDRA_PASSWORD=cassandra
     restart: always
 
   ## MongoDB
@@ -211,6 +214,56 @@ services:
     container_name: cerebro
     ports:
       - "39000:9000"    
+    restart: always
+
+  ## Neo4J
+
+  neo4j:
+    image: neo4j:latest
+    hostname: neo4j
+    container_name: neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_dbms_shell_enabled=true
+    restart: always
+
+  ## Influxdb
+
+#  influxdb:
+#    image: influxdb
+#    hostname: influxdb
+#    container_name: influxdb
+#    ports:
+#      - "8083:8083"
+#      - "8086:8086"
+#      - "8090:8090"
+#    environment:
+#      - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
+#      - INFLUXDB_HTTP_AUTH_ENABLED=true
+#      - INFLUXDB_HTTP_LOG_ENABLED=false
+#    restart: always
+#
+#  chronograf:
+#    image: chronograf:latest
+#    hostname: chronograf
+#    container_name: chronograf
+#    ports:
+#      - "8888:8888"
+#    links:
+#      - influxdb
+
+  ## Grafana
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    container_name: grafana
+    ports:
+      - "3010:3000"
     restart: always
 
   ## Notebook
