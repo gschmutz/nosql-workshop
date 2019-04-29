@@ -39,7 +39,7 @@ apt-get install -y wget
 export PUBLIC_IP=$(curl ipinfo.io/ip)
 export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 git clone https://github.com/gschmutz/nosql-workshop.git
-cd ksql-workshop/01-environment/docker
+cd nosql-workshop/01-environment/docker
 
 # Startup Environment
 docker-compose up -d
