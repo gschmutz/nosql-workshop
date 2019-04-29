@@ -1,0 +1,8 @@
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+
+http.port: 9200
+http.cors.enabled: true
+http.cors.allow-origin: http://dejavu:1358,http://analyticsplatform:1358,http://192.168.73.86:1358,http://127.0.0.1:1358
+http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+http.cors.allow-credentials: true 

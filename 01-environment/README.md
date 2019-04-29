@@ -50,14 +50,19 @@ export PUBLIC_IP=$(curl ipinfo.io/ip)
 export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 
 # Get the project
-cd  
+cd /home/ubuntu 
 git clone https://github.com/gschmutz/nosql-workshop.git
+chown -R ubuntu:ubuntu nosql-workshop
 cd nosql-workshop/01-environment/docker
 
 # Startup Environment
 sudo -E docker-compose up -d
 ```
 
+
+```
+tail -f /var/log/cloud-init-output.log
+```
 
 ## Post Installation
 

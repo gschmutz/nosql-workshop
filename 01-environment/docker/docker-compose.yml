@@ -152,13 +152,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    entrypoint:
-      - elasticsearch
-      - -Ehttp.port=9200
-      - -Ehttp.cors.enabled=true
-      - -Ehttp.cors.allow-origin=http://dejavu:1358,http://127.0.0.1:1358
-      - -Ehttp.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
-      - -Ehttp.cors.allow-credentials=true      
+    volumes:
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       xpack.security.enabled: "false"
       XPACK_SECURITY_ENABLED: "false"
