@@ -1,8 +1,10 @@
-# Provision in AWS Lightsail
+# AWS Lightsail
 
 Navigate to the [AWS Console](http://console.aws.amazon.com) and login with your user. Click on the [Lightsail service](https://lightsail.aws.amazon.com/ls/webapp/home/instances).
 
 ![Alt Image Text](./images/lightsail-homepage.png "Lightsail Homepage")
+
+## Provision instance
 
 Click **Create instance** to navigate to the **Create an instance** dialog. 
 
@@ -83,13 +85,36 @@ So with all services running, there is one last step to do. We have to configure
 ![Alt Image Text](./images/lightsail-image-networking.png "Lightsail Homepage")
 
 Click on the **Networking** tab/link to navigate to the network settings and under **Firewall** click on ** **Add another**.
-For simplicity reasons, we allow all TCP traffic by selecting **All TCP** on port range **0 - 65535** and then click 
+For simplicity reasons, we allow all TCP traffic by selecting **All TCP** on port range **0 - 65535** and then click **Save**. 
 
 ![Alt Image Text](./images/lightsail-image-networking-add-firewall-rule.png "Lightsail Homepage")
 
+## Stop an Instance
 
+To stop the instance, navigate to the instance overview and click on the drop-down menu and select **Stop**. 
 
-## Deprovisiongin the environment
+![Alt Image Text](./images/lightsail-stop-instance.png "Lightsail Homepage")
+
+Click on **Stop** to confirm stopping the instance. 
+
+![Alt Image Text](./images/lightsail-stop-instance-confirm.png "Lightsail Homepage")
+
+A stopped instance will still incur charges, you have to delete the instance completely to stop charges. 
+
+## Delete an Instance
+
+t.b.d.
+
+## Create a snapshot of an Instance
+
+When an instance is stopped, you can create a snapshot, which you can keep, even if later drop the instance to reduce costs.
+
+![Alt Image Text](./images/lightsail-image-create-snapshot.png "Lightsail Homepage")
+
+You can always recreate an instance based on a snapshot. 
+
+# Deprovision the environment
+
 To stop the environment, execute the following command:
 
 ```
