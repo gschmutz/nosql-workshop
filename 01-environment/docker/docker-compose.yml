@@ -8,8 +8,16 @@
 #  Neo4J
 #  Zeppelin
 
-version: '2'
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
+
+version: '3.3'
 services:
+
+  ## Redis Stack
 
   redis:
     container_name: redis
@@ -29,23 +37,40 @@ services:
       - "38083:8081"
     restart: always
 
-  dse-1:
-    image: datastax/dse-server
-    container_name: cassandra-1
-    ports: 
-      - "9042:9042"
-    environment:
-      DS_LICENSE: accept
-    # Allow DSE to lock memory with mlock
-    cap_add:
-    - IPC_LOCK
-    ulimits:
-      memlock: -1
-    restart: always
+  ## Dastastax Cassandra
+
+#  dse-1:
+#    image: datastax/dse-server
+#    container_name: cassandra-1
+#    ports: 
+#      - "9042:9042"
+#    environment:
+#      DS_LICENSE: accept
+#    # Allow DSE to lock memory with mlock
+#    cap_add:
+#    - IPC_LOCK
+#    ulimits:
+#      memlock: -1
+#    restart: always
+#  
+#  dse-studio:
+#    image: datastax/dse-studio
+#    container_name: dse-studio
+#    environment:
+#      DS_LICENSE: accept
+#    ports:
+#      - "9091:9091"
+#    restart: always
+    
+  ## Cassandra
 
   cassandra-1:
     image: cassandra
     container_name: cassandra-1
+    networks:
+      backend:
+        ipv4_address: 172.19.0.1
+    
     ports: 
       - 9042:9042
       - 7199:7199
@@ -57,23 +82,16 @@ services:
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch    
     restart: always
 
-  dse-studio:
-    image: datastax/dse-studio
-    container_name: dse-studio
-    environment:
-      DS_LICENSE: accept
-    ports:
-      - "9091:9091"
-    restart: always
-
   cassandra-web:
     image: metavige/cassandra-web
     container_name: cassandra-web
     ports:
       - "3000:3000"
     environment:
-      - CASSANDRA_HOST=cassandra-1
+      - CASSANDRA_HOST=172.19.0.1
     restart: always
+
+  ## MongoDB
 
   mongodb:
     image: mongo:4
@@ -84,7 +102,7 @@ services:
       - MONGO_INITDB_DATABASE=sample   
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=admin 
-    volumes:
+#    volumes:
       # seeding scripts
       #- ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d 
     restart: always
@@ -105,6 +123,25 @@ services:
       - 1234:1234
     restart: always
 
+  ## HBase
+
+  hbase:
+    image: harisekhon/hbase:latest
+    container_name: hbase
+    ports:
+      - 8080:8080
+      - 8085:8085
+      - 9090:9090
+      - 9095:9095
+      - 16000:16000
+      - 16010:16010
+      - 16201:16201
+      - 16030:16030
+      - 16301:16301
+
+
+  ## SOLR
+
   solr:
     image: solr
     container_name: solr
@@ -112,6 +149,8 @@ services:
       - "8983:8983"
     restart: always
   
+  ## Elasticsearch
+
   ## sudo sysctl -w vm.max_map_count=262144   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
@@ -171,8 +210,10 @@ services:
     hostname: cerebro
     container_name: cerebro
     ports:
-      - "9000:9000"    
+      - "39000:9000"    
     restart: always
+
+  ## Notebook
     
   zeppelin:
     image: apache/zeppelin:0.8.1
@@ -188,14 +229,8 @@ services:
     container_name: jupyter
     ports: 
       - "10000:8888"
+    environment:
+      JUPYTER_ENABLE_LAB: "true"
     restart: always
 
-  anaconda:
-    image: continuumio/anaconda3:latest
-    hostname: anaconda
-    container_name: anaconda
-    ports:
-      - "8888:8888"
-    command: [ "/bin/bash", "-c", "/opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks && /opt/conda/bin/jupyter notebook --notebook-dir=/opt/notebooks --ip='*' --port=8888 --no-browser" ]
-    restart: always
  
