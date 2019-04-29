@@ -1,0 +1,201 @@
+#
+# Docker Compose with the following services:
+#  Redis
+#  MongoDB 
+#  Cassandra
+#  Solr
+#  Elasticsearch
+#  Neo4J
+#  Zeppelin
+
+version: '2'
+services:
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis
+    ports:
+      - 6379:6379
+    restart: always
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "38083:8081"
+    restart: always
+
+  dse-1:
+    image: datastax/dse-server
+    container_name: cassandra-1
+    ports: 
+      - "9042:9042"
+    environment:
+      DS_LICENSE: accept
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+    restart: always
+
+  cassandra-1:
+    image: cassandra
+    container_name: cassandra-1
+    ports: 
+      - 9042:9042
+      - 7199:7199
+      - 9160:9160      
+    environment:
+      - CASSANDRA_SEEDS=cassandra-1
+      - CASSANDRA_CLUSTER_NAME="Test Cluster"
+      - CASSANDRA_DC=se1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch    
+    restart: always
+
+  dse-studio:
+    image: datastax/dse-studio
+    container_name: dse-studio
+    environment:
+      DS_LICENSE: accept
+    ports:
+      - "9091:9091"
+    restart: always
+
+  cassandra-web:
+    image: metavige/cassandra-web
+    container_name: cassandra-web
+    ports:
+      - "3000:3000"
+    environment:
+      - CASSANDRA_HOST=cassandra-1
+    restart: always
+
+  mongodb:
+    image: mongo:4
+    container_name: mongodb
+    ports: 
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=sample   
+      - MONGO_INITDB_USERNAME=admin
+      - MONGO_INITDB_PASSWORD=admin 
+    volumes:
+      # seeding scripts
+      #- ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d 
+    restart: always
+    
+  mongo-express:
+    image: mongo-express  
+    container_name: mongo-express
+    ports: 
+      - 38082:8081
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb   
+    restart: always
+
+  admin-mongo:
+    image: adicom/admin-mongo  
+    container_name: admin-mongo
+    ports: 
+      - 1234:1234
+    restart: always
+
+  solr:
+    image: solr
+    container_name: solr
+    ports:
+      - "8983:8983"
+    restart: always
+  
+  ## sudo sysctl -w vm.max_map_count=262144   
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
+    hostname: elasticsearch
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    entrypoint:
+      - elasticsearch
+      - -Ehttp.port=9200
+      - -Ehttp.cors.enabled=true
+      - -Ehttp.cors.allow-origin=http://dejavu:1358,http://127.0.0.1:1358
+      - -Ehttp.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - -Ehttp.cors.allow-credentials=true      
+    environment:
+      xpack.security.enabled: "false"
+      XPACK_SECURITY_ENABLED: "false"
+      xpack.monitoring.enabled: "false"
+    restart: always
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.7.0
+    hostname: kibana
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    environment:
+      xpack.security.enabled: "false"
+      XPACK_SECURITY_ENABLED: "false"
+      xpack.monitoring.enabled: "false"
+      discovery.type: "single-node"
+      elasticsearch.url: http://elasticsearch:9200
+      server.host: "0.0.0.0"
+      SERVER_HOST: "0.0.0.0"
+      server.name: "kibana"
+      SERVER_NAME: "kibana"
+      XPACK_GRAPH_ENABLED: "false"
+      XPACK_MONITORING_ENABLED: "false"
+      XPACK_REPORTING_ENABLED: "false"
+      XPACK_SECURITY_ENABLED: "false"
+    command: [ "/bin/bash", "-c", "/usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker" ]
+    restart: always
+    
+  dejavu:
+    image: appbaseio/dejavu
+    hostname: dejuvu
+    container_name: dejavu
+    ports:
+      - "1358:1358"
+    restart: always
+
+  cerebro:
+    image: lmenezes/cerebro
+    hostname: cerebro
+    container_name: cerebro
+    ports:
+      - "9000:9000"    
+    restart: always
+    
+  zeppelin:
+    image: apache/zeppelin:0.8.1
+    hostname: zeppelin
+    container_name: zeppelin
+    ports:
+      - "38081:8080"    
+    restart: always
+
+  jupyter:
+    image: jupyter/datascience-notebook:latest
+    hostname: jupyter
+    container_name: jupyter
+    ports: 
+      - "10000:8888"
+    restart: always
+
+  anaconda:
+    image: continuumio/anaconda3:latest
+    hostname: anaconda
+    container_name: anaconda
+    ports:
+      - "8888:8888"
+    command: [ "/bin/bash", "-c", "/opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks && /opt/conda/bin/jupyter notebook --notebook-dir=/opt/notebooks --ip='*' --port=8888 --no-browser" ]
+    restart: always
+ 
