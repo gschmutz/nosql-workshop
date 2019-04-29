@@ -38,7 +38,7 @@ To start the whole stack on AWS Lightsail, use the following script
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable edge"
 apt-get install -y docker-ce
-sudo usermod -a -G docker $USER
+sudo usermod -aG docker $USER
 
 # Install Docker Compose
 curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -55,7 +55,7 @@ git clone https://github.com/gschmutz/nosql-workshop.git
 cd nosql-workshop/01-environment/docker
 
 # Startup Environment
-docker-compose up -d
+sudo -E docker-compose up -d
 ```
 
 
