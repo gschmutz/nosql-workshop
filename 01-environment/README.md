@@ -45,9 +45,6 @@ curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compo
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 
-# Install wget
-apt-get install -y wget
-
 # Prepare Environment
 export PUBLIC_IP=$(curl ipinfo.io/ip)
 export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
