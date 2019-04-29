@@ -8,12 +8,6 @@
 #  Neo4J
 #  Zeppelin
 
-networks:
-  backend:
-    ipam:
-      config:
-        - subnet: 172.19.0.0/24
-
 version: '3.3'
 services:
 
@@ -67,10 +61,6 @@ services:
   cassandra-1:
     image: cassandra
     container_name: cassandra-1
-    networks:
-      backend:
-        ipv4_address: 172.19.0.1
-    
     ports: 
       - 9042:9042
       - 7199:7199
