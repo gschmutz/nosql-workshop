@@ -16,19 +16,44 @@ You have the follwing options to start the environment:
 Copy the Virtual Machine files to your local machine and start it up. 
 
 ```
+# Prepare Environment Variables
 export PUBLIC_IP=$(curl ipinfo.io/ip)
 export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+# needed for elasticsearch
+sudo sysctl -w vm.max_map_count=262144   
+
+# Get the project
+cd /home/ubuntu 
 git clone https://github.com/gschmutz/nosql-workshop.git
-cd ksql-workshop/01-environment/docker
+chown -R ubuntu:ubuntu nosql-workshop
+cd nosql-workshop/01-environment/docker
 
 # Startup Environment
-docker-compose up -d
+sudo -E docker-compose up -d
 ```
-
 
 ### Local Docker Installation
 
+But 
 
+```
+# Prepare Environment Variables
+export PUBLIC_IP=$(curl ipinfo.io/ip)
+export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+# needed for elasticsearch
+sudo sysctl -w vm.max_map_count=262144   
+
+# Get the project
+cd /home/ubuntu 
+git clone https://github.com/gschmutz/nosql-workshop.git
+chown -R ubuntu:ubuntu nosql-workshop
+cd nosql-workshop/01-environment/docker
+
+# Startup Environment
+sudo -E docker-compose up -d
+```
 
 ### AWS Lightsail
 To start the whole stack on AWS Lightsail, use the following script
@@ -71,11 +96,13 @@ tail -f /var/log/cloud-init-output.log
 
 
 ### Add entry to local /etc/hosts File
-To simplify working with the Streaming Platform, add the following entry to your local `/etc/hosts` file. 
+To simplify working with the Streaming Platform and for the links below to work, add the following entry to your local `/etc/hosts` file. 
 
 ```
 40.91.195.92	nosqlplatform
 ```
+
+Replace the IP address by the PUBLIC IP of the docker host. 
 
 ## Services accessible on Streaming Platform
 The following service are available as part of the platform:
