@@ -8,7 +8,7 @@ In order to simplify the provisioning, a single docker-compose configuration is 
 You have the follwing options to start the environment:
 
  * [**Local Virtual Machine Environment**](./LocalVirtualMachine.md) - a Virtual Machine with Docker and Docker Compose pre-installed will be distributed at by the course instructure. You will need 50 GB free disk space.
- * [**Local Docker Enironment**](./LocalDockerMachine.md) - you have a local Docker and Docker Compose setup in place which you want to use
+ * [**Local Docker Enironment**](./LocalDocker.md) - you have a local Docker and Docker Compose setup in place which you want to use
  * [**AWS Lightsail Environment**](./Lightsail.md) - AWS Lightsail is a service in Amazon Web Services (AWS) with which we can easily startup a environment and provide all the necessary bootstraping as a script.
 
 
