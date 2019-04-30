@@ -89,6 +89,8 @@ For simplicity reasons, we allow all TCP traffic by selecting **All TCP** on por
 
 ![Alt Image Text](./images/lightsail-image-networking-add-firewall-rule.png "Lightsail Homepage")
 
+Your instance is now ready to use. Complete the post installation steps documented the [here](README.md).
+
 ## Stop an Instance
 
 To stop the instance, navigate to the instance overview and click on the drop-down menu and select **Stop**. 
