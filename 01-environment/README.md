@@ -9,7 +9,7 @@ You have the follwing options to start the environment:
 
  * **Local Virtual Machine** - a Virtual Machine with Docker and Docker Compose pre-installed will be distributed at by the course instructure. You will need 50 GB free disk space.
  * **Local Docker Installation** - you have a local Docker and Docker Compose setup in place which you want to use
- * **AWS Lightsail** - AWS Lightsail is a service in Amazon Web Services (AWS) with which we can easily startup a environment and provide all the necessary bootstraping as a script.
+ * [**AWS Lightsail**](./Lightsail.md) - AWS Lightsail is a service in Amazon Web Services (AWS) with which we can easily startup a environment and provide all the necessary bootstraping as a script.
 
 ### Local Virtual Machine
 
