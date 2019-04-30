@@ -1,22 +1,72 @@
 # Local Docker Environment
 
-# Startup
-But 
+Make sure that you have Docker and Docker Compose running on your local environment. To run docker on windows you need to have Windows 10.
+
+* Mac: <https://docs.docker.com/docker-for-mac/>
+* Windows 10: <https://docs.docker.com/docker-for-windows/install/>
+
+## Prepare Environment
+
+In the Virtual Machine, start a terminal window and execute the following commands. 
+
+First lets add the environment variables. Make sure to adapt the network interface (**ens33** according to your environment. You can retrieve the interface name by using **ipconfig** on windwos or **ifconfig* on Mac/Linux. 
 
 ```
-# Prepare Environment Variables
-export PUBLIC_IP=$(curl ipinfo.io/ip)
-export DOCKER_HOST_IP=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+# Set environment variables to match the IP address of the local machine
+export PUBLIC_IP=10.1.215.134
+export DOCKER_HOST_IP=10.1.215.134
+```
 
+Now for Elasticserach to run properly, we have to increase the `vm.max_map_count` paramter like shown below.  
+
+```
 # needed for elasticsearch
 sudo sysctl -w vm.max_map_count=262144   
+```
 
+Now let's checkout the NoSQL Workshop project from github:
+
+```
 # Get the project
-cd /home/ubuntu 
+cd 
+sudo rm -R nosql-workshop/
 git clone https://github.com/gschmutz/nosql-workshop.git
-chown -R ubuntu:ubuntu nosql-workshop
 cd nosql-workshop/01-environment/docker
+```
+
+## Start Environment
+
+And finally let's start the environment:
+
+```
+# Make sure that the environment is not running
+doker-compose down
 
 # Startup Environment
-sudo -E docker-compose up -d
+docker-compose up -d
 ```
+
+The environment should start immediately, as all the necessary images should already be available in the local docker image registry. 
+
+The output should be similar to the one below. 
+
+![Alt Image Text](./images/start-env-docker.png "StartDocker")
+
+Your instance is now ready to use. Complete the post installation steps documented the [here](README.md).
+
+## Stop environment
+
+To stop the environment, execute the following command:
+
+```
+docker-compose stop
+```
+
+after that it can be re-started using `docker-compose start`.
+
+To stop and remove all running container, execute the following command:
+
+```
+docker-compose down
+```
+
