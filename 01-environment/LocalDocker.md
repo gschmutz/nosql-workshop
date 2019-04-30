@@ -40,7 +40,7 @@ And finally let's start the environment:
 
 ```
 # Make sure that the environment is not running
-doker-compose down
+docker-compose down
 
 # Startup Environment
 docker-compose up -d
