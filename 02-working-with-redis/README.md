@@ -3,7 +3,7 @@ In this workshop we will learn the basics of working with Redis. We will be usin
 
 ## Connecting to the Redis environment
 
-### Running the Redis Command Line utility
+### Using the Redis Command Line utility
 Open another terminal window and enter the following command to start Redis CLI in another docker container:
 
 ```
