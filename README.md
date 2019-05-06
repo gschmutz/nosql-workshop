@@ -1,2 +1,2 @@
-# nosql-workshop
-NoSQL Workshops with hands-on workshops for Redis, Cassandra, MongoDB, ...
+# NoSQL Workshop
+NoSQL Workshop
