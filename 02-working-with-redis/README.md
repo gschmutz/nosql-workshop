@@ -7,7 +7,7 @@ In this workshop we will learn the basics of working with Redis. We will be usin
 Open another terminal window and enter the following command to start Redis CLI in another docker container:
 
 ```
-docker run -it --rm --network nosqlplatform_default redis redis-cli -h redis -p 6379
+docker run -it --rm --network docker_default redis redis-cli -h redis -p 6379
 ```
 
 The Redis CLI should start and the following command prompt should appear (whereas the IP-Address can differ). 
@@ -35,7 +35,7 @@ Set your preferences in ~/.redisclirc
 
 ### Using Redis Commander
 
-<http://analyticsplatform:38083>
+<http://nosqlplatform:38083>
 
 ## String Data Structure
 Enter the commands described in the following sections at the prompt. 
