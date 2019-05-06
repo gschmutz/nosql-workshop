@@ -650,8 +650,7 @@ check the new result using the same find as above a 2nd time
 db.movies.find( {title: 'The Matrix'}, {"votes":1})
 ```
 
-
-## Indexes
+## Performance Optimizations using Indexes
 
 Indexes in MongoDB work a lot like indexes in a relational database: they help improve query and sorting performance. Indexes are created via `createIndex` command. So let's add an index on the title of movies documents. For an ascending index on a field, specify a value of `1`; for descending index, specify a value of `-1`.
 
@@ -786,7 +785,42 @@ We can also create a **Compound** Index covering multiple fields, we can create 
 
 Consult the [MongoDB's documentation](https://docs.mongodb.com/manual/indexes/) to read more about Indexes.  
 
-## Aggregating Data
+## Text Search 
+
+MongoDB supports query operations that perform a text search of string content. To perform text search, MongoDB uses a **text index** and the `$text` operator.
+
+To perform text search queries, you must have a text index on your collection. A collection can only have one text search index, but that index can cover multiple fields.
+
+For example you can run the following in a mongo shell to allow text search over the `title` and `plotOutline` fields:
+
+```
+db.movies.createIndex ( { title: "text", plotOutline: "text" } )
+```
+
+Now let's to a text search for the term "fight"
+
+```
+db.movies.find( { $text: { $search: "fight" } } )
+```
+
+The `$text` query operator will tokenize the search string using whitespace and most punctuation as delimiters, and perform a logical OR of all such tokens in the search string.
+We should get a result with two movies, one Flight Club where the term can be found in the title and another one where the term is used in the `plotOutline`. 
+
+```
+db.movies.find( { $text: { $search: "fight" } } )
+{ "_id" : ObjectId("5cd011f1a43cf7c3fa9c84b4"), "id" : "0137523", "title" : "Fight Club", "genres" : [ "Drama" ], "year" : 1999, "rating" : 8.8, "rank" : 10 }
+{ "_id" : ObjectId("5ccfebc1c4df88b359a29f91"), "id" : "0110912", "title" : "Pulp Fiction", "year" : 1994, "runtime" : 154, "languages" : [ "en", "es", "fr" ], "rating" : 8.9, "genres" : [ "Crime", "Drama" ], "plotOutline" : "Jules Winnfield (Samuel L. Jackson) and Vincent Vega (John Travolta) are two hit men who are out to retrieve a suitcase stolen from their employer, mob boss Marsellus Wallace (Ving Rhames). Wallace has also asked Vincent to take his wife Mia (Uma Thurman) out a few days later when Wallace himself will be out of town. Butch Coolidge (Bruce Willis) is an aging boxer who is paid by Wallace to lose his fight. The lives of these seemingly unrelated people are woven together comprising of a series of funny, bizarre and uncalled-for incidents.", "coverUrl" : "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY150_CR1,0,101,150_.jpg", "actors" : [ { "actorID" : 619, "name" : "Tim Roth" }, { "actorID" : 917, "name" : "Amanda Plummer" }, { "actorID" : 173379, "name" : "Laura Lovelace" }, { "actorID" : 159, "name" : "John Travolta" }, { "actorID" : 168, "name" : "Samuel L. Jackson" }, { "actorID" : 482851, "name" : "Phil LaMarr" }, { "actorID" : 1844, "name" : "Frank Whaley" }, { "actorID" : 824882, "name" : "Burr Steers" }, { "actorID" : 166, "name" : "Bruce Willis" }, { "actorID" : 609, "name" : "Ving Rahmes" }, { "actorID" : 157, "name" : "Uma Thurman" }, { "actorID" : 155, "name" : "Quentin Tarantino" } ], "directors" : [ { "directorID" : 155, "name" : "Quentin Tarantino" } ], "producers" : [ { "producerID" : 2532, "name" : "Lawrence Bender" }, { "producerID" : 242, "name" : "Danny DeVito" }, { "producerID" : 107409, "name" : "Richard N. Gladstein" }, { "producerID" : 787834, "name" : "Michael Shamberg" }, { "producerID" : 792049, "name" : "Stacey Sher" }, { "producerID" : 918424, "name" : "Bob Weinstein" }, { "producerID" : 2916, "name" : "Harvey Weinstein" } ] }
+```
+
+If we change the term to `fight terrorist` we can see that the search string will be tokenized into `fight` and `terrorist` and all the movies will be returned matching either of the two terms in the `title` or the `plotOutline` field. 
+
+```
+db.movies.find( { $text: { $search: "fight terrorist" } } )
+```
+
+Therefore we will also get back a 3rd movie, the movie "The Matrix" which uses the word Terrorist in the plot outline.
+
+## Aggregating Data
 
 Aggregation pipeline gives you a way to transform and combine documents in your collection. You do it by passing the documents through a pipeline that’s somewhat analogous to the Unix “pipe” where you send output from one command to another to a third, etc.
 
