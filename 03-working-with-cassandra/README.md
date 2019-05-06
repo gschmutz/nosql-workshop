@@ -7,14 +7,13 @@ We assume that the platform decribed [here](../01-environment) is running and ac
 
 ### Using the Cassandra Command Line utility
 
-
-Start a CQL Shell window by starting another docker container: 
+You can find the `cqlsh` command line utility inside the Cassandra docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command 
 
 ```
 docker exec -ti cassandra-1 cqlsh
 ```
 
-and you should see an output similar to this one. 
+This will connect you into the `cassandra-1` container and run the `cqlsh` inside id. You should see an output similar to this one. 
 
 ```
 bigdata@bigdata:~$ docker exec -ti cassandra-1 cqlsh
@@ -24,12 +23,12 @@ Use HELP for help.
 cqlsh>
 ```
 
-You are now at the Cassandra CQL command prompt, ready to execute CQL statements. We can also see the verion of Cassandra, CQL and cqlsh which we have available. 
+You are now at the Cassandra CQL command prompt, ready to execute CQL statements. We can also see the version of Cassandra, CQL and cqlsh which we have available. 
 
-### Using broser-based GUI
+### Using browser-based GUI
 Instead of working over the command line and therefore having to connect to the Docker Host via SSH, we can also use a browser based GUI to access Cassandra. Two browser-based utilities are available as part of the platform. 
 
-### Cassandra Web
+#### Cassandra Web
 
 The first one is the [Cassandra Web](http://avalanche123.com/cassandra-web/).
 In a browser window navigate to <http://nosqlplatform:33000/> and you should directly arrive on the home screen as shown below. 
@@ -38,7 +37,7 @@ In a browser window navigate to <http://nosqlplatform:33000/> and you should dir
 
 If you click on **Execute** in the top-right corner, a pop-window will appear where you can enter CQL statements and execute them. 
 
-### Apache Zeppelin
+#### Apache Zeppelin
 
 Antoher universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
 
@@ -200,7 +199,7 @@ VALUES (0111257,
 
 Now let's also add some actors playing in these 2 movies. 
 
-Let's add the actor "Bruce Willis", "John Travolta", 
+Let's add the actor "Bruce Willis", "John Travolta", "Sandra Bullock", "Samuel L. Jackson", "Uma Thurman" & "Quentin Tarantino"
 
 ```
 // insert "Bruce Willis" - 0000246
@@ -231,7 +230,7 @@ VALUES (0000237,
 		  'Black hair and blue eyes']);
 
 
-// insert "Samuel L. Jackson" - 0000113
+// insert "Sandra Bullock" - 0000113
 INSERT INTO movies.actor (actor_id, name, headshot_url, birth_date, trade_mark)
 VALUES (0000113,
 		'Sandra Bullock',
@@ -275,7 +274,25 @@ VALUES (0000206,
 		 ['Intense contemplative gaze',
 		  'Deep husky voice',
 		  'Known for playing stoic reserved characters']);
+
+// insert "Quentin Tarantino" - 0000233
+INSERT INTO movies.actor (actor_id, name, headshot_url, birth_date, trade_mark)
+VALUES (0000233,
+         'Quentin Tarantino',
+         'https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_UX67_CR0,0,67,98_AL_.jpg',
+         '1963-03-27',
+         ['Lead characters usually drive General Motors vehicles, particularly Chevrolet and Cadillac, such as Jules 1974 Nova and Vincents 1960s Malibu.',
+          'Briefcases and suitcases play an important role in Pulp Fiction (1994), Reservoir Dogs (1992), Jackie Brown (1997), True Romance (1993) and Kill Bill: Vol. 2 (2004).',
+          'Makes references to cult movies and television',
+          'Frequently works with Harvey Keitel, Tim Roth, Michael Madsen, Uma Thurman, Michael Bowen, Samuel L. Jackson, Michael Parks and Christoph Waltz.',
+          'His films usually have a shot from inside an automobile trunk',
+          'He always has a Dutch element in his films: The opening tune, Little Green Bag, in Reservoir Dogs (1992) was performed by George Baker Selection and written by Jan Gerbrand Visser and Benjamino Bouwens who are all Dutch. The character Freddy Newandyke, played by Tim Roth is a direct translation to a typical Dutch last name, Nieuwendijk. The code name of Tim Roth is Mr. Orange, the royal color of Holland and the last name of the royal family. The Amsterdam conversation in Pulp Fiction (1994), Vincent Vega smokes from a Dutch tobacco shag (Drum), the mentioning of Rutger Hauer in Jackie Brown (1997), the brides name is Beatrix, the name of the Royal Dutch Queen.',
+		  '[The Mexican Standoff] All his movies (including True Romance (1993), which he only wrote and did not direct) feature a scene in which three or more characters are pointing guns at each other at the same time.',
+         'Often uses an unconventional storytelling device in his films, such as retrospect (Reservoir Dogs (1992)), non-linear (Pulp Fiction (1994)), or "chapter" format (Kill Bill: Vol. 1 (2003)).',
+         'His films will often include one long, unbroken take where a character is  followed around somewhere.']);
 ```
+
+**Note:** In the case of Quentin Tarantino we have shortend the trade marks from the original. 
 
 ### Displaying Data
 
