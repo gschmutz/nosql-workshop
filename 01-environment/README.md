@@ -45,3 +45,12 @@ Zepplin | Development | Zeppelin | <http://nosqlplatform:38081>
 Jupyter | Development | Jupyter | <http://nosqlplatform:10000>
 
 
+## Workshop based on IMDd
+
+For the workshop we are going to use data from [IMDb](https://www.imdb.com/). 
+
+The following diagram shows the conceptual model of IMDb. 
+
+![Alt Image Text](./images/IMDB-domain-and-context-data-model.png "Lightsail Homepage")
+
+The data has been downloaded using the following Jupyter notebook (link to be added). 
