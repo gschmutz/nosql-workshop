@@ -1,0 +1,22 @@
+{ 
+    "id": "0000246", 
+    "name": "Bruce Willis",
+    "headshot": "https://m.media-amazon.com/images/M/MV5BMjA0MjMzMTE5OF5BMl5BanBnXkFtZTcwMzQ2ODE3Mw@@._V1_UY98_CR8,0,67,98_AL_.jpg",
+    "birthDate": "1955-03-19",
+    "tradeMarks": [ "Frequently plays a man who suffered a tragedy, had lost something or had a crisis of confidence or conscience.",
+					  "Frequently plays likeable wisecracking heroes with a moral centre",
+					  "Headlines action-adventures, often playing a policeman, hitman or someone in the military",
+					  "Often plays men who get caught up in situations far beyond their control",
+					  "Sardonic one-liners",
+					  "Shaven head",
+					  "Distinctive, gravelly voice",
+					  "Smirky grin",
+					  "Known for playing cynical anti-heroes with unhappy personal lives" ],
+    "actedInMovies": [
+        { "movieId": "0110912", "title": "Pulp Fiction"},
+        { "movieId": "1606378", "title": "A Good Day to Die Hard"},
+        { "movieId": "0217869", "title": "Unbreakable"},
+        { "movieId": "0377917", "title": "The Fifth Element"},
+        { "movieId": "0112864", "title": "Die Hard: With a Vengeance"}
+    ]        
+}

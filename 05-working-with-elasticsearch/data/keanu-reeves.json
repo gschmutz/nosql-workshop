@@ -1,0 +1,14 @@
+{ 
+    "id": "0000206", 
+    "name": "Keanu Reeves",
+    "headshot": "https://m.media-amazon.com/images/M/MV5BMjA0MjMzMTE5OF5BMl5BanBnXkFtZTcwMzQ2ODE3Mw@@._V1_UY98_CR8,0,67,98_AL_.jpg",
+    "birthDate": "1955-03-19",
+    "tradeMarks": ["Intense contemplative gaze",
+		  "Deep husky voice",
+		  "Known for playing stoic reserved characters"],
+    "actedInMovies": [
+        { "movieId": "0133093", "title": "The Matrix"},
+        { "movieId": "0234215", "title": "The Matrix Reloaded"},
+        { "movieId": "0111257", "title": "Speed"}
+    ]        
+}

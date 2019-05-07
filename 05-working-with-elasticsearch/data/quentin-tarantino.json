@@ -1,0 +1,21 @@
+{ 
+    "id": "0000233", 
+    "name": "Quentin Tarantino",
+    "headshot": "https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_UX67_CR0,0,67,98_AL_.jpg",
+    "birthDate": "1963-03-27",
+    "tradeMarks": ["Lead characters usually drive General Motors vehicles, particularly Chevrolet and Cadillac, such as Jules 1974 Nova and Vincents 1960s Malibu.",
+          "Briefcases and suitcases play an important role in Pulp Fiction (1994), Reservoir Dogs (1992), Jackie Brown (1997), True Romance (1993) and Kill Bill: Vol. 2 (2004).",
+          "Makes references to cult movies and television",
+          "Frequently works with Harvey Keitel, Tim Roth, Michael Madsen, Uma Thurman, Michael Bowen, Samuel L. Jackson, Michael Parks and Christoph Waltz.",
+          "His films usually have a shot from inside an automobile trunk",
+          "He always has a Dutch element in his films: The opening tune, Little Green Bag, in Reservoir Dogs (1992) was performed by George Baker Selection and written by Jan Gerbrand Visser and Benjamino Bouwens who are all Dutch. The character Freddy Newandyke, played by Tim Roth is a direct translation to a typical Dutch last name, Nieuwendijk. The code name of Tim Roth is Mr. Orange, the royal color of Holland and the last name of the royal family. The Amsterdam conversation in Pulp Fiction (1994), Vincent Vega smokes from a Dutch tobacco shag (Drum), the mentioning of Rutger Hauer in Jackie Brown (1997), the brides name is Beatrix, the name of the Royal Dutch Queen.",
+		  "[The Mexican Standoff] All his movies (including True Romance (1993), which he only wrote and did not direct) feature a scene in which three or more characters are pointing guns at each other at the same time.",
+         "Often uses an unconventional storytelling device in his films, such as retrospect (Reservoir Dogs (1992)), non-linear (Pulp Fiction (1994)), or chapter format (Kill Bill: Vol. 1 (2003)).",
+         "His films will often include one long, unbroken take where a character is  followed around somewhere."],
+    "actedInMovies": [
+        { "movieId": "0378194", "title": "Kill Bill: Vol. 2"},
+        { "movieId": "0110912", "title": "Speed 2: Cruise Control"},
+        { "movieId": "0116367", "title": "From Dusk Till Dawn"},
+        { "movieId": "0119396", "title": "Jackie Brown"}
+    ]        
+}

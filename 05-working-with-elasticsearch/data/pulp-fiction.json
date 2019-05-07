@@ -1,0 +1,38 @@
+{
+    "id": "110912", 
+    "title": "Pulp Fiction",
+    "year": 1994,
+    "runtime": 154,
+    "languages": ["en", "es", "fr"],
+    "rating": 8.9,
+    "votes": 2084331,
+    "genres": ["Crime", "Drama"],
+    "plotOutline": "Jules Winnfield (Samuel L. Jackson) and Vincent Vega (John Travolta) are two hit men who are out to retrieve a suitcase stolen from their employer, mob boss Marsellus Wallace (Ving Rhames). Wallace has also asked Vincent to take his wife Mia (Uma Thurman) out a few days later when Wallace himself will be out of town. Butch Coolidge (Bruce Willis) is an aging boxer who is paid by Wallace to lose his fight. The lives of these seemingly unrelated people are woven together comprising of a series of funny, bizarre and uncalled-for incidents.",
+    "coverUrl": "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY150_CR1,0,101,150_.jpg",
+    "actors": [
+        { "actorID": "0000619", "name": "Tim Roth"},
+        { "actorID": "0001625", "name": "Amanda Plummer"},    
+        { "actorID": "0522503", "name": "Laura Lovelace"},         
+        { "actorID": "0000237", "name": "John Travolta"},   
+        { "actorID": "0000168", "name": "Samuel Jackson"},   
+        { "actorID": "0482851", "name": "Phil LaMarr"},   
+        { "actorID": "0001844", "name": "Frank Whaley"},  
+        { "actorID": "0824882", "name": "Burr Steers"},  
+        { "actorID": "0000246", "name": "Bruce Willis"}, 
+        { "actorID": "0000609", "name": "Ving Rahmes"},         
+        { "actorID": "0000235", "name": "Uma Thurman"},
+        { "actorID": "0000233", "name": "Quentin Tarantino"}
+    ],
+    "directors": [
+        { "directorID": "0000233", "name": "Quentin Tarantino"}
+    ],
+    "producers": [
+        { "producerID": "0004744", "name": "Lawrence Bender"},
+        { "producerID": "0000362", "name": "Danny DeVito"},
+        { "producerID": "0321621", "name": "Richard N. Gladstein"},        
+        { "producerID": "0787834", "name": "Michael Shamberg"},        
+        { "producerID": "0792049", "name": "Stacey Sher"},  
+        { "producerID": "0918424", "name": "Bob Weinstein"},  
+        { "producerID": "0005544", "name": "Harvey Weinstein"}  
+    ]
+}

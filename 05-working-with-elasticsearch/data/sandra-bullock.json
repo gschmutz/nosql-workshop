@@ -1,0 +1,12 @@
+{ 
+    "id": "0000113", 
+    "name": "Sandra Bullock",
+    "headshot": "https://m.media-amazon.com/images/M/MV5BMTI5NDY5NjU3NF5BMl5BanBnXkFtZTcwMzQ0MTMyMw@@._V1_UX67_CR0,0,67,98_AL_.jpg",
+    "birthDate": "1964-07-26",
+    "actedInMovies": [
+        { "movieId": "2737304", "title": "Bird Box"},
+        { "movieId": "0120179", "title": "Speed 2: Cruise Control"},
+        { "movieId": "0111257", "title": "Speed"},
+        { "movieId": "0212346", "title": "Miss Congeniality"}
+    ]        
+}
