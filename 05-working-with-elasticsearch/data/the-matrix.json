@@ -1,0 +1,35 @@
+{
+    "id": "0133093", 
+    "title": "The Matrix",
+    "year": 1999,
+    "runtime": 136,
+    "languages": ["en"],
+    "rating": 8.7,
+    "votes": 1496538,
+    "genres": ["Action", "Sci-Fi"],
+    "plotOutline": "Thomas A. Anderson is a man living two lives. By day he is an average computer programmer and by night a hacker known as Neo. Neo has always questioned his reality, but the truth is far beyond his imagination. Neo finds himself targeted by the police when he is contacted by Morpheus, a legendary computer hacker branded a terrorist by the government. Morpheus awakens Neo to the real world, a ravaged wasteland where most of humanity have been captured by a race of machines that live off of the humans body heat and electrochemical energy and who imprison their minds within an artificial reality known as the Matrix. As a rebel against the machines, Neo must return to the Matrix and confront the agents: super-powerful computer programs devoted to snuffing out Neo and the entire human rebellion.",
+    "coverUrl": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX101_CR0,0,101,150_.jpg",
+    "actors": [
+        { "actorID": "0000206", "name": "Keanu Reeves"},
+        { "actorID": "0000401", "name": "Laurence Fishburne"},    
+        { "actorID": "0005251", "name": "Carrie-Anne Moss"},         
+        { "actorID": "0915989", "name": "Hugo Weaving"},   
+        { "actorID": "0287825", "name": "Gloria Foster"},   
+        { "actorID": "0001592", "name": "Joe Pantoliano"},   
+        { "actorID": "0159059", "name": "Marcus Chong"},  
+        { "actorID": "0032810", "name": "Julian Arahanga"},  
+        { "actorID": "0000246", "name": "Bruce Willis"}, 
+        { "actorID": "0000609", "name": "Ving Rahmes"},         
+        { "actorID": "0000235", "name": "Uma Thurman"},
+        { "actorID": "0000233", "name": "Quentin Tarantino"}
+    ],
+    "directors": [
+        { "directorID": "0905154", "name": "Lana Wachowski"},
+        { "directorID": "0905152", "name": "Lilly Wachowski"}
+    ],
+    "producers": [
+        { "producerID": "0075732", "name": "Bruce Berman"},
+        { "producerID": "0185621", "name": "Dan Cracchiolo"},
+        { "producerID": "0400492", "name": "Carol Hughes"}  
+    ]        
+}
