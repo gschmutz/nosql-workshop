@@ -577,7 +577,7 @@ SET five_star = five_star + 1
 WHERE movie_id = 0110912;
 
 UPDATE movies.rating_by_movie
-SET five_star = five_star + 1
+SET four_star = four_star + 1
 WHERE movie_id = 0110912;
 
 UPDATE movies.rating_by_movie
@@ -585,11 +585,11 @@ SET five_star = five_star + 1
 WHERE movie_id = 0110912;
 
 UPDATE movies.rating_by_movie
-SET five_star = four_star + 1
+SET five_star = five_star + 1
 WHERE movie_id = 0110912;
 
 UPDATE movies.rating_by_movie
-SET five_star = five_start + 1
+SET two_star = two_star + 1
 WHERE movie_id = 0110912;
 ```
 
