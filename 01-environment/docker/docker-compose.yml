@@ -61,6 +61,7 @@ services:
   cassandra-1:
     image: cassandra
     container_name: cassandra-1
+    
     ports: 
       - 9042:9042
       - 7199:7199
@@ -76,7 +77,7 @@ services:
     image: trivadis/cassandra-web
     container_name: cassandra-web
     ports:
-      - "3000:3000"
+      - "33000:3000"
     environment:
       - CASSANDRA_HOSTNAME=cassandra-1
       - CASSANDRA_PORT=9042
@@ -113,45 +114,45 @@ services:
     image: adicom/admin-mongo  
     container_name: admin-mongo
     ports: 
-      - 1234:1234
+      - 31234:1234
     restart: always
 
   ## HBase
 
-  hbase:
-    image: harisekhon/hbase:latest
-    container_name: hbase
-    ports:
-      - 8080:8080
-      - 8085:8085
-      - 9090:9090
-      - 9095:9095
-      - 16000:16000
-      - 16010:16010
-      - 16201:16201
-      - 16030:16030
-      - 16301:16301
+#  hbase:
+#    image: harisekhon/hbase:latest
+#    container_name: hbase
+#    ports:
+#      - 8080:8080
+#      - 8085:8085
+#      - 9090:9090
+#      - 9095:9095
+#      - 16000:16000
+#      - 16010:16010
+#      - 16201:16201
+#      - 16030:16030
+#      - 16301:16301
 
 
   ## SOLR
 
-  solr:
-    image: solr
-    container_name: solr
-    ports:
-      - "8983:8983"
-    restart: always
+#  solr-1:
+#    image: solr
+#    container_name: solr-1
+#    ports:
+#      - "8983:8983"
+#    restart: always
   
   ## Elasticsearch
 
   ## sudo sysctl -w vm.max_map_count=262144   
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
     hostname: elasticsearch
     container_name: elasticsearch
     ports:
       - "9200:9200"
-      - "9300:9300"
+      - "9300:9300"    
     volumes:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
@@ -161,7 +162,7 @@ services:
     restart: always
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.0.0
+    image: docker.elastic.co/kibana/kibana:6.7.0
     hostname: kibana
     container_name: kibana
     depends_on:
@@ -169,14 +170,10 @@ services:
     ports:
       - "5601:5601"
     environment:
-      xpack.security.enabled: "false"
       XPACK_SECURITY_ENABLED: "false"
-      xpack.monitoring.enabled: "false"
-      discovery.type: "single-node"
-      elasticsearch.url: http://elasticsearch:9200
-      server.host: "0.0.0.0"
+      XPACK_MONITORING_ENABLED: "false"
+      DISCOVER_TYPE: "single-node"
       SERVER_HOST: "0.0.0.0"
-      server.name: "kibana"
       SERVER_NAME: "kibana"
       XPACK_GRAPH_ENABLED: "false"
       XPACK_MONITORING_ENABLED: "false"
@@ -200,7 +197,14 @@ services:
     ports:
       - "39000:9000"    
     restart: always
-
+  
+  elastichq:
+    image: elastichq/elasticsearch-hq
+    hostname: elatichq
+    container_name: elastichq
+    ports:
+      - "35000:5000"
+  
   ## Neo4J
 
   neo4j:
@@ -231,7 +235,7 @@ services:
 #      - INFLUXDB_HTTP_AUTH_ENABLED=true
 #      - INFLUXDB_HTTP_LOG_ENABLED=false
 #    restart: always
-#
+
 #  chronograf:
 #    image: chronograf:latest
 #    hostname: chronograf

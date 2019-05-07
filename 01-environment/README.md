@@ -31,12 +31,13 @@ The following service are available as part of the platform:
 Product | Type | Service | Url
 ------|------| --------| ----
 Redis | Development | Redis Commander | <http://nosqlplatform:38083>
-Cassandra | Development | Cassandra-Web | <http://nosqlplatform:3000>
-MongoDB | Management | Admin Mongo | <http://nosqlplatform:1234>
+Cassandra | Development | Cassandra-Web | <http://nosqlplatform:33000>
+MongoDB | Management | Admin Mongo | <http://nosqlplatform:31234>
 MongoDB | Development | Mongo-Express | <http://nosqlplatform:38082>
 Elasticsearch | Development | Dejavu | <http://nosqlplatform:1358>
 Elasticsearch | Development | cerebro | <http://nosqlplatform:39000>
 Elasticsearch | Development | Kibana | <http://nosqlplatform:5601>
+Elasticsearch | Development | ElasticHQ | <http://nosqlplatform:35000>
 Solr | Management | Solr | <http://nosqlplatform:8983>
 Neo4J | Development | Neo4J | <http://nosqlplatform:7474>
 Grafana | Development | Grafana | <http://nosqlplatform:3010>
