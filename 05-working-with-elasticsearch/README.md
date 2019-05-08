@@ -570,17 +570,23 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 
 ### Sorting
 
-Some examples of sorting:
-
-Via a URL
+In a URL Search, sorting can be enabled by adding the `sort` parameter
 
 ```
 http://localhost:9200/movies/movie/_search?sort=year
 ```
 
-Sorting works out of the box for things like integers, years etc but not for text fields that are analyzed for full text search becuase it exists in the inverted index as individual terms and not as the full string.
-http://localhost:9200/movies/movie/_search?sort=title <- Results in an error because title is of type text
-There is a way around this which is to keep an non-analyzed copy of the field that you need both full text and sorting against. You need to consider this at the mapping/index stage. Here is a mapping example to do this (remember to apply this first DELETE the current movies index, apply this mapping then re-import the movies data!)
+Sorting works out of the box for things like integers, years etc, but not for text fields that are analyzed for full text search because they exist in the inverted index as individual terms and not as the full string.
+
+Trying to sort on `title`
+
+```
+http://localhost:9200/movies/movie/_search?sort=title 
+```
+
+will result in an error because title is of type text. 
+
+There is a way around this which is to keep an non-analyzed copy of the field. You need to consider this at the mapping/index stage. Here is a mapping example to do this (**Remember:** to apply this you first have to DELETE the current `movies` index, then apply this mapping and re-import the movies data!)
 
 ```
 curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
@@ -600,11 +606,11 @@ curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies 
 }'
 ```
 
-With that done the sorting query example will now work using the title.raw field as so:
+With that in place, the sorting query will work using the `title.raw` field instead of just the `title`field
+
+```
 http://localhost:9200/movies/movie/_search?sort=title.raw
-
-### Filters Revisted
-
+```
 
 ### Fuzzy Queries
 
