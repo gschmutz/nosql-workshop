@@ -1,0 +1,69 @@
+#
+# Docker Compose with the following services:
+#  Datastax Enterprise
+#  Datastax Studio
+#  Datastax Opscenter
+#  Datastax GraphLoader
+#
+networks:
+  nosql:
+    external: true
+
+version: '3.3'
+services:
+
+  ## Dastastax Cassandra
+
+  dse-1:
+    image: datastax/dse-server
+    container_name: dse-1
+    hostname: dse-1
+    command: [ -s -g ]
+    ports: 
+      - "9042:9042"
+    environment:
+      DS_LICENSE: accept
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
+    networks:
+      - nosql
+    restart: always
+
+  opscenter:
+    image: "datastax/dse-opscenter"
+    container_name: opscenter
+    ports:
+      - 48888:8888
+    environment:
+      - DS_LICENSE=accept
+    networks:
+      - nosql
+    restart: always
+
+  dse-studio:
+    image: datastax/dse-studio
+    container_name: dse-studio
+    hostname: dse-studio
+    environment:
+      DS_LICENSE: accept
+    ports:
+      - "39091:9091"
+    networks:
+      - nosql 
+    restart: always
+
+  graph-loader:
+    image: trivadis/dse-graphloader
+    container_name: graph-loader
+    hostname: graph-loader
+    depends_on:
+      - dse-1
+    volumes:
+      - ./graph-examples:/graph-examples
+    networks:
+      - nosql 
+    restart: always
+

@@ -1,0 +1,25 @@
+KillrVideo DSL
+==============
+
+This is a Python starter project that shows how to build a Domain Specific Language (DSL) for
+link:http://tinkerpop.apache.org/[Apache TinkerPop's] Gremlin graph traversal language.
+link:http://tinkerpop.apache.org/docs/current/reference/#dsl[Gremlin DSLs] provide a way to extend the graph language
+with new steps that can help reduce complexity of Gremlin code.
+
+Prerequisites
+-------------
+
+* Python 2.7+
+* pip
+* A running instance of link:https://www.datastax.com/products/datastax-enterprise-graph[DSE Graph]
+** Load the `graph-examples/killrvideo` data as specified in the link:https://github.com/datastax/graph-examples/blob/master/killrvideo/README.md[README]
+
+Building and Running
+--------------------
+
+There is a small application that runs several traversals using the defined DSL and outputs the results to the
+console. It can be executed as follows:
+
+[source,text]
+pip install dse-graph
+python app.py
