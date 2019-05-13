@@ -18,7 +18,7 @@ Keep **Linux/Unix** for the **Select a platform** and click on **OS Only** and s
 Scroll down to **Launch script** and add the the following script to the edit field. 
 
 ```
-# Install Docker and Docker Compose
+# Install Docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable edge"
 apt-get install -y docker-ce
