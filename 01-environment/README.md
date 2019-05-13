@@ -17,7 +17,7 @@ You have the follwing options to start the environment:
 These steps are necessary after the starting the docker environment. 
 
 ### Add entry to local /etc/hosts File
-To simplify working with the Streaming Platform and for the links below to work, add the following entry to your local `/etc/hosts` file. 
+To simplify working with the NoSQL Platform and for the links below to work, add the following entry to your local `/etc/hosts` file. 
 
 ```
 40.91.195.92	nosqlplatform
@@ -25,7 +25,7 @@ To simplify working with the Streaming Platform and for the links below to work,
 
 Replace the IP address by the PUBLIC IP of the docker host. 
 
-## Services accessible on Streaming Platform
+## Services accessible on NoSQL Platform
 The following service are available as part of the platform:
 
 Product | Type | Service | Url
