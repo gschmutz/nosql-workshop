@@ -31,31 +31,6 @@ services:
       - "38083:8081"
     restart: always
 
-  ## Dastastax Cassandra
-
-#  dse-1:
-#    image: datastax/dse-server
-#    container_name: cassandra-1
-#    ports: 
-#      - "9042:9042"
-#    environment:
-#      DS_LICENSE: accept
-#    # Allow DSE to lock memory with mlock
-#    cap_add:
-#    - IPC_LOCK
-#    ulimits:
-#      memlock: -1
-#    restart: always
-#  
-#  dse-studio:
-#    image: datastax/dse-studio
-#    container_name: dse-studio
-#    environment:
-#      DS_LICENSE: accept
-#    ports:
-#      - "9091:9091"
-#    restart: always
-    
   ## Cassandra
 
   cassandra-1:
