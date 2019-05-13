@@ -1,88 +1,37 @@
 # Working with DataStax Graph
 
-In this workshop we will learn the basics of working with the Gremlin query language. We will use a docker image to work with Gremlin on top of a DataSatax DSE Graph database.
+In this workshop we will learn the basics of working with the Gremlin query language using the DataStax Graph option.
 
-For the workshop you need a docker environment with docker-compose installed on it. Docker Compose provides a way to start multiple docker container in once. 
+The environment will also be based on Docker Compose, but we will not use the one provisionend in [01-environment](../01-environment/README.md). We will use a new docker-compose.yml which can be found in the [`docker`](./docker/docker-compose.yml) folder of this workshop. The reason for that is that we have to specify a network for the Datastax docker containers to work properly. 
 
 ## Starting DataStax DSE Graph using Docker
-In a Docker environment, create a new docker-compose.yml file with the following content:
 
-Add the following two services to the docker-compose.yml file. 
-
-```
-  dse:
-    image: "datastax/dse-server"
-    environment:
-      - DS_LICENSE=accept
-    command:
-     -k
-     -s
-     -g
-    # Allow DSE to lock memory with mlock
-    cap_add:
-      - IPC_LOCK
-    ulimits:
-      memlock: -1
-    ports:
-      - "9042:9042"
-    container_name: "dse"
- 
-  studio:
-    image: "datastax/dse-studio"
-    environment:
-      - DS_LICENSE=accept
-    volumes:
-      - ./studio:/var/lib/datastax-studio
-      - ./conf/studio:/config
-    ports:
-      - "9091:9091"
-    container_name: "studio"
-
-  graph-loader:
-    image: trivadis/dse-graphloader
-    depends_on:
-      - dse
-    volumes:
-      - ./graph-examples:/graph-examples
-    container_name: "graph-loader"
-```
-
-Create the network which is used by the docker-compose definition above. 
+Before we can start the environment, we have to create the network which is used by the docker-compose definition. 
 
 ```
 docker network create nosql
 ```
 
-Create the workspace/datastax folder inside /home/cas 
+now let's navigate to the `07-working-with-dse-graph` folder
 
 ```
-cd /home/bigdata/nosqlplatform
-mkdir datastax
-cd datastax
+cd /home/bigdata/nosql-workshop/07-working-with-dse-graph
 ```
 
-and download the `graph-examples` folder from the download site.
+and start the environment using 
 
 ```
-wget "https://www.dropbox.com/s/b4y3pfttetan38n/graph-examples.zip?dl=0"
-unzip graph-examples.zip\?dl=0
-rm graph-examples.zip\?dl\=0
-```
-
-Start the environment using 
-
-```
-sudo docker-compose -f docker-compose-datastax.yml up -d
+sudo docker-compose up -d
 ```
 
 If you get a timeout error, then just redo the `docker-compose up -d` command.
 
-With the extension to the docker-compose enviromment, four three additional will be created, a single Cassandra node, an instance of DSE Studio and an instance of the DSE Graph Loader. 
+With this docker-compose, 4 services should get started, a single DSE node, an instance of DSE Studio, an instance of OpsCetner and an instance of the DSE Graph Loader. 
 
 To see the log file of the 4 services running, use the following command
 
 ```
-sudo docker-compose logs -f dse studio graph-loader
+sudo docker-compose logs -f
 ```
 
 ## Create a new graph schema in DSE Studio
@@ -120,7 +69,7 @@ An empty notebook should appear. That’s your working space.
 
 ![Alt Image Text](./images/dse-studio-empty-notebook.png "DSE Studio")
  
-## Create the schema
+## Create the graph schema
 
 Now we are ready to create the graph schema. The following diagram shows the graph model we are going to implement.
 
@@ -185,6 +134,8 @@ Either click on the **Real-Time >** Button with the arrow in the upper right cor
 It will take a few seconds to create the schema. 
 
 ## Load data into the graph
+
+We will be using data from IMDB. It has been taken from the [graph-examples](https://github.com/datastax/graph-examples) project provided by DataStax on GitHub. In that project you can also find other interesting examples showing DSE Graph in action.
 
 To load the data, we will use the DSE Graph Loader started previously with docker-compose. The folder with the example files has been mapped into the `graph-loader` container as `/graph-examples`. 
 
