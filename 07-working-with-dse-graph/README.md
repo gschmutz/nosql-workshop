@@ -38,7 +38,7 @@ sudo docker-compose logs -f
 
 In order to work with DSE-Graph we will be using the graphical environment DSE Studio. It’s a notebook-style UI provided by DataStax. 
 
-In a browser, connect to http://localhost:9091 inside the Virtual Machine or use the IP Address of the Virtual Machine to connect from externally (i.e. from the host machine). In Azure don’t forget to open the port 9091 and 9042 on the Networking page (add an inbound rule on TCP for port 9091 and for port 9042).
+In a browser, connect to <http://nosqlplatform:39091> inside the Virtual Machine or use the IP Address of the Virtual Machine to connect from externally (i.e. from the host machine). In Azure don’t forget to open the port 9091 and 9042 on the Networking page (add an inbound rule on TCP for port 9091 and for port 9042).
 
 The following page should appear:
 
