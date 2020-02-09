@@ -1,15 +1,16 @@
 # Working with Elasticsearch
+
 In this workshop we will learn how to use the Elasticsearch NoSQL database.
 
-We assume that the platform decribed [here](../01-environment) is running and accessible. 
+We assume that the platform described [here](../01-environment) is running and accessible. 
 
 ## Connecting to the Elasticsearch environment
 
 ### Using REST API
 
-Once you have an instance of ElasticSearch up and running you can talk to it using it's JSON based REST API residing at localhost port 9200. You can use any HTTP client to talk to it. In ElasticSearch's own documentation all examples use curl, which makes for concise examples. However, when playing with the API you may find a graphical client such RESTClient more convenient. 
+Once you have an instance of ElasticSearch up and running you can talk to it using its JSON based REST API residing at localhost port 9200. You can use any HTTP client to talk to it. In ElasticSearch's own documentation all examples use curl, which makes for concise examples. However, when playing with the API you may find a graphical client such RESTClient more convenient. 
 
-In a browser window navigate to <http://nosqlplatform:9200/> just to see that Elastic Search is running. You should see the followin result. 
+In a browser window navigate to <http://nosqlplatform:9200/> just to see that Elastic Search is running. You should see the following result. 
 
 ![Alt Image Text](./images/browser-es-test.png "Elasticsearch in Browser")
 
@@ -67,9 +68,9 @@ Specify the **Method**, **URL** and **Body** fields according to your command an
 
 #### Kibana Application
 
-[Kibana](https://www.elastic.co/products/kibana) is part of the Elastic stack (aka. ELK Stack) and lets you visualize your Elasticsearch data and navigate the Elastic Stack. It also holds a Dev Tools interace where you can execute REST calls over a browser based window. 
+[Kibana](https://www.elastic.co/products/kibana) is part of the Elastic stack (aka. ELK Stack) and lets you visualise your Elasticsearch data and navigate the Elastic Stack. It also holds a Dev Tools interface where you can execute REST calls over a browser based window. 
 
-In a browser window navigat to <http://nosqlplatform:5601> and you should directly land on the Kibana home screen as shown below. 
+In a browser window navigate to <http://nosqlplatform:5601> and you should directly land on the Kibana home screen as shown below. 
 
 ![Alt Image Text](./images/kibana.png "Kibana")
 
@@ -84,6 +85,7 @@ In a browser window navigate to <http://nosqlplatform:35000> and you should dire
 ![Alt Image Text](./images/elastichq.png "ElasticHQ")
 
 #### Cerebro Application
+
 The second one is [Cerebro](https://github.com/lmenezes/cerebro/), an open source (MIT License) elasticsearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
 
 In a browser window navigate to <http://nosqlplatform:39000/> and you should directly land on the Cerebro **Connect** screen. Enter `http://nosqlplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
@@ -102,7 +104,7 @@ Enter `http://nosqlplatform:9200` into the URL field
 
 #### Apache Zeppelin
 
-Antoher universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
+Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
 
@@ -118,9 +120,9 @@ Navigate to the **Elasticsearch** Interpreter either by searching for it or scro
 
 Scroll-down to the end of the Interpreter settings and click **Save**. Confirm that you want Zeppelin to restart the Interpreter with the new settings. 
 
-Click on **Zeppelin** in the uper left corner to navigate back to the Home screen. 
+Click on **Zeppelin** in the upper left corner to navigate back to the Home screen. 
 
-Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Elasticsearch` intot he **Note Name** field and select **elasticsearch** for the **Default Interpreter** and click **Create**.
+Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Elasticsearch` into he **Note Name** field and select **elasticsearch** for the **Default Interpreter** and click **Create**.
 An empty notebook with one cell will appear. This cell is now ready to be used and has the Cassandra interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
 
 For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
@@ -142,7 +144,7 @@ curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies 
 }'
 ```
 
-and you should get a result similar to the one belwo. 
+and you should get a result similar to the one bellow
 
 ```
 gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
@@ -328,7 +330,7 @@ curl -XPUT "http://nosqlplatform:9200/movies/movie/4154796" -H 'Content-Type: ap
 
 ## Analyzers
 
-Firstly lets try some searches. First lets try a match search for 'The Matrix':
+Firstly let's try some searches. First lets try a match search for 'The Matrix':
 
 ```
 curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
@@ -341,7 +343,7 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 }'
 ```
 
-You will notice that **The Godfather** and **The Lord of the Rings** is listed as well as **The Matrix**. This is becuase the analyser used is the default full text / partial match analyser. Additionally, **The Godfather** appears even above (with more relevance) **The Matrix** due to the small number of documents across many shards. A larger corpus of documents will fix/improve the relevancy.
+You will notice that **The Godfather** and **The Lord of the Rings** is listed as well as **The Matrix**. This is because the analyser used is the default full text / partial match analyser. Additionally, **The Godfather** appears even above (with more relevance) **The Matrix** due to the small number of documents across many shards. A larger corpus of documents will fix/improve the relevancy.
 
 Let's search for a genre of 'sci' as follows
 
@@ -387,9 +389,9 @@ curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies 
 }'
 ```
 
-So to recap what just happend here:
+So to recap what just happened here:
  * For string/text fields that should be exact matches then define as a keyword mapping
- * For string/text fields that should be partial matches based on relevance then define as a text mapping together with an optional anayzer like 'english'
+ * For string/text fields that should be partial matches based on relevance then define as a text mapping together with an optional analyser like 'english'
 
 Now reimport the data
 
@@ -503,7 +505,7 @@ Things you can do within a query
 
 Below is an example using both a Query and a Filter.
 
-In the query below we have a bool query - which is essentially allwoing us to combine conditions together. Within the bool query we use a `must` which is essentially the equivalend of an AND logical query. Additionaly within the `bool` query we have a filter which further applies a range against the year attribute.
+In the query below we have a bool query - which is essentially allowing us to combine conditions together. Within the bool query we use a `must` which is essentially the equivalent of an AND logical query. Additionally within the `bool` query we have a filter which further applies a range against the year attribute.
 
 So we basically want to see all the movies which have `star` in the title and have been release after `2010`
 
@@ -538,7 +540,7 @@ For more details, refer to the [Elasticsearch Query DSL](https://www.elastic.co/
 
 ### Phrase search
 
-Use `match_phrase` and, optionally, `slop. In the following example the search would find the document containing *'NYPD cop John McClane'* becuase the match_phrase query is 'nypd cop' with a slop of 1.
+Use `match_phrase` and, optionally, `slop. In the following example the search would find the document containing *'NYPD cop John McClane'* because the match_phrase query is 'nypd cop' with a slop of 1.
 
 ```
 curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
@@ -576,7 +578,7 @@ In a URL Search, sorting can be enabled by adding the `sort` parameter
 http://localhost:9200/movies/movie/_search?sort=year
 ```
 
-Sorting works out of the box for things like integers, years etc, but not for text fields that are analyzed for full text search because they exist in the inverted index as individual terms and not as the full string.
+Sorting works out of the box for things like integers, years etc, but not for text fields that are analysed for full text search because they exist in the inverted index as individual terms and not as the full string.
 
 Trying to sort on `title`
 
@@ -586,7 +588,7 @@ http://localhost:9200/movies/movie/_search?sort=title
 
 will result in an error because title is of type text. 
 
-There is a way around this which is to keep an non-analyzed copy of the field. You need to consider this at the mapping/index stage. Here is a mapping example to do this (**Remember:** to apply this you first have to DELETE the current `movies` index, then apply this mapping and re-import the movies data!)
+There is a way around this which is to keep a non-analyzed copy of the field. You need to consider this at the mapping/index stage. Here is a mapping example to do this (**Remember:** to apply this you first have to DELETE the current `movies` index, then apply this mapping and re-import the movies data!)
 
 ```
 curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
@@ -606,7 +608,7 @@ curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies 
 }'
 ```
 
-With that in place, the sorting query will work using the `title.raw` field instead of just the `title`field
+With that in place, the sorting query will work using the `title.raw` field instead of just the `title` field
 
 ```
 http://localhost:9200/movies/movie/_search?sort=title.raw
