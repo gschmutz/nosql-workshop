@@ -1,253 +1,365 @@
-#
-# Docker Compose with the following services:
-#  Redis
-#  MongoDB 
-#  Cassandra
-#  Solr
-#  Elasticsearch
-#  Neo4J
-#  Zeppelin
-
-version: '3.3'
+# =====================================================
+# Platform: default
+# =====================================================
+version: '3.0'
 services:
-
-  ## Redis Stack
-
+  #  ================================== Zeppelin ========================================== #}
+  zeppelin:
+    image: trivadis/apache-zeppelin:0.8.2-hadoop2.7-spark2.4.4
+    container_name: zeppelin
+    hostname: zeppelin
+    labels:
+      com.mdps.service.webui.name: Apache Zeppelin UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28080
+    ports:
+      - 28080:8080
+#      - "4040:4040"
+#      - "42331:42331"
+    env_file:
+      - ./conf/hadoop.env
+    environment:
+      # AWS Credentials
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      ZEPPELIN_ADDR: 0.0.0.0
+      ZEPPELIN_PORT: '8080'
+      ZEPPELIN_INTERPRETER_CONNECT_TIMEOUT: 120000
+      SPARK_MASTER: spark://spark-master:7077
+      # set spark-master for Zeppelin interpreter
+      MASTER: spark://spark-master:7077
+      SPARK_DRIVER_HOST: zeppelin
+      SPARK_DRIVER_BINDADDRESS: 0.0.0.0
+      PYSPARK_PYTHON: python3
+# no longer necessary with 0.8.2 of Zepplin
+#      - SPARK_SUBMIT_OPTIONS="--packages org.apache.commons:commons-lang3:3.5"
+      # enableV4 to make it work with AWS Frankfurt region
+      SPARK_SUBMIT_OPTIONS: --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4
+    volumes:
+      - ./conf/spark/spark-defaults-memory.conf:/spark/conf/spark-defaults.conf
+      - ./conf/s3cfg:/root/.s3cfg
+      - ./conf/zeppelin/shiro.ini:/opt/zeppelin/conf/shiro.ini
+      - ./conf/zeppelin/interpreter-setting.json:/opt/zeppelin/interpreter/spark/interpreter-setting.json
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
+  #  ================================== Grafana ========================================== #}
+  grafana:
+    image: grafana/grafana:6.5.0
+    hostname: grafana
+    container_name: grafana
+    labels:
+      com.mdps.service.webui.name: Grafana UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:3000
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=abc123!
+    volumes:
+      - ./plugins/grafana:/etc/grafana/provisioning
+    restart: unless-stopped
+  #  ================================== Redis ========================================== #}
   redis:
     container_name: redis
-    hostname: redis
+    hostname: redis:5.0.7
     image: redis
     ports:
       - 6379:6379
-    restart: always
-
+    restart: unless-stopped
   redis-commander:
+    image: rediscommander/redis-commander:latest
     container_name: redis-commander
     hostname: redis-commander
-    image: rediscommander/redis-commander:latest
+    labels:
+      com.mdps.service.webui.name: Redis Commander UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28119
+    ports:
+      - 28119:8081
     environment:
       - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "38083:8081"
-    restart: always
-
-  ## Cassandra
-
+    restart: unless-stopped
+  #  ================================== Cassandra ========================================== #}
   cassandra-1:
-    image: cassandra
+    image: cassandra:3
     container_name: cassandra-1
-    
-    ports: 
-      - 9042:9042
+    hostname: cassandra-1
+    ports:
+      - 29042:9042
       - 7199:7199
-      - 9160:9160      
+      - 9160:9160
     environment:
       - CASSANDRA_SEEDS=cassandra-1
       - CASSANDRA_CLUSTER_NAME="Test Cluster"
       - CASSANDRA_DC=se1
-      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch    
-    restart: always
-
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+    restart: unless-stopped
   cassandra-web:
     image: trivadis/cassandra-web
     container_name: cassandra-web
+    hostname: cassandra-web
+    labels:
+      com.mdps.service.webui.name: Cassandra Web UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28200
     ports:
-      - "33000:3000"
+      - 28200:3000
     environment:
       - CASSANDRA_HOSTNAME=cassandra-1
       - CASSANDRA_PORT=9042
       - CASSANDRA_USERNAME=cassandra
       - CASSANDRA_PASSWORD=cassandra
-    restart: always
-
-  ## MongoDB
-
-  mongodb:
-    image: mongo:4
-    container_name: mongodb
-    ports: 
+    restart: unless-stopped
+  #  ================================== MongoDB ========================================== #}
+  mongo:
+    image: mongo:3.4
+    container_name: mongo
+    hostname: mongo
+    ports:
       - 27017:27017
     environment:
-      - MONGO_INITDB_DATABASE=sample   
+      - MONGO_INITDB_DATABASE=sample
       - MONGO_INITDB_USERNAME=admin
-      - MONGO_INITDB_PASSWORD=admin 
-#    volumes:
+      - MONGO_INITDB_PASSWORD=admin
+    volumes:
       # seeding scripts
-      #- ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d 
-    restart: always
-    
+      - ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d
+    restart: unless-stopped
   mongo-express:
-    image: mongo-express  
+    image: mongo-express:0.49
     container_name: mongo-express
-    ports: 
-      - 38082:8081
+    hostname: mongo-express
+    labels:
+      com.mdps.service.webui.name: Cassandra Web UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28203
+    ports:
+      - 28203:8081
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongodb   
-    restart: always
-
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    restart: unless-stopped
   admin-mongo:
-    image: adicom/admin-mongo  
+    image: adicom/admin-mongo:latest
     container_name: admin-mongo
-    ports: 
-      - 31234:1234
-    restart: always
-
-  ## HBase
-
-#  hbase:
-#    image: harisekhon/hbase:latest
-#    container_name: hbase
-#    ports:
-#      - 8080:8080
-#      - 8085:8085
-#      - 9090:9090
-#      - 9095:9095
-#      - 16000:16000
-#      - 16010:16010
-#      - 16201:16201
-#      - 16030:16030
-#      - 16301:16301
-
-
-  ## SOLR
-
-#  solr-1:
-#    image: solr
-#    container_name: solr-1
-#    ports:
-#      - "8983:8983"
-#    restart: always
-  
-  ## Elasticsearch
-
-  ## sudo sysctl -w vm.max_map_count=262144   
+    hostname: admin-mongo
+    labels:
+      com.mdps.service.webui.name: Admin Mongo UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28204
+    ports:
+      - 28204:1234
+    restart: unless-stopped
+  #  ================================== Elasticsearch ========================================== #}
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
     hostname: elasticsearch
     container_name: elasticsearch
+    labels:
+      com.mdps.service.restapi.name: Elasticsearch REST API
+      com.mdps.service.restapi.url: http://${PUBLIC_IP}:9200
     ports:
-      - "9200:9200"
-      - "9300:9300"    
-    volumes:
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - 9200:9200
+      - 9300:9300
     environment:
-      xpack.security.enabled: "false"
-      XPACK_SECURITY_ENABLED: "false"
-      xpack.monitoring.enabled: "false"
-    restart: always
-
+      XPACK_SECURITY_enabled: 'false'
+      xpack.monitoring.enabled: 'false'
+      http.cors.enabled: 'true'
+      http.cors.allow-origin: 'http://dejavu:1358,http://dataplatform:28205,http://${PUBLIC_IP}:28205,${DOCKER_HOST_IP}:28205,http://127.0.0.1:1358'
+      http.cors.allow-headers: 'X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization'
+      http.cors.allow-credentials: 'true'
+      
+    restart: unless-stopped
+  dejavu:
+    image: appbaseio/dejavu:3.4.0
+    container_name: dejavu
+    hostname: dejuvu
+    labels:
+      com.mdps.service.webui.name: Elasticsearch Dejavu UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28205
+    ports:
+      - 28205:1358
+    restart: unless-stopped
+  cerebro:
+    image: lmenezes/cerebro:latest
+    container_name: cerebro
+    hostname: cerebro
+    labels:
+      com.mdps.service.webui.name: Elasticsearch Cerbero UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28206
+    ports:
+      - 28206:9000
+    restart: unless-stopped
+  elastichq:
+    image: elastichq/elasticsearch-hq:latest
+    container_name: elastichq
+    hostname: elatichq
+    labels:
+      com.mdps.service.webui.name: ElasticHQ UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28207
+    ports:
+      - 28207:5000
+  #  ================================== Kibana ========================================== #}
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.7.0
+    image: docker.elastic.co/kibana/kibana:6.6.0
     hostname: kibana
     container_name: kibana
+    labels:
+      com.mdps.service.webui.name: Kibana UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:5601
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601"
+      - 5601:5601
     environment:
-      XPACK_SECURITY_ENABLED: "false"
-      XPACK_MONITORING_ENABLED: "false"
-      DISCOVER_TYPE: "single-node"
-      SERVER_HOST: "0.0.0.0"
-      SERVER_NAME: "kibana"
-      XPACK_GRAPH_ENABLED: "false"
-      XPACK_MONITORING_ENABLED: "false"
-      XPACK_REPORTING_ENABLED: "false"
-      XPACK_SECURITY_ENABLED: "false"
-    command: [ "/bin/bash", "-c", "/usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker" ]
-    restart: always
-    
-  dejavu:
-    image: appbaseio/dejavu
-    hostname: dejuvu
-    container_name: dejavu
-    ports:
-      - "1358:1358"
-    restart: always
-
-  cerebro:
-    image: lmenezes/cerebro
-    hostname: cerebro
-    container_name: cerebro
-    ports:
-      - "39000:9000"    
-    restart: always
-  
-  elastichq:
-    image: elastichq/elasticsearch-hq
-    hostname: elatichq
-    container_name: elastichq
-    ports:
-      - "35000:5000"
-  
-  ## Neo4J
-
-  neo4j:
+      xpack.monitoring.enabled: 'false'
+      discovery.type: single-node
+      elasticsearch.url: http://elasticsearch:9200
+      server.host: 0.0.0.0
+      SERVER_HOST: 0.0.0.0
+      server.name: kibana
+      SERVER_NAME: kibana
+      XPACK_GRAPH_enabled: 'false'
+      XPACK_MONITORING_enabled: 'false'
+      XPACK_REPORTING_enabled: 'false'
+      XPACK_SECURITY_enabled: 'false'
+    command: [/bin/bash, -c, /usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker]
+    restart: unless-stopped
+  #  ================================== Neo4J ========================================== #}
+  neo4j-1:
     image: neo4j:latest
-    hostname: neo4j
-    container_name: neo4j
+    hostname: neo4j-1
+    container_name: neo4j-1
+    labels:
+      com.mdps.service.webui.name: Neo4J UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:7474
     ports:
-      - "7474:7474"
-      - "7687:7687"
+      - 7474:7474
+      - 7687:7687
     environment:
-      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
-      - NEO4J_apoc_import_file_enabled=true
-      - NEO4J_dbms_shell_enabled=true
-    restart: always
-
-  ## Influxdb
-
-#  influxdb:
-#    image: influxdb
-#    hostname: influxdb
-#    container_name: influxdb
-#    ports:
-#      - "8083:8083"
-#      - "8086:8086"
-#      - "8090:8090"
-#    environment:
-#      - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
-#      - INFLUXDB_HTTP_AUTH_ENABLED=true
-#      - INFLUXDB_HTTP_LOG_ENABLED=false
-#    restart: always
-
-#  chronograf:
-#    image: chronograf:latest
-#    hostname: chronograf
-#    container_name: chronograf
-#    ports:
-#      - "8888:8888"
-#    links:
-#      - influxdb
-
-  ## Grafana
-
-  grafana:
-    image: grafana/grafana
-    hostname: grafana
-    container_name: grafana
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_HEAP_MEMORY=2048
+      - NEO4J_CACHE_MEMORY=1G
+      - NEO4J_AUTH=neo4j/abc123!
+    volumes:
+#      - "./conf/neo4j/neo4j.conf:/conf/neo4j.conf"
+      - ./plugins/neo4j/:/plugins
+    restart: unless-stopped
+  #  ================================== InfluxData InfluxDB ========================================== #}
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    hostname: influxdb
+    labels:
+      com.mdps.service.restapi.name: InfluxDB Rest API
+      com.mdps.service.restapi.url: http://${PUBLIC_IP}:8086
     ports:
-      - "3010:3000"
-    restart: always
-
-  ## Notebook
-    
-  zeppelin:
-    image: apache/zeppelin:0.8.1
-    hostname: zeppelin
-    container_name: zeppelin
+      - 8086:8086
+    volumes:
+      - ./conf/influxdata/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
+  influxdb-ui:
+    image: timeseriesadmin/timeseriesadmin:latest
+    container_name: influxdb-ui
+    hostname: influxdb-ui
+    labels:
+      com.mdps.service.webui.name: InfluxDB UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28208
     ports:
-      - "38081:8080"    
-    restart: always
-
-  jupyter:
-    image: jupyter/datascience-notebook:latest
-    hostname: jupyter
-    container_name: jupyter
-    ports: 
-      - "10000:8888"
+      - 28208:80
+    restart: unless-stopped
+  #  ================================== InfluxData Chronograf ========================================== #}
+  chronograf:
+    image: chronograf:latest
+    hostname: chronograf
+    container_name: chronograf
+    labels:
+      com.mdps.service.webui.name: Chronograf UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28209
+    ports:
+      - 28209:8888
     environment:
-      JUPYTER_ENABLE_LAB: "true"
-    restart: always
-
- 
+      RESOURCES_PATH: /usr/share/chronograf/resources
+      PORT: 8888
+      HOST: chronograf
+      INFLUXDB_URL: http://influxdb:8086
+    depends_on:
+      - influxdb
+    restart: unless-stopped
+  #  ================================== InfluxData Telegraf ========================================== #}
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    hostname: telegraf
+    environment:
+      HOSTNAME: telegraf
+    volumes:
+      - ./conf/influxdata/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./data-transfer:/data-transfer
+      # Mount for Docker API access
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+  #  ================================== PostgreSQL ========================================== #}
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    hostname: postgresql
+    environment:
+      - POSTGRES_PASSWORD=sample
+      - POSTGRES_USER=sample
+      - POSTGRES_DB=sample
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./init/postgresql:/docker-entrypoint-initdb.d/
+    restart: unless-stopped
+  #  ================================== Adminer ========================================== #}
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    hostname: adminer
+    labels:
+      com.mdps.service.webui.name: Adminer UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28210
+    ports:
+      - 28210:8080
+    restart: unless-stopped
+  #  ================================== Presto ========================================== #}
+  presto:
+    hostname: presto
+    image: starburstdata/presto:latest
+    container_name: presto
+    labels:
+      com.mdps.service.webui.name: Presto UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28081
+    ports:
+      - 28081:8080
+#    volumes:
+#      - './conf/presto/minio.properties:/usr/lib/presto/etc/catalog/minio.properties'
+#      - './conf/presto/postgresql.properties:/usr/lib/presto/etc/catalog/postgresql.properties'
+    restart: unless-stopped
+  #  ================================== Presto ========================================== #}
+  dremio:
+    hostname: dremio
+    image: dremio/dremio-oss:latest
+    container_name: dremio
+    labels:
+      com.mdps.service.webui.name: Dremio UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:9047
+    ports:
+      - 9047:9047
+      - 31010:31010
+      - 45678:45678
+    restart: unless-stopped
+  #  ================================== cAdvisor ========================================== #}
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    hostname: cadvisor
+    labels:
+      com.mdps.service.webui.name: cAdvisor UI
+      com.mdps.service.webui.url: http://${PUBLIC_IP}:28217
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 28217:8080
+    restart: unless-stopped
