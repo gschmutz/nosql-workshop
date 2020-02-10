@@ -1,9 +1,13 @@
 # Getting started with Redis
-In this workshop we will learn the basics of working with Redis. We will be using Docker for initilizing Redis in a container. 
+
+In this workshop we will learn the basics of working with Redis. We will be using Docker for initialising Redis in a container. 
 
 ## Connecting to the Redis environment
 
+For connecting to Redis, we can either use the Redis Command Line Utility or the browser-based Redis Commander.
+
 ### Using the Redis Command Line utility
+
 Open another terminal window and enter the following command to start Redis CLI in another docker container:
 
 ```
@@ -35,28 +39,34 @@ Set your preferences in ~/.redisclirc
 
 ### Using Redis Commander
 
-<http://nosqlplatform:38083>
+In a web browser window, navigate to <http://dataplatform:28119>. You should see an image similar to the one shown below
+
+![Redis Commander](./images/redis-commander-home.png)
 
 ## String Data Structure
-Enter the commands described in the following sections at the prompt. 
+
+Enter the commands described in the following sections at the prompt. This can be done either using the Redis CLI or using the Redis Commander. 
 
 ```
 HELP @STRING
 ```
 
 ###	Working with keys
+
 Redis is what is called a key-value store, often referred to as a NoSQL database. The essence of a key-value store is the ability to store some data, called a value, inside a key. This data can later be retrieved only if we know the exact key used to store it. 
-We can use the command SET to store the value “redis-server” at key “server:name”:
+
+We can use the command `SET` to store the value “redis-server” at key “server:name”:
 
 ```
 SET server:name "redis-server"
 ```
 
-Redis will store our data permanently, so we can later ask “What is the value stored at key server:name?” 
+Redis will store our data permanently, so we can later ask _What is the value stored at key server:name_?
 
 ```
 GET server:name 
 ```
+
 and Redis will reply with “redis-server”.
 
 ```
@@ -76,23 +86,24 @@ KEYS *
 
 
 ### Get and Set operations
+
 Other common operations provided by key-value stores are DEL to delete a given key and associated value, SET-if-not-exists (called SETNX on Redis) that sets a key only if it does not already exist, and INCR to atomically increment a number stored at a given key. So let's see some of these commands in action:
 
-Let's first set a value at the key `connections` by using the **SET** command:
+Let's first set a value at the key `connections` by using the `SET` command:
 
 ```
 redis:6379> SET connections 10
 OK
 ```
 
-Let's check for the value by using the **GET** command:
+Let's check for the value by using the `GET` command:
 
 ```
 redis:6379> GET connections
 "10"
 ```
 
-Now let's try if we can overwrite it by using another **SET** command:
+Now let's try if we can overwrite it by using another `SET` command:
 
 ```
 redis:6379> SET connections 20
@@ -101,7 +112,7 @@ redis:6379> GET connections
 "20"
 ```
 
-Let's see what happens if we are using the **SETNX** command. 
+Let's see what happens if we are using the `SETNX` command. 
 
 ```
 redis:6379> SETNX connections 30
@@ -110,21 +121,21 @@ redis:6379> GET connections
 "20"
 ```
 
-if we are using **SETNX** on a key which does not yet exists, we get a different answer:
+if we are using `SETNX` on a key which does not yet exists, we get a different answer:
 
 ```
 redis:6379> SETNX newkey 30
 (integer) 1
 ```
 
-Let's use **MSET** to set multiple key value pairs...
+Let's use `MSET` to set multiple key value pairs...
 
 ```
 redis:6379> MSET key1 10 key2 20 key3 30
 (integer) 1
 ```
 
-and the oppposite **MGET** to get multiple values for multiple keys back. 
+and the oppposite `MGET` to get multiple values for multiple keys back. 
 
 ```
 redis:6379> MGET key1 key3
@@ -132,13 +143,13 @@ redis:6379> MGET key1 key3
 2) "30"
 ```
 
-**Note**: this is very much different to single **SET** and **GET** commands, as it it done atomically in one operation. 
+**Note**: this is very much different to single `SET` and `GET` commands, as it it is done atomically in one operation. 
 
 ### Increment and Decrement operation
 
 Now let's treat the value as a counter. 
 
-First we initialize the connections value to 10, followed by a **INCR** to increment it by one. 
+First we initialise the connections value to 10, followed by a `INCR` to increment it by one. 
  
 ```
 redis:6379> SET connections 10
@@ -149,28 +160,28 @@ redis:6379> INCR connections
 
 We can see that we get the new value of the counter back. 
 
-Next we increase it by 10, using the **INCRBY** command. 
+Next we increase it by 10, using the `INCRBY` command. 
 
 ```
 redis:6379> INCRBY connections 10
 (integer) 21
 ```
 
-Now let's do the opposite and decrement the counter value. First using the **DECR** command the counter is decremented by one. 
+Now let's do the opposite and decrement the counter value. First using the `DECR` command the counter is decremented by one. 
 
 ```
 redis:6379> DECR connections
 (integer) 20
 ```
 
-and then witht the **DECRBY** we can specify the decrement to use, here we use 10. 
+and then with the `DECRBY` we can specify the decrement to use, here we use 10. 
 
 ```
 redis:6379> DECRBY connections 10
 (integer) 10
 ```
 
-Now let's delete the key/value pair and see what happends if we use **INCR** on a non-existing key. 
+Now let's delete the key/value pair and see what happens if we use `INCR` on a non-existing key. 
 
 ```
 redis:6379> DEL connections
@@ -183,10 +194,10 @@ redis:6379> INCR connections
 (integer) 1
 ```
 
-We can see that the **INCR** automatically starts with the value 0 and increments it by 1, which is the result we get back. 
+We can see that the `INCR` automatically starts with the value 0 and increments it by 1, which is the result we get back. 
 
 ----
-**Note:** There is something special about INCR. Why do we provide such an operation if we can do it ourself with a bit of code? After all it is as simple as:
+**Note:** There is something special about INCR. Why do we provide such an operation if we can do it ourselves with a bit of code? After all it is as simple as:
 x = GET count
 x = x + 1
 SET count x
@@ -198,12 +209,13 @@ The problem is that doing the increment in this way will only work as long as th
   3.	Client A increments 10 and sets count to 11.
   4.	Client B increments 10 and sets count to 11.
 
-We wanted the value to be 12, but instead it is 11! This is because incrementing the value in this way is not an atomic operation. Calling the **INCR** command in Redis will prevent this from happening, because it is an atomic operation. Redis provides many of these atomic operations on different types of data.
+We wanted the value to be 12, but instead it is 11! This is because incrementing the value in this way is not an atomic operation. Calling the `INCR` command in Redis will prevent this from happening, because it is an atomic operation. Redis provides many of these atomic operations on different types of data.
 
 ----
 
 ### Expiration and Time to Live
-Redis can be told that a key should only exist for a certain length of time. This is accomplished with the **EXPIRE** and **TTL** commands.
+
+Redis can be told that a key should only exist for a certain length of time. This is accomplished with the `EXPIRE` and `TTL` commands.
 
 First let's set a new key/value pair. 
 
@@ -212,14 +224,14 @@ redis:6379> SET resource:lock "Redis Demo"
 OK
 ```
 
-and then set it to expire after 2 minutes (120 seconds) by using the **EXPIRE** command.
+and then set it to expire after 2 minutes (120 seconds) by using the `EXPIRE` command.
 
 ```
 redis:6379> EXPIRE resource:lock 120
 (integer) 1
 ```
 
-This sets the key `resource:lock` to be deleted in 120 seconds. You can test how long a key will exist for with the **TTL** command. It returns the number of seconds until it will be deleted.
+This sets the key `resource:lock` to be deleted in 120 seconds. You can test how long a key will exist for with the `TTL` command. It returns the number of seconds until it will be deleted.
 
 ```
 redis:6379> TTL resource:lock
@@ -233,14 +245,14 @@ redis:6379> TTL resource:lock
 (integer) -2
 ```
 
-The -2 for the TTL of the key count means that the key does (not/no longer) exist. We can prove it using the **EXISTS** command.
+The -2 for the TTL of the key count means that the key does (not/no longer) exist. We can prove it using the `EXISTS` command.
 
 ```
 redis:6379> EXISTS resource:lock
 (integer) 0
 ```
 
-If you **SET** a key to a new value, its TTL will reset. Let's see that behaviour, by creating the value directly with an expiration time. This can either be done with the special **SETEX** or by **SET** and the option **EX**.  
+If you `SET` a key to a new value, its TTL will reset. Let's see that behaviour, by creating the value directly with an expiration time. This can either be done with the special `SETEX` or by `SET` and the option `EX`.  
 
 ```
 redis:6379> SET resource:lock "Redis Demo 1" EX 120
@@ -272,10 +284,11 @@ Check the full list of [Srings commands](https://redis.io/commands#string) for m
 
 ##	List data structures
 
-Redis also supports several more complex data structures. The first one we'll look at is a list. A list is a series of ordered values. Some of the important commands for interacting with lists are RPUSH, LPUSH, LLEN, LRANGE, LPOP, and RPOP. You can immediately begin working with a key as a list, as long as it doesn't already exist as a different type.
-RPUSH puts the new value at the end of the list.
+Redis also supports several more complex data structures. The first one we'll look at is a list. A list is a series of ordered values. Some of the important commands for interacting with lists are `RPUSH`, `LPUSH`, `LLEN`, `LRANGE`, `LPOP``, and RPOP. You can immediately begin working with a key as a list, as long as it doesn't already exist as a different type.
 
-Let's add a new item to the end of a non-existing list called `skills` using the **RPUSH** command. 
+`RPUS` puts the new value at the end of the list.
+
+Let's add a new item to the end of a non-existing list called `skills` using the `RPUSH` command. 
 
 ```
 redis:6379> RPUSH skills "Oracle RDBMS"
@@ -289,15 +302,15 @@ redis:6379> RPUSH skills "Redis"
 (integer) 2
 ```
 
-Not let's see the values currently in the `skills` list. Can we use the **GET** command?
+Not let's see the values currently in the `skills` list. Can we use the `GET` command?
 
 ```
 redis:6379> GET skills
 (error) WRONGTYPE Operation against a key holding the wrong kind of value
 ```
 
-The **GET** command belongs to the **String** group and can not be used for **list** structures.
-But we can use the **LRANGE** command for that. 
+The `GET` command belongs to the `String` group and cannot be used for `list` structures.
+But we can use the `LRANGE` command for that. 
 
 ```
 redis:6379> LRANGE skills 0 -1
@@ -305,7 +318,7 @@ redis:6379> LRANGE skills 0 -1
 2) "Redis"
 ``` 
 
-**LPUSH** puts the new value at the start of the list.
+`LPUSH` puts the new value at the start of the list.
 
 ```
 redis:6379> LPUSH skills "SQL Server"
@@ -316,7 +329,7 @@ redis:6379> LRANGE skills 0 -1
 3) "Redis"
 ```
 
-**LRANGE** gives a subset of the list. It takes the index of the first element you want to retrieve as its first parameter and the index of the last element you want to retrieve as its second parameter. A value of -1 for the second parameter means to retrieve elements until the end of the list.
+`LRANGE` gives a subset of the list. It takes the index of the first element you want to retrieve as its first parameter and the index of the last element you want to retrieve as its second parameter. A value of -1 for the second parameter means to retrieve elements until the end of the list.
 
 ```
 redis:6379> LRANGE skills 0 -1 
@@ -337,21 +350,21 @@ redis:6379> LRANGE skills 1 2
 3) "Redis"
 ```
 
-**LLEN** returns the current length of the list.
+`LLEN` returns the current length of the list.
 
 ```
 redis:6379> LLEN skills 
 (integer) 3
 ```
 
-**LPOP** removes the first element from the list and returns it.
+`LPOP` removes the first element from the list and returns it.
 
 ```
 redis:6379> LPOP skills 
 "SQL Server"
 ```
 
-**RPOP** removes the last element from the list and returns it.
+`RPOP` removes the last element from the list and returns it.
 
 ```
 redis:6379> RPOP skills 
@@ -373,9 +386,9 @@ Check the full list of [List commands](https://redis.io/commands#list) for more 
 
 The next data structure that we'll look at is the set. 
 
-A set is similar to a list, except it does not have a specific order and each element may only appear once. Some of the important commands in working with sets are **SADD**, **SREM**, **SISMEMBER**, **SMEMBERS** and **SUNION**.
+A set is similar to a list, except it does not have a specific order and each element may only appear once. Some of the important commands in working with sets are `SADD`, `SREM`, `SISMEMBER`, `SMEMBERS` and `SUNION`.
 
-**SADD** adds the given value to the set. 
+`SADD` adds the given value to the set. 
 
 ```
 redis:6379> SADD nosql:products "Cassandra"
@@ -386,7 +399,7 @@ redis:6379> SADD nosql:products "MongoDB"
 (integer) 1
 ```
 
-**SMEMBERS** returns a list of all the members of this set.
+`SMEMBERS` returns a list of all the members of this set.
 
 ```
 redis:6379> SMEMBERS nosql:products
@@ -395,7 +408,7 @@ redis:6379> SMEMBERS nosql:products
 3) "MongoDB"
 ```
 
-**SREM** removes the given value from the set.
+`SREM` removes the given value from the set.
 
 
 ```
@@ -406,7 +419,7 @@ redis:6379> SMEMBERS nosql:products
 2) "Cassandra"
 ```
 
-**SISMEMBER** tests if the given value is in the set.
+`SISMEMBER` tests if the given value is in the set.
 
 ```
 redis:6379> SISMEMBER nosql:products "Cassandra"
@@ -417,7 +430,7 @@ redis:6379> SISMEMBER nosql:products "MongoDB"
 
 Cassandra is a member of the nosql:products, but MongoDB is not (therefore the result of 0).
 
-**SUNION** combines two or more sets and returns the list of all elements.
+`SUNION` combines two or more sets and returns the list of all elements.
 
 first let's create another set of RDBMS products:
 
@@ -450,7 +463,7 @@ redis:6379> SMEMBERS database:products
 4) "Oracle"
 ```
 
-**SINTER** intersects two or more sets and returns the list of the intersecting elements.
+`SINTER` intersects two or more sets and returns the list of the intersecting elements.
 
 ```
 redis:6379> SADD favorite:products "Cassandra"
@@ -469,7 +482,7 @@ Check the full list of [Set commands](https://redis.io/commands#set) for more in
 Sets are a very handy data type, but as they are unsorted they don't work well for a number of problems. This is why Redis 1.2 introduced Sorted Sets.
 A sorted set is similar to a regular set, but now each value has an associated score. This score is used to sort the elements in the set.
 
-**ZADD** adds one or more members to a sorted set, or update its score if it already exists.
+`ZADD` adds one or more members to a sorted set, or update its score if it already exists.
 
 ```
 redis:6379> ZADD pioneers 1940 "Alan Kay"
@@ -492,7 +505,7 @@ redis:6379> ZADD pioneers 1912 "Alan Turing"
 
 In these examples, the scores are years of birth and the values are the names of famous people in informatics.
 
-**ZRANGE** returns a range of members in a sorted set by index (ordered low to high, e.g. ascending), optionally also returns the scores. Index starts with 0. 
+`ZRANGE` returns a range of members in a sorted set by index (ordered low to high, e.g. ascending), optionally also returns the scores. Index starts with 0. 
 
 ```
 redis:6379> ZRANGE pioneers 2 4
@@ -509,7 +522,7 @@ redis:6379> ZRANGE pioneers 2 4 WITHSCORES
 6) "1953"
 ```
 
-**ZREVRANGE** returns a range of members in a sorted set by index (ordered high to low, e.g. descending), optionally also returns the scores. Index starts with 0. 
+`ZREVRANGE` returns a range of members in a sorted set by index (ordered high to low, e.g. descending), optionally also returns the scores. Index starts with 0. 
 
 ```
 redis:6379> ZREVRANGE pioneers 0 2
@@ -526,7 +539,7 @@ Simple strings, sets and sorted sets already get a lot done but there is one mor
 
 Hashes are maps between string fields and string values, so they are the perfect data type to represent objects (eg: A User with a number of fields like name, surname, age, and so forth):
 
-**HSET** sets the field in the hash stored at the given key to a value. 
+`HSET` sets the field in the hash stored at the given key to a value. 
 
 ```
 redis:6379> HSET user:1000 name "John Smith"
@@ -537,7 +550,7 @@ redis:6379> HSET user:1000 password "s3cret"
 (integer) 1
 ```
 
-To get back the saved data use **HGETALL** command:
+To get back the saved data use `HGETALL` command:
 
 ```
 redis:6379> HGETALL user:1000
@@ -549,7 +562,7 @@ redis:6379> HGETALL user:1000
 6) "s3cret"
 ```
 
-You can also set multiple fields at once using the **HMSET** command. 
+You can also set multiple fields at once using the `HMSET` command. 
 
 ```
 redis:6379> HMSET user:1001 name "Mary Jones" password "hidden" email "mjones@example.com"
@@ -568,7 +581,7 @@ redis:6379> HGETALL user:1001
 6) "mjones@example.com"
 ```
 
-If you only need a single field value that is possible as well using the **HGET** command
+If you only need a single field value that is possible as well using the `HGET` command
 
 ```
 redis:6379> HGET user:1001 name
