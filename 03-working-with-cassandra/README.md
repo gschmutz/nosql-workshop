@@ -1,7 +1,7 @@
 # Working with Cassandra
 In this workshop we will learn how to use the Apache Cassandra NoSQL database.
 
-We assume that the platform decribed [here](../01-environment) is running and accessible. 
+We assume that the platform described [here](../01-environment) is running and accessible. 
 
 ## Connecting to the Cassandra environment
 
@@ -18,12 +18,14 @@ This will connect you into the `cassandra-1` container and run the `cqlsh` insid
 ```
 bigdata@bigdata:~$ docker exec -ti cassandra-1 cqlsh
 Connected to Test Cluster at 127.0.0.1:9042.
-[cqlsh 5.0.1 | Cassandra 3.11.4 | CQL spec 3.4.4 | Native protocol v4]
+[cqlsh 5.0.1 | Cassandra 3.11.5 | CQL spec 3.4.4 | Native protocol v4]
 Use HELP for help.
 cqlsh>
 ```
 
-You are now at the Cassandra CQL command prompt, ready to execute CQL statements. We can also see the version of Cassandra, CQL and cqlsh which we have available. 
+You are now at the Cassandra CQL command prompt, ready to execute CQL statements. 
+
+We can also see the actual version of Cassandra, CQL and cqlsh available to us. 
 
 ### Using browser-based GUI
 Instead of working over the command line and therefore having to connect to the Docker Host via SSH, we can also use a browser based GUI to access Cassandra. Two browser-based utilities are available as part of the platform. 
@@ -31,7 +33,7 @@ Instead of working over the command line and therefore having to connect to the 
 #### Cassandra Web
 
 The first one is the [Cassandra Web](http://avalanche123.com/cassandra-web/).
-In a browser window navigate to <http://nosqlplatform:33000/> and you should directly arrive on the home screen as shown below. 
+In a browser window navigate to <http://nosqlplatform:28120/> and you should directly get to the home screen as shown below. 
 
 ![Alt Image Text](./images/cassandra-web.png "Cassandra Web GUI")
 
@@ -39,16 +41,15 @@ If you click on **Execute** in the top-right corner, a pop-window will appear wh
 
 #### Apache Zeppelin
 
-Antoher universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
+Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
 
-Apache Zeppelin uses a so called "Notebook" based model that enables data-driven,
-interactive data analytics and collaborative documents with SQL, Scala and more.
+Apache Zeppelin uses a so called "Notebook" based model that enables data-driven, interactive data analytics and collaborative documents with SQL, Scala and more.
 
 Zeppelin uses the concept of interpreters. Each Interpreter has the capability to "talk" to a given data systems. When creating a Notebook, you can specify the "default" interpreter to use, all other interpreters can be used as well, but then the directive `%<interpreter-name>`has to be used in each cell. 
 
-Zepplin has a Cassandra interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter** as shown in the image below. 
+Zeppelin has a Cassandra interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter** as shown in the image below. 
 
 ![Alt Image Text](./images/apache-zeppelin-navigate-interpreter.png "Apache Zeppelin Interpreter")
 
@@ -58,9 +59,9 @@ Navigate to the **Cassandra** Interpreter either by searching for it or scrollin
 
 Scroll-down to the end of the Interpreter settings and click **Save**. Confirm that you want Zeppelin to restart the Interpreter with the new settings. 
 
-Click on **Zeppelin** in the uper left corner to navigate back to the Home screen. 
+Click on **Zeppelin** in the upper left corner to navigate back to the Home screen. 
 
-Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Cassandra` intot he **Note Name** field and select **cassandra** for the **Default Interpreter** and click **Create**. 
+Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Cassandra` into the **Note Name** field and select **cassandra** for the **Default Interpreter** and click **Create**. 
 
 ![Alt Image Text](./images/apache-zeppelin-create-notebook.png "Apache Zeppelin Cassandra Create Notebook")
 
@@ -69,6 +70,7 @@ An empty notebook with one cell will appear. This cell is now ready to be used a
 For all the commands which follow now in this workshop, you can either use one of the 3 different options shown above. Of course you an also mix to your liking. 
 
 ## Create a Keyspace for the Movie sample
+
 Keyspace in Cassandra is the equivalent of database/schema in relational databases. While creating a keyspace, you need to specify replication settings:
 
 ```
@@ -76,8 +78,9 @@ CREATE KEYSPACE movies WITH replication =
   {'class':'SimpleStrategy','replication_factor':1};
 ```
 
-We'll be using SimpleStrategy to keep things simple, because our Cassandra setup is
-just single node. In production environment, where it's usually common to have multiple data centers, NetworkTopologyStrategy is generally used because it distributes data across data centers better.
+We'll be using SimpleStrategy to keep things simple, because our Cassandra setup is just single node. 
+
+In a production environment, where it's usually common to have multiple datacenters, `NetworkTopologyStrategy` is generally used because it better distributes data across datacenters.
 
 Replication factor = 1 means there will be single copy of a row on a particular node. Higher replication factors are set up in real systems for creating multiple replicas that ensures data availability in case of disk failures.
 
@@ -89,15 +92,21 @@ USE movies;
 
 Another option is to prefix the table name with the keyspace name in all queries, similar to what you can do when referencing the schema in an RDBMS.
 
-At any time, you can DESCRIBE the keyspace, use the following command to do that: 
+At any time, you can `DESCRIBE` the keyspace, use the following command to do that: 
 
 ```
 DESCRIBE KEYSPACE movies;
 ```
 
-If you wish to list all keyspaces present in the database, a Cassandra reserve keyspace named system comes in handy. It contains many system-defined tables for database objects definition and cluster configuration. Let's list all records from the schema_keyspaces table that contains records for each keyspace. 
+and you should see an output similar to the one shown below
 
-Enter the following command
+```
+CREATE KEYSPACE movies WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+```
+
+If you wish to list all keyspaces present in the database, a Cassandra reserve keyspace named system comes in handy. It contains many system-defined tables for database objects definition and cluster configuration. Let's list all records from the `schema_keyspaces` table that contains records for each keyspace. 
+
+Enter the following command:
 
 ```
 SELECT * FROM system_schema.keyspaces;
@@ -106,13 +115,21 @@ SELECT * FROM system_schema.keyspaces;
 The output of this command looks as follows:
 
 ```
+ keyspace_name      | durable_writes | replication
+--------------------+----------------+-------------------------------------------------------------------------------------
+        system_auth |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '1'}
+      system_schema |           True |                             {'class': 'org.apache.cassandra.locator.LocalStrategy'}
+             movies |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '1'}
+ system_distributed |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '3'}
+             system |           True |                             {'class': 'org.apache.cassandra.locator.LocalStrategy'}
+      system_traces |           True | {'class': 'org.apache.cassandra.locator.SimpleStrategy', 'replication_factor': '2'}
 ```
 
 ## Using "Static" Tables (skinny row)
 
 ### Create the Movie and Actor table
 
-Run the following statement for creating a table called user. For those who are acquainted with SQL, the following syntax should look very familiar and almost identical. Even some of the naming conventions as well as formatting guidelines can be re-used.
+Run the following statement for creating a table called user. For those who are acquainted with SQL, the following syntax should look very familiar and almost identical. Even some of the naming conventions as well as formatting guidelines can be reused.
 
 ```
 DROP TABLE IF EXISTS movies.movie;
@@ -143,7 +160,7 @@ CREATE TABLE movies.actor (actor_id int,
 );
 ```
 
-You can view a table metadata using the DESCRIBE command, as shown in the following statement
+You can view a table metadata using the `DESCRIBE` command, as shown in the following statement
 
 ```
 DESCRIBE TABLE movie;
@@ -154,7 +171,7 @@ DESCRIBE TABLE actor;
 
 In Cassandra, an INSERT operation is actually an "Upsert" (UPDATE or INSERT), which means columns are updated in case a row for the given primary key already exists, otherwise all columns are freshly inserted.
 
-First lets add the movie "The Matrix" and "Plup Fiction"
+First lets add the movie "The Matrix" and "Pulp Fiction"
 
 ```
 // insert "The Matrix" - 0133093
@@ -311,6 +328,7 @@ FROM movies.actor;
 ```
 
 Result of previous SELECT queries may make you wonder, this looks so similar to RDBMS tables, is this how data is stored in Cassandra as well?
+
 The answer to the preceding questions is—although CQL gives you a nice looking interface similar to a RDBMS you are used to, data is stored in Cassandra according to its own data-model.
 
 Try what happens if you try to restrict on another column, such the `name` of the actor.
@@ -337,7 +355,7 @@ FROM movies.actor
 WHERE actor_id = 0000246;
 ```
 
-As hinted in the exception, you can force Cassandra to execute a restriction on an non-primary column by adding the `ALLOW FILTERING` clause.
+As hinted in the exception, you can force Cassandra to execute a restriction on a non-primary column by adding the `ALLOW FILTERING` clause.
 
 ```
 SELECT * 
@@ -346,10 +364,10 @@ WHERE name = 'Bruce Willis'
 ALLOW FILTERING;
 ```
 
-Be careful with this allthough. This is very inefficient for Cassandra to do and there is a good reason ALLOW FILTERING is not active by default. 
+Be careful with this all though. This is **very inefficient** for Cassandra to do and there is a good reason `ALLOW FILTERING` is not enabled by default. 
 
 ### Updating data
-You can use UPDATE to change data. As said previously, it will have the same effect as an INSERT. 
+You can use `UPDATE` to change data. As said previously, it will have the same effect as an `INSERT`. 
 
 Let's update the actor Bruce Willis and add his middle name.
 
@@ -359,7 +377,7 @@ SET name = 'Bruce Walter Willis'
 WHERE actor_id = 0000246; 
 ```
 
-Check the result with a SELECT. 
+Check the result with a `SELECT`. 
 
 ```
 SELECT * 
@@ -374,9 +392,9 @@ INSERT INTO movies.actor (actor_id, name)
 VALUES (0000246, 'Bruce Willis');
 ```
 
-Check the result again with a SELECT. You can see that the `name` has been updated. 
+Check the result again with a `SELECT`. You can see that the `name` has been updated. 
 
-Now let's show that with an UPDATE we can even create a new record:
+Now let's show that with an `UPDATE` we can even create a new record:
 
 ```
 UPDATE movies.actor
@@ -384,7 +402,7 @@ SET name = 'Cool Actor'
 WHERE actor_id = 99999999; 
 ```
 
-You can clearly see that an **INSERT** will not complain if a row already exists under a given primary key (row key). It will even update that row. A huge difference compared to RDBMS! 
+You can clearly see that an `INSERT` will not complain if a row already exists under a given primary key (row key). It will even update that row. A huge difference compared to RDBMS! 
 
 Be careful to always pass the right primary key value, otherwise some unexpected results might occur.
 
@@ -396,11 +414,11 @@ Of course we can also delete data.
 Data can be deleted using CQL in one of the following ways
 
 1.	As used before - it deletes column(s) or entire row(s)
-2.	TRUNCATE: It deletes all rows from the table
-3.	USING TTL: It sets time to live on column(s) within a row; after expiration of specified period, columns are automatically deleted by Cassandra.
+2.	`TRUNCATE`: It deletes all rows from the table
+3.	`USING TTL`: It sets time to live on column(s) within a row; after expiration of specified period, columns are automatically deleted by Cassandra.
 
 
-Let's remove the actor with ID 99999999 we have just inserted before with a DELETE:
+Let's remove the actor with ID 99999999 we have just inserted before with a `DELETE`:
 
 ```
 DELETE FROM movies.actor
@@ -436,13 +454,14 @@ So far we have only stored information which static in a way that the number of 
 
 Dynamic Tables allow also growing to the side, so the number of columns are basically dynamic at runtime and ever row can have a different number of columns stored in the table / database.
 
-So far our Movies and Actors which we have stored in the so-named static Cassandra table have no "relationships" to eachother. But of course an actory has played in many movies and a movie has many actors playing in it. 
+So far our Movies and Actors which we have stored in the so-named static Cassandra table have no "relationships" to each-other. But of course an actor has played in many movies and a movie has many actors playing in it. 
 
 For storing this information, wide-row tables are the tool to use in Casandra.
 
 ### Create the "Movies by Actor" and "Actors by Movie" tables
 
-Let's start with the Actor and the movies he has played in, wich we call `movies_by_actor`. 
+Let's start with the Actor and the movies he has played in, which we call `movies_by_actor`. 
+
 ```
 DROP TABLE IF EXISTS movies.movies_by_actor;
 CREATE TABLE movies.movies_by_actor (actor_id int,
@@ -451,9 +470,10 @@ CREATE TABLE movies.movies_by_actor (actor_id int,
 				PRIMARY KEY (actor_id, movie_id)
 );
 ```
+
 We use a name which reflects the query we can resolve using that table.
 
-Now let's continue with the table to get the actors who have played in a given movie, wich we call `actors_by_movie`
+Now let's continue with the table to get the actors who have played in a given movie, which we call `actors_by_movie`
 
 ```
 DROP TABLE IF EXISTS movies.actors_by_movie;
@@ -535,7 +555,7 @@ INSERT INTO movies.actors_by_movie (movie_id, title, actor_id, name)
 VALUES (0110912, 'Pulp Fiction', 0000246, 'Bruce Willis');
 ```
 
-Now let's see these table in Action. First let's see all th movies "Bruce Willis" has played in. 
+Now let's see these table in Action. First let's see all the movies "Bruce Willis" has played in. 
 
 ```
 SELECT title 
@@ -553,9 +573,9 @@ WHERE movie_id = 0110912;
 
 ## Using Counter Columns
 
-For the movie ratings table we will be using a static table with some columns of type COUNTER to easily count the number of stars we gave to each movie.  
+For the movie ratings table, we will be using a static table with some columns of type `COUNTER` so that we can easily count the number of stars we gave to each movie.  
 
-Columns of type COUNTER can not be mixed with other data types and therefore we have to create a new table can not add these columns to the existing `movie` table.
+Columns of type COUNTER cannot be mixed with other data types and therefore we have to create a new table cannot add these columns to the existing `movie` table.
 
 ```
 DROP TABLE IF EXISTS movies.rating_by_movie;
