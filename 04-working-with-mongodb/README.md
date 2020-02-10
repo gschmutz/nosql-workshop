@@ -1,26 +1,27 @@
 # Working with MongoDB
 In this workshop we will learn how to use the MongoDB NoSQL database.
 
-We assume that the platform decribed [here](../01-environment) is running and accessible. 
+We assume that the platform described [here](../01-environment) is running and accessible. 
 
 ## Connecting to the MongoDB environment
 
 ### Using the MongoDB Command Line utility
 
-You can find the `mongo` command line utiltiy inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command 
+You can find the `mongo` command line utility inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command 
 
 ```
-docker exec -ti mongodb mongo
+docker exec -ti mongo mongo
 ```
 
-This will connect you into the `mongodb` container and run the MongoDB shell inside id. You should see an output similar to this one. 
+This will connect you into the `mongo` container and run the `mongo` shell inside it. 
+
+You should see an output similar to this one below. 
 
 ```
-bigdata@bigdata:~$ docker exec -ti mongodb mongo
-MongoDB shell version v4.0.9
-connecting to: mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb
-Implicit session: session { "id" : UUID("374ac929-61bb-4d14-8d9d-1f4ffcb5161d") }
-MongoDB server version: 4.0.9
+bigdata@bigdata:~$ docker exec -ti mongo mongo
+MongoDB shell version v3.4.24
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.4.24
 Welcome to the MongoDB shell.
 For interactive help, type "help".
 For more comprehensive documentation, see
@@ -28,31 +29,21 @@ For more comprehensive documentation, see
 Questions? Try the support group
 	http://groups.google.com/group/mongodb-user
 Server has startup warnings:
-2019-05-05T10:28:12.406+0000 I STORAGE  [initandlisten]
-2019-05-05T10:28:12.406+0000 I STORAGE  [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
-2019-05-05T10:28:12.406+0000 I STORAGE  [initandlisten] **          See http://dochub.mongodb.org/core/prodnotes-filesystem
-2019-05-05T10:28:19.806+0000 I CONTROL  [initandlisten]
-2019-05-05T10:28:19.806+0000 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
-2019-05-05T10:28:19.806+0000 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
-2019-05-05T10:28:19.806+0000 I CONTROL  [initandlisten]
----
-Enable MongoDB's free cloud-based monitoring service, which will then receive and display
-metrics about your deployment (disk utilization, CPU, operation statistics, etc).
-
-The monitoring data will be available on a MongoDB website with a unique URL accessible to you
-and anyone you share the URL with. MongoDB may use this information to make product
-improvements and to suggest MongoDB products and deployment options to you.
-
-To enable free monitoring, run the following command: db.enableFreeMonitoring()
-To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
----
-
+2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten]
+2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
+2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten] **          See http://dochub.mongodb.org/core/prodnotes-filesystem
+2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten]
+2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
+2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
+2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten]
 >
 ```
 
-You are now at the MongoDB command prompt, ready to execute any MongoDB statements. We can also see the verion of the MongoDB server as well as of the MongoDB shell.
+You are now at the MongoDB command prompt, ready to execute any MongoDB statements. We can also see the version of the MongoDB server as well as of the MongoDB shell.
 
-The shell runs JavaScript. There are some global commands you can execute, like help or exit. Commands that you execute against the current database are executed against the db object, such as `db.help()` or `db.stats()`. Commands that you execute against a specific collection, which is what we’ll be doing a lot of, are executed against the `db.COLLECTION_NAME` object, such as `db.movies.help()` or `db.movies.count()`.
+The shell runs JavaScript. There are some global commands you can execute, like help or exit. Commands that you execute against the current database are executed against the db object, such as `db.help()` or `db.stats()`. 
+
+Commands that you execute against a specific collection, which is what we’ll be doing a lot of, are executed against the `db.COLLECTION_NAME` object, such as `db.movies.help()` or `db.movies.count()`.
 
 Go ahead and enter `db.help()`, you’ll get a list of commands that you can execute against the db object.
 
@@ -66,40 +57,40 @@ Instead of working over the command line and therefore having to connect to the 
 
 The first one is [Mongo Express](https://github.com/mongo-express/mongo-express), a Web-based MongoDB admin interface written with Node.js, Express and Bootstrap3.
 
-In a browser window navigate to <http://nosqlplatform:38082/> and you should directly arrive on the home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:28123/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/mongo-express-home.png "Mongo Express")
 
 #### Admin Mongo
-The second one is [Admin Mongo](https://adminmongo.markmoffat.com/), a open source admin user interface for your MongoDB.
+The second one is [Admin Mongo](https://adminmongo.markmoffat.com/), an open source admin user interface for your MongoDB.
 
-In a browser window navigate to <http://nosqlplatform:31234/> and you should directly arrive on the home screen as shown below. 
+In a browser window navigate to <http://dataplatform:28124/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/admin-mongo-home.png "Admin Mongo")
 
-To connect to the MongoDB instance, add a new connection to Admin Mongo. Enter `NoSQL Platform` into the **Connetion name** field and `mongodb://mongodb:27017` into the **Connection string** field and click **Add connection**. A message should appear saying that the connection has been added successfully.  
+To connect to the MongoDB instance, add a new connection to Admin Mongo. Enter `Data Platform` into the **Connection name** field and `mongodb://mongo:27017` into the **Connection string** field and click **Add connection**. A message should appear saying that the connection has been added successfully.  
 
 ![Alt Image Text](./images/admin-mongo-connection.png "Admin Mongo Connection")
 
 A Click on the **Connect** button brings you to the Admin Mongo details page for the connection. 
 
-### Using Desktop Application
+### Using Desktop Applications
 
-There are also desktop applications for MongoDB managmenet and administration, which can be downloaded and installed on a Desktop. From there you can connect eitehr to a local or remote Mongo instance.
+There are also various desktop applications for MongoDB management and administration, which can be downloaded and installed on a Desktop. From there you can connect either to a local or remote Mongo instance.
 
 #### Robo 3T (formerly Robomongo)
 
-The first one is [Robo 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
+The one we are showing here is [Robo 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
 
 ![Alt Image Text](./images/robo3t.png "Robo 3T")
 
 Click on the **Connect** icon in the left upper corner and click on Create link to create a new connection. 
 
-Enter `NoSQL Platform` into the **Name** field and the IP address of your Docker Host into the **Address** field. Leave the port on 27017 and click on **Save**.
+Enter `Data Platform` into the **Name** field and the IP address of your Docker Host into the **Address** field. Leave the port on 27017 and click on **Save**.
 
-Select the **NoSQL Platform** connection and click Connect. The Robo 3T main screen should appear. 
+Select the **Data Platform** connection and click Connect. The Robo 3T main screen should appear. 
 
-## Working with database
+## Working with MongoDB
 
 We begin our journey by getting to know the basic mechanics of working with MongoDB. Obviously this is core to understanding MongoDB, but it should also help us answer higher-level questions about where MongoDB fits.
 
@@ -110,7 +101,7 @@ To get started, there are six simple concepts we need to understand.
  3.	Collections are made up of zero or more documents. Again, a document can safely be thought of as a row. 
  4.	A document is made up of one or more fields, which you can probably guess are a lot like columns. 
  5.	Indexes in MongoDB function mostly like their RDBMS counterparts. 
- 6.	Cursors are different than the other five concepts but they are important enough, and often overlooked, that I think they are worthy of their own discussion. The important thing to understand about cursors is that when you ask MongoDB for data, it returns a pointer to the result set called a cursor, which we can do things to, such as counting or skipping ahead, before actually pulling down data. 
+ 6.	Cursors are different from the other five concepts but they are important enough, and often overlooked, that I think they are worthy of their own discussion. The important thing to understand about cursors is that when you ask MongoDB for data, it returns a pointer to the result set called a cursor, which we can do things to, such as counting or skipping ahead, before actually pulling down data. 
 
 To recap, MongoDB is made up of databases which contain collections. A collection is made up of documents. Each document is made up of fields. Collections can be indexed, which improves lookup and sorting performance. Finally, when we get data from MongoDB we do so through a cursor whose actual execution is delayed until necessary.
 
@@ -126,7 +117,7 @@ First we’ll use the global use helper to switch databases, so go ahead and ent
 use filmdb
 ```
 
-It doesn’t matter that the database doesn’t really exist yet. The first collection that we create will also create the ```filmdb``` database. Now that you are inside a database, you can start issuing database commands, like `db.getCollectionNames()`. 
+It doesn’t matter that the database doesn’t really exist yet. The first collection that we create will also create the `filmdb` database. Now that you are inside a database, you can start issuing database commands, like `db.getCollectionNames()`. 
 
 ```
 db.getCollectionNames()
@@ -136,7 +127,7 @@ You get back an empty array, as there are not yet any collections in the `filmdb
 
 Since collections are schema-less, we don’t explicitly need to create them and we can directly start adding documents to a collection. 
 
-## Creating Movie documents in the `movies`collection
+## Creating Movie documents in the `movies` collection
 
 We can simply insert a document into a new collection. To do so, use the `insert` command, supplying it with the document to insert:
 
@@ -192,7 +183,7 @@ WriteResult({ "nInserted" : 1 })
 
 In the graphical tools, most of the time you only have to provide the JSON document, without having to specify the `db.movies.insert()` command. 
 
-The above line is executing insert against the **movies** collection, passing it a single parameter. Internally MongoDB uses a binary serialized JSON format called BSON. Externally, this means that we use JSON a lot, as is the case with our parameters. 
+The above line is executing insert against the **movies** collection, passing it a single parameter. Internally MongoDB uses a binary serialised JSON format called BSON. Externally, this means that we use JSON a lot, as is the case with our parameters. 
 
 Let's also add the movie "The Matrix"
 
@@ -235,7 +226,7 @@ db.movies.insert (
 })
 ```
 
-If we execute `db.getCollectionNames()` now, we should see the collection we have just added documnts to
+If we execute `db.getCollectionNames()` now, we should see the collection we have just added documents to
 
 ```
 > db.getCollectionNames()
@@ -281,7 +272,7 @@ You can either generate one yourself or let MongoDB generate a value for you whi
 
 What you’re seeing is the name of the index, the database and collection it was created against and the fields included in the index. 
 
-## Creating Actor documents in the `persons`collection
+## Creating Actor documents in the `persons` collection
 
 Now let's also add some actors to another, new collection named `persons`. We name it this way, because the same person can have different roles in one or many movies.
 
@@ -396,7 +387,7 @@ Which in that case (because we don't specify a query selector) is the same as
 db.persons.count()
 ```
 
-Note: notice that not all documents are exactly the same. The "Sandra Bullock" document does not contain the `tradeMark` arrry. The collections are schema-less, there is only a JSON parsing beeing done and therefore the document has to be valid JSON. Let's see what happens if we are using an invalid document.
+Note: notice that not all documents are exactly the same. The "Sandra Bullock" document does not contain the `tradeMark` array. The collections are schema-less, there is only a JSON parsing being done and therefore the document has to be valid JSON. Let's see what happens if we are using an invalid document.
 
 ```
 db.persons.insert (
@@ -529,7 +520,7 @@ The `$in` operator can be used for matching one of several values that we pass a
 db.movies.find({ "genres": { $in: ['Family', 'Mistery']} })
 ```
 
-which returns all movies in either the Family or Mistery genre.
+which returns all movies in either the `Family` or `Mistery` genre.
 
 If we want to **OR** rather than **AND** several conditions on different fields, we use the `$or` operator and assign to it an array of selectors we want or’d
 
@@ -545,7 +536,7 @@ To find all movies of genre *Action* **AND** which have been published *2010* or
 db.movies.find({ "genres":"Action", $or: [ { "year": { $gte :  2010 } },  { "rating": { $gt :  8.8 } } ] })
 ```
 
-There’s something pretty neat going on in our last two examples. You might have already noticed, but the `genres` field is an array. MongoDB supports arrays as first class objects. This is an incredibly handy feature. Once you start using it, you wonder how you ever lived without it. What’s more interesting is how easy selecting based on an array value is: `{ genres: 'Action' }` will return any document where genres has a value of *Action*.
+There’s something pretty neat going on in our last two examples. You might have already noticed, but the `genres` field is an array. MongoDB supports arrays as first class objects. This is an incredibly handy feature. Once you start using it, you wonder how you ever lived without it. What’s more interesting is how easy selecting based on an array value is: `{ genres: 'Action' }` will return any document where genres has a value of `Action`.
 
 There are more available operators than what we’ve seen so far. These are all described in the [Query Selectors](https://docs.mongodb.com/manual/reference/operator/query/index.html) section of the MongoDB manual. What we’ve covered so far though is the basics you’ll need to get started. It’s also what you’ll end up using most of the time.
 
@@ -557,7 +548,7 @@ The `ObjectId` which MongoDB generated for our `_id` field can be selected like 
 db.movies.find( {_id: ObjectId("<the-object-id>")})
 ```
 
-make sure to replace the `<the-object-id>` by an actual value of one of the movies you have inserted before. 
+Make sure to replace the `<the-object-id>` by an actual value of one of the movies you have inserted before. 
 
 ## Updating Documents
 
@@ -592,7 +583,7 @@ Let's query the document, without an id field
 db.movies.find( { "id": { $exists: false } } )
 ```
 
-we should only get one document, the one we have "destroyed" before. And we can see the `_id` of this document. 
+We should only get one document, the one we have "destroyed" before. And we can see the `_id` of this document. 
 
 ```
 > db.movies.find( { "id": { $exists: false } } )
@@ -616,7 +607,7 @@ This won’t overwrite the new `rating` field since we didn’t specify it. Now 
 db.movies.find( {title: 'Fight Club'})
 ```
 
-we can see that we have successfully "recovered" the document and that the `rating` is correctly set to 9. 
+We can see that we have successfully "recovered" the document and that the `rating` is correctly set to 9. 
 
 Therefore, the correct way to have updated the `rating` in the first place is
 
@@ -664,9 +655,9 @@ if we know execute a query on the tile, the index will be used
 db.movies.find ( {title: "The Matrix"} );
 ```
 
-If we would have a lot more data in the movies collection, we might see a visual difference. But wiht only 50 movies, that's not the case. However we can use the `explain()` method to view the execution plan of the optimizer
+If we would have a lot more data in the movies collection, we might see a visual difference. But with only 50 movies, that's not the case. However we can use the `explain()` method to view the execution plan of the optimiser.
 
-Adding the explain at the end of the find statement will return the following result
+Adding the `explain` method at the end of the find statement will return the following result
 
 ```
 > db.movies.find ( {title: "The Matrix"} ).explain();
@@ -718,8 +709,6 @@ Adding the explain at the end of the find statement will return the following re
 
 We can see that the `winningPlan` uses the `title_1` index. 
 
-
-
 A unique index can be created by supplying a second parameter and setting `unique` to true. Let's add an index on the `id` field to ensure that it is unique. 
 
 ```
@@ -739,7 +728,7 @@ WriteResult({
 })
 ```
 
-We can list the index we currently have on the `movies` collection using `db.movies.getIndexes()`
+We can list the index we currently have on the `movies` collection using `db.movies.getIndexes()`:
 
 ```
 > db.movies.getIndexes()
@@ -772,7 +761,7 @@ We can list the index we currently have on the `movies` collection using `db.mov
 ]
 ```
 
-We can see a total of 3 indices, the two we have just added and a 3rd one on the `_id` field which has been created automtically by MongoDB.
+We can see a total of 3 indices, the two we have just added and a 3rd one on the `_id` field which has been created automatically by MongoDB.
 
 
 An index can be dropped using the `dropIndex` command. 
