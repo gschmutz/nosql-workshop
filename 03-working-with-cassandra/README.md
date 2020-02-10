@@ -33,7 +33,7 @@ Instead of working over the command line and therefore having to connect to the 
 #### Cassandra Web
 
 The first one is the [Cassandra Web](http://avalanche123.com/cassandra-web/).
-In a browser window navigate to <http://nosqlplatform:28120/> and you should directly get to the home screen as shown below. 
+In a browser window navigate to <http://dataplatform:28120/> and you should directly get to the home screen as shown below. 
 
 ![Alt Image Text](./images/cassandra-web.png "Cassandra Web GUI")
 
@@ -41,7 +41,7 @@ If you click on **Execute** in the top-right corner, a pop-window will appear wh
 
 #### Apache Zeppelin
 
-Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
+Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://dataplatform:28080/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
 
