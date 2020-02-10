@@ -8,21 +8,21 @@ We assume that the platform described [here](../01-environment) is running and a
 
 ### Using REST API
 
-Once you have an instance of ElasticSearch up and running you can talk to it using its JSON based REST API residing at localhost port 9200. You can use any HTTP client to talk to it. In ElasticSearch's own documentation all examples use curl, which makes for concise examples. However, when playing with the API you may find a graphical client such RESTClient more convenient. 
+Once you have an instance of Elasticsearch up and running you can talk to it using its JSON based REST API residing at localhost port 9200. You can use any HTTP client to talk to it. In ElasticSearch's own documentation all examples use curl, which makes for concise examples. However, when playing with the API you may find a graphical client such RESTClient more convenient. 
 
-In a browser window navigate to <http://nosqlplatform:9200/> just to see that Elastic Search is running. You should see the following result. 
+In a browser window, navigate to <http://dataplatform:9200/> just to see that Elastic Search is running. You should see the following result. 
 
 ![Alt Image Text](./images/browser-es-test.png "Elasticsearch in Browser")
 
-Because most of the command use another HTTP Method than GET, using the browser like that is only of limited use. 
+Because most of the commands use another HTTP Method than `GET`, using the browser like shown is only of limited use. 
 
-To have control over the HTTP method to use, the `curl` command can be used. From a terminal window use the curl to to a GET on the address specified using the JSON for the `Content-Type` header attribute.
+To have more control over the HTTP method to use, the `curl` command can be used. From a terminal window, use curl and the GET method on the address specified, using JSON for the `Content-Type` header attribute.
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200
 ```
 
-and you should get a result similar to the one shown below. 
+You should get a result similar to the one shown below. 
 
 ```
 {
@@ -48,7 +48,7 @@ In this workshop we will be using the method with `curl` for most of the times. 
 
 ### Using Browser-based GUIs
 
-There are many options to work with Elasticserach in a browser-based way, which are more comfortable than just the plain browser. 
+There are many options to work with Elasticsearch in a browser-based way, which are more comfortable than just the plain browser. 
 
 One option is to use a generic REST client which runs in the browser, such as the Firefox Add-On called RESTClient. 
 
@@ -70,7 +70,7 @@ Specify the **Method**, **URL** and **Body** fields according to your command an
 
 [Kibana](https://www.elastic.co/products/kibana) is part of the Elastic stack (aka. ELK Stack) and lets you visualise your Elasticsearch data and navigate the Elastic Stack. It also holds a Dev Tools interface where you can execute REST calls over a browser based window. 
 
-In a browser window navigate to <http://nosqlplatform:5601> and you should directly land on the Kibana home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:5601> and you should directly land on the Kibana home screen as shown below. 
 
 ![Alt Image Text](./images/kibana.png "Kibana")
 
@@ -78,9 +78,9 @@ Navigate to **Dev Tools** on the right to open the **Dev Tools Console** window.
 
 #### ElasticHQ Application
 
-The second one is [ElasticHQ](https://www.elastichq.org/), a open source management and monitoring interface for Elasticsearch.
+The second one is [ElasticHQ](https://www.elastichq.org/), an open source management and monitoring interface for Elasticsearch.
 
-In a browser window navigate to <http://nosqlplatform:35000> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://nosqlplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:28127> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://nosqlplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
 
 ![Alt Image Text](./images/elastichq.png "ElasticHQ")
 
@@ -88,7 +88,7 @@ In a browser window navigate to <http://nosqlplatform:35000> and you should dire
 
 The second one is [Cerebro](https://github.com/lmenezes/cerebro/), an open source (MIT License) elasticsearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
 
-In a browser window navigate to <http://nosqlplatform:39000/> and you should directly land on the Cerebro **Connect** screen. Enter `http://nosqlplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:28126/> and you should directly land on the Cerebro **Connect** screen. Enter `http://dataplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
 
 ![Alt Image Text](./images/cerebro.png "Cerebro")
 
@@ -96,24 +96,29 @@ In a browser window navigate to <http://nosqlplatform:39000/> and you should dir
 
 [Dejavu](https://opensource.appbase.io/dejavu/) is a Web-based UI for Elasticsearch to import, browse and edit data with rich filters & query views.
 
-In a browser window navigate to <http://nosqlplatform:1358/> and you should directly arrive on the home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:28125/> and you should directly arrive on the home screen as shown below. 
 
-Enter `http://nosqlplatform:9200` into the URL field
+Enter `http://dataplatform:9200` into the URL field and `*` into the `Appname` field and then click **Connect**. 
+
+You will get an error, because there is not yet an index available. 
 
 ![Alt Image Text](./images/dejavu.png "Dejavu Home Screen")
 
+But this proves that the connection to Elasticsearch worked and later, after creating the index, the connect will just work fine.
+
 #### Apache Zeppelin
 
-Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window navigate to <http://nosqlplatform:38001/> and you should directly arrive on the home screen as shown below. 
+Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://dataplatform:28080/> and you should directly arrive on the home screen as shown below. 
 
 ![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
 
 Apache Zeppelin uses a so called "Notebook" based model that enables data-driven,
-interactive data analytics and collaborative documents with SQL, Scala and more.
+Interactive data analytics and collaborative documents with SQL, Scala and more.
 
 Zeppelin uses the concept of interpreters. Each Interpreter has the capability to "talk" to a given data systems. When creating a Notebook, you can specify the "default" interpreter to use, all other interpreters can be used as well, but then the directive `%<interpreter-name>`has to be used in each cell. 
 
-Zepplin has an Elasticsearch interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter**.
+Zeppelin has an Elasticsearch interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter**.
+
 Navigate to the **Elasticsearch** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **elasticsearch.host** property to `elasticsearch-1`, which is the service name of our Elasticsearch node in the docker-compose configuration. 
 
 ![Alt Image Text](./images/apache-zeppelin-interpreter-elasticsearch.png "Apache Zeppelin Elasticsearch Interpreter")
@@ -132,7 +137,7 @@ For all the commands which follow now in this workshop, you can either use one o
 To create the mapping for the year type in Elasticsearch run the following curl command:
 
 ```
-curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
+curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
         "movie": {
@@ -147,7 +152,7 @@ curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies 
 and you should get a result similar to the one bellow
 
 ```
-gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
+gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
                   {
                       "mappings": {
                           "movie": {
