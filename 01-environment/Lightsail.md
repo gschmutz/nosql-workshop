@@ -237,7 +237,8 @@ So with all services running, there is one last step to do. We have to configure
 
 ![Alt Image Text](./images/lightsail-image-networking.png "Lightsail Homepage")
 
-Click on the **Networking** tab/link to navigate to the network settings and under **Firewall** click on ** **Add another**.
+Click on the **Networking** tab/link to navigate to the network settings and under **Firewall** click on **+** **Add another**.
+
 For simplicity reasons, we allow all TCP traffic by selecting **All TCP** on port range **0 - 65535** and then click **Save**. 
 
 ![Alt Image Text](./images/lightsail-image-networking-add-firewall-rule.png "Lightsail Homepage")
