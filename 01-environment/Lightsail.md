@@ -80,6 +80,151 @@ Optionally you can also SSH into the Lightsail instance using the **SSH key pair
 ssh -i LightsailDefaultKey-eu-central-1.pem ubuntu@18.196.124.212 
 ```
 
+## Connecting to Services from Client
+
+For accessing the services in the cloud, we have to options:
+  * use a SSH Tunnel
+  * open the ports on the firewall
+
+Due to the fact, that the lightsail instance is exposed to the public internet, opening the ports is not the best idea. Using an SSH tunnel is much more secure.  
+
+### SSH Tunnel as a Socks Proxy
+
+Opening an SSH tunnel is different on Windows and Mac. The following short description shows how to create the tunnel on Windows and on Mac OS-X.
+
+#### Using Windows
+
+First you have to install Putty (available at <http://www.chiark.greenend.org.uk/~sgtatham/putty/>). We will use Putty to extract the private key as well as for creating the SSH Tunnel. 
+
+**1. Download the SSH Key of the Lightroom instance and Extract Private Key**
+
+In order to connect to the lightsail instance, a copy of the private SSH key. You can use the key pair that Lightsail creates. Download the key from the AWS console by choosing **Account** on the top navigation bar and again choose **Account** from the drop-down menu. Navigate to the **SSH Keys** tab. 
+
+![Alt Image Text](./images/ssh-keys-download.png "Lightsail Homepage")
+
+Select the **Default** key and click on the **Download** link to download it to your local computer. 
+
+Now start the **PuTTYgen** tool you have installed before. The following screen should appear. 
+
+![Alt Image Text](./images/putty-gen-1.png "Lightsail Homepage")
+
+Click on **Load** and load the `xxxxxxx.pem` file you have downloaded before. By default, PuTTYgen displays only files with the `.ppk` extension. To locate your `.pem` file, select the option to display files of all types.
+
+PuTTYgen confirms that you successfully imported the key, and then you can choose OK.
+
+Choose **Save private key**, and then confirm you don't want to save it with a passphrase.
+
+**2. Create the SSH Tunnel**
+
+Start Putty and from the Session tab, enter the public IP (54.93.82.199) into the **Host Name (or IP address)** field. Leave the **port** field to 22.
+
+![Alt Image Text](./images/putty-1.png "Lightsail Homepage")
+
+Now click on the **SSH** folder, expand it and click on **Auth**. 
+
+![Alt Image Text](./images/putty-2.png "Lightsail Homepage")
+
+Click on **Browse** and select the private key file you have created above.  
+
+Click on **Tunnels** and on the screen, enter `9870` into the **Source port** field, click the **Dynamic** radio button and then click on **Add**.
+
+![Alt Image Text](./images/putty-3.png "Lightsail Homepage")
+
+Now click on **Open** and confirm the Alert pop up with **Yes**. Enter `ubuntu` as the login user and you should get the bash prompt. 
+
+Be sure to save your connection for future use.
+
+**3. Configure Web Browser to use the SSH Tunnel** 
+
+As a last step you have to configure the browser (we assume Firefox here, but Chrome would be fine as well) to use the SSH Tunnel. 
+
+Install the **FoxyProxy Standard** extension into Firefox. 
+
+![Alt Image Text](./images/firefox-addon.png "Lightsail Homepage")
+
+After installing the Addon, click on the new icon in the top right corner of the menu bar and click on **Options**. 
+
+![Alt Image Text](./images/firefox-foxyproxy-1.png "Lightsail Homepage")
+
+Click on **Add** in the menu to the left. Configure the proxy settings as shown below
+
+![Alt Image Text](./images/firefox-foxyproxy-2.png "Lightsail Homepage")
+
+and click **Save**. 
+Click again on the **FoxyProxy** icon in the top right corner and select the **Hadoop Workshop** entry to enable the proxy settings. 
+
+![Alt Image Text](./images/firefox-foxyproxy-3.png "Lightsail Homepage")
+
+You can now reach the services on Lightsail using the localhost address. For example you can reach Zeppelin over <http://localhost:38081>. For the other URLs, consult the table at the bottom of the main [Readme](README.md). 
+
+#### Using Mac OS-X
+
+**1. Download the SSH Key of the Lightroom instance**
+
+Download the key from the AWS console by choosing **Account** on the top navigation bar and again choose **Account** from the drop-down menu. Navigate to the **SSH Keys** tab. 
+
+![Alt Image Text](./images/ssh-keys-download.png "Lightsail Homepage")
+
+Select the **Default** key and click on the **Download** link to download it to your local computer. 
+
+**2. Create the SSH Tunnel**
+On Mac OS-X you can either use the `ssh` command line utility to open up a ssh tunnel or 
+download an SSH Tunnel GUI client. The [**Secure Pipes**](https://www.opoet.com/pyro/) Application is the one I use here.
+
+To configure Secure Pipes, click on the cloud icon in the menu bar
+
+![Alt Image Text](./images/secure-pipes-0.png "Lightsail Homepage")
+
+and select the **Preferences** menu. The **Connections** overview screen is shown. 
+
+![Alt Image Text](./images/secure-pipes-1.png "Lightsail Homepage")
+
+Click on the **+** icon in the bottom left corner and select **New SOCKS Proxy...** from the drop-down menu. 
+
+On the **Connection** tab, enter `Hadoop Workshop` into the **Connection Name** field and use the public IP address of the Lightsail instance for the **SSH Server Address** field. Set the **Port** field to `22`, **Local Bind Address** field to `localhost` and the other **Port** field to a port which is not used on your local computer. 
+If you have administrator rights on your Mac, then you can enable the **Automatically configure SOCKS proxy in Network Preferences** as shown below. 
+
+![Alt Image Text](./images/secure-pipes-2.png "Lightsail Homepage")
+
+Next click on **Options** and enable the **Use ssh identity file** check box and click on **Select...** to select the key file you have downloaded in step 1. 
+
+![Alt Image Text](./images/secure-pipes-3.png "Lightsail Homepage")
+
+Click **Add** to add the new connection to the **Secure Pipes**. 
+
+Now the SSH tunnel can be activated by again clicking on the clod icon in the menu bar and selecting the connection **Hadoop Workshop** configured above.
+
+![Alt Image Text](./images/secure-pipes-4.png "Lightsail Homepage")
+
+The green icon in front of the connection signals that the SSH tunnel has been established successfully. 
+
+**3. Configure Web Browser to use the SSH Tunnel** 
+
+As a last step you have to configure the browser (we assume Firefox here, but Chrome would be fine as well) to use the SSH Tunnel. 
+
+Install the **FoxyProxy Standard** extension into Firefox. 
+
+![Alt Image Text](./images/firefox-addon.png "Lightsail Homepage")
+
+After installing the Addon, click on the new icon in the top right corner of the menu bar and click on **Options**. 
+
+![Alt Image Text](./images/mac-firefox-foxyproxy-1.png "Lightsail Homepage")
+
+Click on **Add** in the menu to the left. Configure the proxy settings as shown below
+
+![Alt Image Text](./images/mac-firefox-foxyproxy-2.png "Lightsail Homepage")
+
+and click **Save**. 
+
+Click again on the **FoxyProxy** icon in the top right corner and select the **Hadoop Workshop** entry to enable the proxy settings. 
+
+![Alt Image Text](./images/mac-firefox-foxyproxy-3.png "Lightsail Homepage")
+
+You can now reach the services on Lightsail using the localhost address. For example you can reach Zeppelin over <http://localhost:38081>. For the other URLs, consult the table at the bottom of the main [Readme](README.md). 
+
+
+### Open Ports on Firewall
+
 So with all services running, there is one last step to do. We have to configure the Firewall to allow traffic into the Lightsail instance. 
 
 ![Alt Image Text](./images/lightsail-image-networking.png "Lightsail Homepage")
