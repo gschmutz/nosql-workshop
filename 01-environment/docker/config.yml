@@ -160,12 +160,12 @@
       AXON_enable: false
 
       # ===== Presto ========
-      PRESTO_enable: true
+      PRESTO_enable: false
       # one of starburstdata, oss
       PRESTO_edition: 'starburstdata'
 
       # ===== Dremio ========
-      DREMIO_enable: true
+      DREMIO_enable: false
 
       # MQTT
       MOSQUITTO_enable: false 
