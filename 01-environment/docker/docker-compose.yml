@@ -5,7 +5,7 @@ version: '3.0'
 services:
   #  ================================== Zeppelin ========================================== #}
   zeppelin:
-    image: trivadis/apache-zeppelin:0.8.2-hadoop2.7-spark2.4.4
+    image: trivadis/apache-zeppelin:0.8.2-spark2.4-hadoop2.8
     container_name: zeppelin
     hostname: zeppelin
     labels:
@@ -18,12 +18,10 @@ services:
     env_file:
       - ./conf/hadoop.env
     environment:
-      # AWS Credentials
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       ZEPPELIN_ADDR: 0.0.0.0
       ZEPPELIN_PORT: '8080'
       ZEPPELIN_INTERPRETER_CONNECT_TIMEOUT: 120000
+      ZEPPELIN_INTERPRETER_DEP_MVNREPO: https://repo.maven.apache.org/maven2
       SPARK_MASTER: spark://spark-master:7077
       # set spark-master for Zeppelin interpreter
       MASTER: spark://spark-master:7077
@@ -36,6 +34,7 @@ services:
       SPARK_SUBMIT_OPTIONS: --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4
     volumes:
       - ./conf/spark/spark-defaults-memory.conf:/spark/conf/spark-defaults.conf
+      - ./container-volume/spark/logs/:/var/log/spark/logs
       - ./conf/s3cfg:/root/.s3cfg
       - ./conf/zeppelin/shiro.ini:/opt/zeppelin/conf/shiro.ini
       - ./conf/zeppelin/interpreter-setting.json:/opt/zeppelin/interpreter/spark/interpreter-setting.json
@@ -78,7 +77,7 @@ services:
   #  ================================== Redis ========================================== #}
   redis:
     container_name: redis
-    hostname: redis:5.0.7
+    hostname: redis:latest
     image: redis
     ports:
       - 6379:6379
@@ -126,10 +125,10 @@ services:
       - CASSANDRA_PASSWORD=cassandra
     restart: unless-stopped
   #  ================================== MongoDB ========================================== #}
-  mongo:
-    image: mongo:3.4
-    container_name: mongo
-    hostname: mongo
+  mongo-1:
+    image: mongo:latest
+    container_name: mongo-1
+    hostname: mongo-1
     ports:
       - 27017:27017
     environment:
@@ -141,7 +140,7 @@ services:
       - ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d
     restart: unless-stopped
   mongo-express:
-    image: mongo-express:0.49
+    image: mongo-express:latest
     container_name: mongo-express
     hostname: mongo-express
     labels:
@@ -150,7 +149,7 @@ services:
     ports:
       - 28123:8081
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_SERVER=mongo-1
     restart: unless-stopped
   admin-mongo:
     image: adicom/admin-mongo:latest
@@ -164,7 +163,7 @@ services:
     restart: unless-stopped
   #  ================================== Elasticsearch ========================================== #}
   elasticsearch-1:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.7.0
+    image: elasticsearch:6.7.0
     hostname: elasticsearch-1
     container_name: elasticsearch-1
     labels:
@@ -181,38 +180,9 @@ services:
       http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       http.cors.allow-credentials: 'true'
     restart: unless-stopped
-  dejavu:
-    image: appbaseio/dejavu:3.4.0
-    container_name: dejavu
-    hostname: dejuvu
-    labels:
-      com.mdps.service.webui.name: Elasticsearch Dejavu UI
-      com.mdps.service.webui.url: http://${PUBLIC_IP}:28125
-    ports:
-      - 28125:1358
-    restart: unless-stopped
-  cerebro:
-    image: lmenezes/cerebro:latest
-    container_name: cerebro
-    hostname: cerebro
-    labels:
-      com.mdps.service.webui.name: Elasticsearch Cerbero UI
-      com.mdps.service.webui.url: http://${PUBLIC_IP}:28126
-    ports:
-      - 28126:9000
-    restart: unless-stopped
-  elastichq:
-    image: elastichq/elasticsearch-hq:latest
-    container_name: elastichq
-    hostname: elatichq
-    labels:
-      com.mdps.service.webui.name: ElasticHQ UI
-      com.mdps.service.webui.url: http://${PUBLIC_IP}:28127
-    ports:
-      - 28127:5000
   #  ================================== Kibana ========================================== #}
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.6.0
+    image: kibana:6.6.0
     hostname: kibana
     container_name: kibana
     labels:
