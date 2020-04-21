@@ -80,15 +80,23 @@ Optionally you can also SSH into the Lightsail instance using the **SSH key pair
 ssh -i LightsailDefaultKey-eu-central-1.pem ubuntu@18.196.124.212 
 ```
 
-## Connecting to Services from Client
+## Connecting to a Terminal on the Lightsail
+
+There are two options for connecting to a terminal
+
+  1. use **Connect using SSH** from the Lightsail Web console
+  1. use a client (Putty on Windows or Terminal on Mac/Linux) to connect via SSH using the SSH key.  
+
+## Connecting to Services from Client 
 
 For accessing the services in the cloud, we have to options:
-  * use a SSH Tunnel
-  * open the ports on the firewall
 
-Due to the fact, that the lightsail instance is exposed to the public internet, opening the ports is not the best idea. Using an SSH tunnel is much more secure.  
+  1. use a SSH Tunnel
+  1. open the ports on the firewall
 
-### SSH Tunnel as a Socks Proxy
+Due to the fact, that the Lightsail instance is exposed to the public internet, opening the ports is not the best idea. Using an SSH tunnel is much more secure.  
+
+### 1. Use a SSH Tunnel as a Socks Proxy
 
 Opening an SSH tunnel is different on Windows and Mac. The following short description shows how to create the tunnel on Windows and on Mac OS-X.
 
@@ -96,9 +104,9 @@ Opening an SSH tunnel is different on Windows and Mac. The following short descr
 
 First you have to install Putty (available at <http://www.chiark.greenend.org.uk/~sgtatham/putty/>). We will use Putty to extract the private key as well as for creating the SSH Tunnel. 
 
-**1. Download the SSH Key of the Lightroom instance and Extract Private Key**
+**1. Download the SSH Key of the Lightsail instance and Extract Private Key**
 
-In order to connect to the lightsail instance, a copy of the private SSH key. You can use the key pair that Lightsail creates. Download the key from the AWS console by choosing **Account** on the top navigation bar and again choose **Account** from the drop-down menu. Navigate to the **SSH Keys** tab. 
+In order to connect to the Lightsail instance, a copy of the private SSH key. You can use the key pair that Lightsail creates. Download the key from the AWS console by choosing **Account** on the top navigation bar and again choose **Account** from the drop-down menu. Navigate to the **SSH Keys** tab. 
 
 ![Alt Image Text](./images/ssh-keys-download.png "Lightsail Homepage")
 
@@ -223,7 +231,7 @@ Click again on the **FoxyProxy** icon in the top right corner and select the **H
 You can now reach the services on Lightsail using the localhost address. For example you can reach Zeppelin over <http://localhost:38081>. For the other URLs, consult the table at the bottom of the main [Readme](README.md). 
 
 
-### Open Ports on Firewall
+### 2. Open Ports on the Firewall
 
 So with all services running, there is one last step to do. We have to configure the Firewall to allow traffic into the Lightsail instance. 
 
