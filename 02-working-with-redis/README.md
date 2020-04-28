@@ -286,7 +286,7 @@ Check the full list of [Srings commands](https://redis.io/commands#string) for m
 
 Redis also supports several more complex data structures. The first one we'll look at is a list. A list is a series of ordered values. Some of the important commands for interacting with lists are `RPUSH`, `LPUSH`, `LLEN`, `LRANGE`, `LPOP``, and RPOP. You can immediately begin working with a key as a list, as long as it doesn't already exist as a different type.
 
-`RPUS` puts the new value at the end of the list.
+`RPUSH` puts the new value at the end of the list.
 
 Let's add a new item to the end of a non-existing list called `skills` using the `RPUSH` command. 
 

@@ -49,7 +49,7 @@ Adminer | Development | PostgreSQL | <http://nosqlplatform:28210>
 CAdvisor | Management | Docker | <http://nosqlplatform:28217>
 
 
-## Workshop based on IMDd
+## Workshop based on IMDb
 
 For the workshop we are going to use data from [IMDb](https://www.imdb.com/). 
 
