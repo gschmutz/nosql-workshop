@@ -138,7 +138,7 @@ After that also change the `inputs.tail` section as shown below
   json_name_key = "sensorType"
 ```
 
-Now run a new container with the `telegraf.conf` config file configured above
+Now run a new container with the `telegraf.conf` config file configured above. We will start a new docker container, independent of the one running in the stack and create a volume mapping for a) the `telegraf.conf` config file and b) the folder to which the IoT simulator writes its log files (`logs`). 
 
 ```
 docker run --rm -ti --name telegraf-agent --network docker_default -v ${PWD}/telegraf.conf:/telegraf.conf -v ${PWD}/logs:/logs telegraf telegraf --config /telegraf.conf
