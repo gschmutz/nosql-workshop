@@ -4,6 +4,7 @@ In this workshop we will learn how to use the InfluxDB NoSQL database.
 
 We assume that the platform described [here](../01-environment) is running and accessible. 
 
+For this workshop we will be using an IoT device/sensor simulator and synthetic data generator. The generator is available as a [Docker image](https://hub.docker.com/repository/docker/trivadis/iot-simulator) as well as a [GitHub project](https://github.com/gschmutz/IotSimulator), which is a fork of [rradev/iosynth](https://github.com/rradev/iosynth) and has been extended to support more output adapters, such as Kafka, File and AWS IoT Core.
 
 ## Running the IoT Simulator
 
@@ -85,7 +86,7 @@ and use the telegraf utiltity from within the running `telegraf` container:
 docker run telegraf telegraf --input-filter tail --output-filter influxdb config > telegraf.conf
 ```
 
-Open the `telegraf.conf` in an editor of your choice and change the  
+Open the `telegraf.conf` in an editor of your choice and change the `outputs.influxdb` section to specify the url of the InfluxDB engine and the database to store the device metrics: 
 
 ```
 [[outputs.influxdb]]
