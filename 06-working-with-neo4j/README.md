@@ -49,7 +49,7 @@ Navigate to step 3/8 to find some Cipher statements for finding the information 
 
 ![Alt Image Text](./images/neo4j-find-queries.png "Neo4J Browser")
 
-The first statements, finds the actor named "Tom Hanks"
+The first statement, finds the actor named "Tom Hanks"
 
 ```
 MATCH (tom {name: "Tom Hanks"}) RETURN tom
