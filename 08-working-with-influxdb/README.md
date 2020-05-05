@@ -41,7 +41,7 @@ Add the following configuration. The topic name has no
             {"type":"string", "name":"sensorType", "cycle":["temperature"]},
             {"type":"dev.timestamp",    "name":"ts", "format":"yyyy-MM-dd'T'HH:mm:ss.SSSZ"},
             {"type":"dev.uuid",         "name":"uuid"},
-            {"type":"double_walk",   "name":"temp",  "min":-15, "max":20},
+            {"type":"double_walk",   "name":"temp",  "min":10, "max":20},
             {"type":"double_walk",  "name":"level", "values": [1.1,3.2,8.3,9.4]},
             {"type":"string",        "name":"category", "random": ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o"]}
         ]
