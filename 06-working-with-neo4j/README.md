@@ -23,7 +23,7 @@ On the top panel, enter `:play movie graph` to start the **Movie Graph** tutoria
 
 ![Alt Image Text](./images/neo4j-play-moviegraph.png "Neo4J Browser")
 
-Execute the statement by either hitting <Enter> or click on the play arrow on the top right corner.
+Execute the statement by either hitting ENTER or click on the play arrow on the top right corner.
 
 ![Alt Image Text](./images/neo4j-moviegraph.png "Neo4J Browser")
 
