@@ -34,7 +34,7 @@ Add the following configuration. The topic name has no
         "type":"simple",
         "uuid":"",
         "topic":"sensor-reading",
-        "partition":"{$uuid}"
+        "partition":"{$uuid}",
         "sampling":{"type":"fixed", "interval":1000},
         "copy":10,
         "sensors":[
