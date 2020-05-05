@@ -10,15 +10,15 @@ We assume that the platform described [here](../01-environment) is running and a
 You can find the `mongo` command line utility inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command 
 
 ```
-docker exec -ti mongo mongo
+docker exec -ti mongo-1 mongo
 ```
 
-This will connect you into the `mongo` container and run the `mongo` shell inside it. 
+This will connect you into the `mongo-1` container and run the `mongo` shell inside it. 
 
 You should see an output similar to this one below. 
 
 ```
-bigdata@bigdata:~$ docker exec -ti mongo mongo
+bigdata@bigdata:~$ docker exec -ti mongo-1 mongo
 MongoDB shell version v3.4.24
 connecting to: mongodb://127.0.0.1:27017
 MongoDB server version: 3.4.24
