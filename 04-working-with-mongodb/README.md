@@ -68,7 +68,7 @@ In a browser window navigate to <http://dataplatform:28124/> and you should dire
 
 ![Alt Image Text](./images/admin-mongo-home.png "Admin Mongo")
 
-To connect to the MongoDB instance, add a new connection to Admin Mongo. Enter `Data Platform` into the **Connection name** field and `mongodb://mongo:27017` into the **Connection string** field and click **Add connection**. A message should appear saying that the connection has been added successfully.  
+To connect to the MongoDB instance, add a new connection to Admin Mongo. Enter `Data Platform` into the **Connection name** field and `mongodb://mongo-1:27017` into the **Connection string** field and click **Add connection**. A message should appear saying that the connection has been added successfully.  
 
 ![Alt Image Text](./images/admin-mongo-connection.png "Admin Mongo Connection")
 
