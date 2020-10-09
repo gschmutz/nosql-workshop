@@ -23,7 +23,7 @@ On the top panel, enter `:play movie graph` to start the **Movie Graph** tutoria
 
 ![Alt Image Text](./images/neo4j-play-moviegraph.png "Neo4J Browser")
 
-Execute the statement by either hitting <Enter> or click on the play arrow on the top right corner.
+Execute the statement by either hitting ENTER or click on the play arrow on the top right corner.
 
 ![Alt Image Text](./images/neo4j-moviegraph.png "Neo4J Browser")
 
@@ -49,7 +49,7 @@ Navigate to step 3/8 to find some Cipher statements for finding the information 
 
 ![Alt Image Text](./images/neo4j-find-queries.png "Neo4J Browser")
 
-The first statements, finds the actor named "Tom Hanks"
+The first statement, finds the actor named "Tom Hanks"
 
 ```
 MATCH (tom {name: "Tom Hanks"}) RETURN tom
