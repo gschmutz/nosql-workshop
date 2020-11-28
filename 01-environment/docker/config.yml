@@ -4,7 +4,7 @@
       platys:
         platform-name: 'default'
         stack-image-name: 'trivadis/platys-modern-data-platform'
-        stack-image-version: '1.4.0'
+        stack-image-version: '1.8.0'
 
       #zookeeper
       ZOOKEEPER_enable: false
