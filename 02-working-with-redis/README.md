@@ -11,20 +11,32 @@ For connecting to Redis, we can either use the Redis Command Line Utility or the
 Open another terminal window and enter the following command to start Redis CLI in another docker container:
 
 ```
-docker run -it --rm --network docker_default redis redis-cli -h redis -p 6379
+docker run -it --rm --network nosql-platform bitnami/redis redis-cli -h redis-1 -p 6379
 ```
 
 The Redis CLI should start and the following command prompt should appear (whereas the IP-Address can differ). 
 
 ```
-redis:6379> 
+redis 21:04:06.73
+redis 21:04:06.74 Welcome to the Bitnami redis container
+redis 21:04:06.74 Subscribe to project updates by watching https://github.com/bitnami/bitnami-docker-redis
+redis 21:04:06.74 Submit issues and feature requests at https://github.com/bitnami/bitnami-docker-redis/issues
+redis 21:04:06.74
+
+redis-1:6379> 
+```
+
+Redis is configured so that it requires authentication. You can use the `default` user, so only the password has to be passed with the `AUTH` command
+
+```
+AUTH abc123!
 ```
 
 Enter help to see the version of Redis installed.
 
 ```
 redis:6379> help
-redis-cli 5.0.4
+redis-cli 6.0.9
 To get help about Redis commands type:
       "help @<group>" to get a list of commands in <group>
       "help <command>" for help on <command>
@@ -83,7 +95,6 @@ KEYS server*
 KEYS *
 1) "server:name"
 ```
-
 
 ### Get and Set operations
 
