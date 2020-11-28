@@ -114,6 +114,8 @@
       
       # NoSQL
       REDIS_enable: true
+      REDIS_INSIGHT_enable: true
+      REDIS_COMMANDER_enable: true
       CASSANDRA_enable: true
       DATASTAX_enable: false
       DATASTAX_nodes: 3
