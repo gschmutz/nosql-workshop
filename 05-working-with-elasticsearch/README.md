@@ -320,17 +320,17 @@ bash-3.2$ curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 Now let's add some more movies. This time we are using a file to hold the document and reference it from the curl command.
 
 ```
-curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
+curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
+curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
+curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
 ```
 
 ## Analyzers
@@ -401,17 +401,17 @@ So to recap what just happened here:
 Now reimport the data
 
 ```
-curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
+curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
+curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
+curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
 ```
 And perform the search for 'The Matrix' again
 
@@ -471,10 +471,10 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 
 ### Inserting Top-250 movies
 
-In order to have some more data, we can import the Top 250 rated movies, available in [data/top250-movies.json>](/data/top250-movies.json)
+In order to have some more data, we can import the Top 250 rated movies, available in [data/top250-movies.json>](./data/top250-movies.json)
 
 ```
-curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/_bulk?pretty --data-binary @data/top250-movies.json
+curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/_bulk?pretty --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/top250-movies.json
 ```
 
 ### Query Lite / URI Search
@@ -497,7 +497,7 @@ Because their is now body needed, you can also directly execute them from a brow
 
 ![Alt Image Text](./images/query-lite-from-browser.png "Query lite in Browser")
 
-**Note:** Do not use this approach in Production. It's easy to break, URL may need to be encoded, is a seurity risk, its very fragile.
+**Note:** Do not use this approach in Production. It's easy to break, URL may need to be encoded, is a security risk, it's very fragile.
 
 For more details, refer to the [Elasticsearch URI Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html) documentation.
 
