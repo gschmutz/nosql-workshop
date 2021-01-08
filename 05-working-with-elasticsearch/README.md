@@ -119,7 +119,7 @@ Zeppelin uses the concept of interpreters. Each Interpreter has the capability t
 
 Zeppelin has an Elasticsearch interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter**.
 
-Navigate to the **Elasticsearch** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **elasticsearch.host** property to `elasticsearch-1`, which is the service name of our Elasticsearch node in the docker-compose configuration. 
+Navigate to the **Elasticsearch** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **elasticsearch.host** property to `elasticsearch-1`, the **elasticsearch.port** to `9200` and the **elasticsearch.client.type** to `http`. 
 
 ![Alt Image Text](./images/apache-zeppelin-interpreter-elasticsearch.png "Apache Zeppelin Elasticsearch Interpreter")
 
@@ -128,7 +128,7 @@ Scroll-down to the end of the Interpreter settings and click **Save**. Confirm t
 Click on **Zeppelin** in the upper left corner to navigate back to the Home screen. 
 
 Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Elasticsearch` into he **Note Name** field and select **elasticsearch** for the **Default Interpreter** and click **Create**.
-An empty notebook with one cell will appear. This cell is now ready to be used and has the Cassandra interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
+An empty notebook with one cell will appear. This cell is now ready to be used and has the Elasticsearch interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
 
 For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
 
