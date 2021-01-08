@@ -1,7 +1,7 @@
 # =======================================================================
 # Platform Name            nosql-platform
 # Platform Stack:          trivadis/platys-modern-data-platform
-# Platform Stack Version:  1.9.0-preview
+# Platform Stack Version:  1.10.0
 # =======================================================================
 version: '3.5'
 networks:
@@ -10,7 +10,7 @@ networks:
 services:
   #  ================================== Zeppelin ========================================== #
   zeppelin:
-    image: trivadis/apache-zeppelin:0.8.2-spark2.4-hadoop2.8
+    image: trivadis/apache-zeppelin:0.9.0-spark2.4-hadoop2.8
     container_name: zeppelin
     hostname: zeppelin
     labels:
@@ -24,46 +24,36 @@ services:
     env_file:
       - ./conf/hadoop.env
     environment:
-      CORE_CONF_fs_defaultFS: file:///tmp
       SPARK_DEFAULTS_CONF_spark_jars_repositories:
       SPARK_DEFAULTS_CONF_spark_jars_packages:
       SPARK_DEFAULTS_CONF_spark_jars_excludes:
       SPARK_DEFAULTS_CONF_spark_jars:
       SPARK_DEFAULTS_CONF_spark_jars_ivySettings:
-      SPARK_DEFAULTS_CONF_spark_hadoop_fs_s3a_impl: org.apache.hadoop.fs.s3a.S3AFileSystem
-      SPARK_DEFAULTS_CONF_spark_hadoop_fs_s3a_endpoint: http://minio:9000
-      SPARK_DEFAULTS_CONF_spark_hadoop_fs_s3a_path_style_access: 'true'
       SPARK_DEFAULTS_CONF_spark_sql_catalogImplementation: in-memory
-      SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir: s3a://hive-bucket/warehouse
+      CORE_CONF_fs_defaultFS: file:///tmp
+      SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir: file:///hive/warehouse
       SPARK_DEFAULTS_CONF_spark_yarn_dist_files: /spark/conf/hive-site.xml
       SPARK_DEFAULTS_CONF_spark_driver_extraJavaOptions:
       SPARK_DEFAULTS_CONF_spark_executor_extraJavaOptions:
       ZEPPELIN_ADDR: 0.0.0.0
       ZEPPELIN_PORT: '8080'
+      ZEPPELIN_MEM: -Xms1024m -Xmx1024m -XX:MaxMetaspaceSize=512m
       ZEPPELIN_INTERPRETER_CONNECT_TIMEOUT: 120000
       ZEPPELIN_INTERPRETER_DEP_MVNREPO: https://repo.maven.apache.org/maven2
-#      SPARK_MASTER: "spark://spark-master:7077"
+      ZEPPELIN_ADMIN_USERNAME: admin
+      ZEPPELIN_ADMIN_PASSWORD: changeme
+      ZEPPELIN_USER_USERNAME: zeppelin
+      ZEPPELIN_USER_PASSWORD: changeme
       # set spark-master for Zeppelin interpreter
-      MASTER: spark://spark-master:7077
-      SPARK_DRIVER_HOST: ${DOCKER_HOST_IP}
-      SPARK_DRIVER_BINDADDRESS: 0.0.0.0
-      SPARK_UI_PORT: 4050
-      SPARK_DRIVER_PORT: 5050
-      SPARK_BLOCKMANGER_PORT: 6060
-      SPARK_DRIVER_EXTRAJAVAOPTIONS:
-      SPARK_EXECUTOR_EXTRAJAVAOPTIONS:
-      SPARK_HADOOP_FS_S3A_ACCESS_KEY: V42FCGRVMK24JJ8DHUYG
-      SPARK_HADOOP_FS_S3A_SECRET_KEY: bKhWxVF3kQoLY9kFmt91l+tDrEoZjqnWXzY9Eza
+      ZEPPELIN_SPARK_MASTER: spark://spark-master:7077
+      ZEPPELIN_NOTEBOOK_CRON_ENABLE: 'True'
       PYSPARK_PYTHON: python3
-      SPARK_SUBMIT_OPTIONS: --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4
+      SPARK_SUBMIT_OPTIONS: --conf spark.ui.port=4050 --conf spark.driver.host=${DOCKER_HOST_IP} --conf spark.driver.port=5050 --conf spark.driver.bindAddress=0.0.0.0 --conf spark.blockManager.port=6060 --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4
     volumes:
       - ./data-transfer:/data-transfer
       - ./plugins/spark/jars:/extra-jars
       - ./container-volume/spark/logs/:/var/log/spark/logs
-      - ./conf/s3cfg:/root/.s3cfg
-      - ./conf/zeppelin/shiro.ini:/opt/zeppelin/conf/shiro.ini
-      - ./conf/zeppelin/interpreter.json:/opt/zeppelin/conf/interpreter.json
-      - ./conf/zeppelin/interpreter-setting.json:/opt/zeppelin/interpreter/spark/interpreter-setting.json
+      - ./conf/s3cfg:/root/.s3cfg.template
     restart: unless-stopped
   #  ================================== Jupyter ========================================== #
   jupyter:
@@ -229,8 +219,9 @@ services:
     hostname: elasticsearch-1
     container_name: elasticsearch-1
     labels:
-      com.mdps.service.restapi.name: Elasticsearch REST API
+      com.platys.restapi.title: Elasticsearch REST API
       com.platys.restapi.url: http://${PUBLIC_IP}:9200
+      com.platys.manual.step.msgs: sudo sysctl -w vm.max_map_count=262144
     ports:
       - 9200:9200
       - 9300:9300
@@ -241,6 +232,42 @@ services:
       http.cors.allow-origin: http://dejavu:1358,http://dataplatform:28125,http://analyticsplatform:28125,http://${PUBLIC_IP}:28125,http://${DOCKER_HOST_IP}:28125,http://127.0.0.1:1358
       http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       http.cors.allow-credentials: 'true'
+    volumes:
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
+  dejavu:
+    image: appbaseio/dejavu:latest
+    container_name: dejavu
+    hostname: dejuvu
+    labels:
+      com.platys.webui.title: Elasticsearch Dejavu UI
+      com.platys.webui.url: http://${PUBLIC_IP}:28125
+    ports:
+      - 28125:1358
+    volumes:
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
+  cerebro:
+    image: lmenezes/cerebro:latest
+    container_name: cerebro
+    hostname: cerebro
+    labels:
+      com.platys.webui.title: Elasticsearch Cerbero UI
+      com.platys.webui.url: http://${PUBLIC_IP}:28126
+    ports:
+      - 28126:9000
+    volumes:
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
+  elastichq:
+    image: elastichq/elasticsearch-hq:latest
+    container_name: elastichq
+    hostname: elatichq
+    labels:
+      com.platys.webui.title: ElasticHQ UI
+      com.platys.webui.url: http://${PUBLIC_IP}:28127
+    ports:
+      - 28127:5000
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
@@ -257,12 +284,9 @@ services:
     ports:
       - 5601:5601
     environment:
-      xpack.monitoring.enabled: 'false'
       discovery.type: single-node
       ELASTICSEARCH_URL: http://elasticsearch-1:9200
-      server.host: 0.0.0.0
       SERVER_HOST: 0.0.0.0
-      server.name: kibana
       SERVER_NAME: kibana
       XPACK_GRAPH_enabled: 'false'
       XPACK_MONITORING_enabled: 'false'
@@ -299,7 +323,7 @@ services:
     container_name: influxdb
     hostname: influxdb
     labels:
-      com.mdps.service.restapi.name: InfluxDB Rest API
+      com.platys.restapi.title: InfluxDB Rest API
       com.platys.restapi.url: http://${PUBLIC_IP}:8086
     ports:
       - 8086:8086
@@ -427,7 +451,7 @@ services:
     hostname: markdown-viewer
     labels:
       com.platys.webui.title: Markdown Viewer UI
-      com.platys.webui.url: http://${PUBLIC_IP}
+      com.platys.webui.url: http://${PUBLIC_IP}:80
     ports:
       - 80:80
     volumes:
@@ -439,6 +463,7 @@ services:
     container_name: markdown-renderer
     hostname: markdown-renderer
     environment:
+      USE_PUBLIC_IP: 'True'
       PUBLIC_IP: ${PUBLIC_IP}
       DOCKER_HOST_IP: ${DOCKER_HOST_IP}
       DATAPLATFORM_HOME: ${DATAPLATFORM_HOME}

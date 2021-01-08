@@ -18,11 +18,9 @@ mkdir influxdb-workspace
 cd influxdb-workspace
 ```
 
-Add a `conf` folder and in this new folder create the `devices-def.json` file
+Create the `devices-def.json` file
 
 ```
-mkdir conf
-
 nano conf/devices-def.json
 ```
 
@@ -59,7 +57,13 @@ mkdir logs
 Now let's run the IoT Simulator with this definition file and
 
 ```
-docker run -v $PWD/conf/devices-def.json:/conf/devices-def.json -v $PWD/logs:/logs trivadis/iot-simulator -dt FILE -u /logs/iot-file.log -cf /conf/devices-def.json
+docker run -v $PWD/devices-def.json:/conf/devices-def.json -v $PWD/logs:/logs trivadis/iot-simulator -dt FILE -u /logs/iot-file.log -cf /conf/devices-def.json
+```
+
+Alternatively you can also use the `-cl` flag to link to the config via URL (i.e. stored in GitHub)
+
+```
+docker run -v $PWD/logs:/logs trivadis/iot-simulator -dt FILE -u /logs/iot-file.log -cl https://raw.githubusercontent.com/gschmutz/IotSimulator/master/config/sensor-reading-sample.json
 ```
 
 The data is published to a file in the `logs` folder.  
@@ -96,7 +100,7 @@ Open the `telegraf.conf` in an editor of your choice and change the `outputs.inf
   ## urls will be written to each interval.
   # urls = ["unix:///var/run/influxdb.sock"]
   # urls = ["udp://127.0.0.1:8089"]
-  urls = ["http://dataplatform:8086"]
+  urls = ["http://influxdb:8086"]
 
   ## The target database for metrics; will be created as needed.
   ## For UDP url endpoint database needs to be configured on server side.
@@ -146,10 +150,17 @@ docker run --rm -ti --name telegraf-agent --network docker_default -v ${PWD}/tel
 
 ## Visualise InfluxDB data using Chronograf
 
-One tool for visualization is Chronograf, which is part of the so called [TICK Stack](https://www.influxdata.com/time-series-platform/) (TICK for **T**elegraf, **I**nfluxDB, **C**hronograf and **K**apacitor). 
+One tool for visualisation is Chronograf, which is part of the so called [TICK Stack](https://www.influxdata.com/time-series-platform/) (TICK for **T**elegraf, **I**nfluxDB, **C**hronograf and **K**apacitor). 
 
 In a browser window, navigate to <http://dataplatform:28152/> to open the Chronograf homepage. 
 
+## Using Rest API to retrieve data
+
+```
+curl -X POST -H 'Accept: application/csv' -H 'Content-Type: application/vnd.flux' -i http://dataplatform:8086/api/v2/query --data 'from(bucket:"iot")
+   |> range(start:-5m)
+    '
+```
 
 
 
