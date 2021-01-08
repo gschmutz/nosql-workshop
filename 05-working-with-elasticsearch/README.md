@@ -80,7 +80,7 @@ Navigate to **Dev Tools** on the right to open the **Dev Tools Console** window.
 
 The second one is [ElasticHQ](https://www.elastichq.org/), an open source management and monitoring interface for Elasticsearch.
 
-In a browser window, navigate to <http://dataplatform:28127> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://nosqlplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
+In a browser window, navigate to <http://dataplatform:28127> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://dataplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
 
 ![Alt Image Text](./images/elastichq.png "ElasticHQ")
 
@@ -170,7 +170,7 @@ Check that the mapping was correctly loaded by getting it back using the followi
 
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/_mapping/movie?pretty
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_mapping/movie?pretty
 ```
 
 ## Insert, Update and Delete Operations 
@@ -181,7 +181,7 @@ First we use a single movie and see the various modify operations on Elasticsear
 Let's insert the movie "Pulp Fiction" into the `movies` index we have created before
 
 ```
-curl -XPUT "http://nosqlplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' -d'
+curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' -d'
 {
     "id": "110912", 
     "title": "Pulp Fiction",
@@ -228,19 +228,19 @@ You can now use the `GET` http method against the **movies** index to check if t
 First let's search for all documents 
 
 ```
-curl -XGET http://nosqlplatform:9200/movies/movie/_search
+curl -XGET http://dataplatform:9200/movies/movie/_search
 ```
 
 We can also tell the REST API to pretty print the results, i.e. where the Json document is nicely formatted
 
 ```
-curl -XGET http://nosqlplatform:9200/movies/movie/_search?pretty
+curl -XGET http://dataplatform:9200/movies/movie/_search?pretty
 ```
 
 but of course as we know the id of the document, we can also retrieve specifically that document
 
 ```
-curl -XGET http://nosqlplatform:9200/movies/movie/110912
+curl -XGET http://dataplatform:9200/movies/movie/110912
 ```
 
 ### Update the movie
@@ -248,7 +248,7 @@ curl -XGET http://nosqlplatform:9200/movies/movie/110912
 Now let's see how we can update the title of the movie we have stored before. Let's say we want to append the `year` to the `title` field. 
 
 ```
-curl -H "Content-Type: application/json" -XPOST http://nosqlplatform:9200/movies/movie/110912/_update?pretty -d '
+curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/movie/110912/_update?pretty -d '
 {
     "doc": {
         "title": "The Matrix (1999)"
@@ -259,7 +259,7 @@ curl -H "Content-Type: application/json" -XPOST http://nosqlplatform:9200/movies
 in the answer we can see that the version of the document has been increase to 2. 
 
 ```
-bash-3.2$ curl -H "Content-Type: application/json" -XPOST http://nosqlplatform:9200/movies/movie/110912/_update?pretty -d '
+bash-3.2$ curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/movie/110912/_update?pretty -d '
 > {
 >     "doc": {
 >         "title": "The Matrix (1999)"
@@ -284,7 +284,7 @@ bash-3.2$ curl -H "Content-Type: application/json" -XPOST http://nosqlplatform:9
 Let's see if the update was successful
 
 ```
-curl -XGET http://nosqlplatform:9200/movies/movie/110912?pretty
+curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 ```
 
 We can also see the version of the document in the header. 
@@ -294,19 +294,19 @@ We can also see the version of the document in the header.
 Last but not least let's remove the movie by using the DELETE method on the URI.
 
 ```
-curl -XDELETE http://nosqlplatform:9200/movies/movie/110912
+curl -XDELETE http://dataplatform:9200/movies/movie/110912
 ```
 
 Let's see if the delete was successful
 
 ```
-curl -XGET http://nosqlplatform:9200/movies/movie/110912
+curl -XGET http://dataplatform:9200/movies/movie/110912
 ```
 
 We should no longer get the document back but instead get a `"found" : false` result
 
 ```
-bash-3.2$ curl -XGET http://nosqlplatform:9200/movies/movie/110912?pretty
+bash-3.2$ curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 {
   "_index" : "movies",
   "_type" : "movie",
@@ -320,17 +320,17 @@ bash-3.2$ curl -XGET http://nosqlplatform:9200/movies/movie/110912?pretty
 Now let's add some more movies. This time we are using a file to hold the document and reference it from the curl command.
 
 ```
-curl -XPUT "http://nosqlplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
+curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
+curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
+curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
 ```
 
 ## Analyzers
@@ -338,7 +338,7 @@ curl -XPUT "http://nosqlplatform:9200/movies/movie/4154796" -H 'Content-Type: ap
 Firstly let's try some searches. First lets try a match search for 'The Matrix':
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match": { 
@@ -353,7 +353,7 @@ You will notice that **The Godfather** and **The Lord of the Rings** is listed a
 Let's search for a genre of 'sci' as follows
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -372,13 +372,13 @@ We can fix these issues by specifying analysers to use at the mapping. To do thi
 To delete the index run this command:
 
 ```
-curl -H "Content-Type: application/json" -XDELETE http://nosqlplatform:9200/movies
+curl -H "Content-Type: application/json" -XDELETE http://dataplatform:9200/movies
 ```
 
 Then update the mappings as follows:
 
 ```
-curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
+curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
         "movie": {
@@ -401,22 +401,22 @@ So to recap what just happened here:
 Now reimport the data
 
 ```
-curl -XPUT "http://nosqlplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
+curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @data/pulp-fiction.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
+curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @data/the-matrix.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @data/fight-club.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @data/the-godfather.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
+curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @data/lord-of-the-rings.json
 
-curl -XPUT "http://nosqlplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
+curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @data/avengers-endgame.json
 ```
 And perform the search for 'The Matrix' again
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match": { 
@@ -429,7 +429,7 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 So now our search for a genre of 'sci' will no longer return a result
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -442,7 +442,7 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 We now have to search for an exact match, for example we can search for 'sci-fi'
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -455,7 +455,7 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 We still don't get any result. The search is even case sensitive, so it really has to be an exact match, so a search for 'Sci-Fi' will return us the movie
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -474,7 +474,7 @@ curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/
 In order to have some more data, we can import the Top 250 rated movies, available in [data/top250-movies.json>](/data/top250-movies.json)
 
 ```
-curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/_bulk?pretty --data-binary @data/top250-movies.json
+curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/_bulk?pretty --data-binary @data/top250-movies.json
 ```
 
 ### Query Lite / URI Search
@@ -484,13 +484,13 @@ Short hand query syntax which can be useful for debugging and testing out search
 Let's find all movies where the title contains 'matrix'
 
 ```
-curl http://nosqlplatform:9200/movies/movie/_search?q=title:matrix 
+curl http://dataplatform:9200/movies/movie/_search?q=title:matrix 
 ```
 
 We can include the `explain` parameter, so that for each hit an explanation of how scoring of the hits is computed and returned
 
 ```
-curl http://nosqlplatform:9200/movies/movie/_search?q=title:matrix&explain=true
+curl http://dataplatform:9200/movies/movie/_search?q=title:matrix&explain=true
 ```
 
 Because their is now body needed, you can also directly execute them from a browser
@@ -515,7 +515,7 @@ In the query below we have a bool query - which is essentially allowing us to co
 So we basically want to see all the movies which have `star` in the title and have been release after `2010`
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "bool": { 
@@ -548,7 +548,7 @@ For more details, refer to the [Elasticsearch Query DSL](https://www.elastic.co/
 Use `match_phrase` and, optionally, `slop. In the following example the search would find the document containing *'NYPD cop John McClane'* because the match_phrase query is 'nypd cop' with a slop of 1.
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -565,7 +565,7 @@ For more details, refer to the [Elasticsearch Match Phrase Query](https://www.el
 Let's say you want to find documents and give them a higher relevance when certain words are close together, then set the slop to a high number. In the following example the search would find the document containing *'NYPD cop John McClane goes on a Christmas vacation to visit his wife Holly in Los Angeles where she works for the Nakatomi Corporation. While they are at the Nakatomi headquarters for a Christmas party, a group of robber...'* because the match_phrase query is 'cop robber' with a slop of 50.
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -596,7 +596,7 @@ will result in an error because title is of type text.
 There is a way around this which is to keep a non-analyzed copy of the field. You need to consider this at the mapping/index stage. Here is a mapping example to do this (**Remember:** to apply this you first have to DELETE the current `movies` index, then apply this mapping and re-import the movies data!)
 
 ```
-curl -H "Content-Type: application/json" -XPUT http://nosqlplatform:9200/movies -d '
+curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
         "movie": {
@@ -624,7 +624,7 @@ http://localhost:9200/movies/movie/_search?sort=title.raw
 Note the following query will not match any results because 'Pulb Fiction' is spelt incorrectly (the 'b' at the end of Pulb should in fact be a 'p')
 
 ```
-curl -H "Content-Type: application/json" -XGET http://nosqlplatform:9200/movies/movie/_search?pretty -d '
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
 {
     "query": {
         "match": { 
