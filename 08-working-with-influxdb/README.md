@@ -57,13 +57,13 @@ mkdir logs
 Now let's run the IoT Simulator with this definition file and
 
 ```
-docker run -v $PWD/devices-def.json:/conf/devices-def.json -v $PWD/logs:/logs trivadis/iot-simulator -dt FILE -u /logs/iot-file.log -cf /conf/devices-def.json
+docker run -v $PWD/devices-def.json:/conf/devices-def.json -v $PWD/logs:/logs trivadis/iot-simulator -t file -of /logs/iot-file.log -df /conf/devices-def.json
 ```
 
 Alternatively you can also use the `-cl` flag to link to the config via URL (i.e. stored in GitHub)
 
 ```
-docker run -v $PWD/logs:/logs trivadis/iot-simulator -dt FILE -u /logs/iot-file.log -cl https://raw.githubusercontent.com/gschmutz/IotSimulator/master/config/sensor-reading-sample.json
+docker run -v $PWD/logs:/logs trivadis/iot-simulator -t file -of /logs/iot-file.log -df https://raw.githubusercontent.com/gschmutz/IotSimulator/master/config/sensor-reading-sample.json
 ```
 
 The data is published to a file in the `logs` folder.  
