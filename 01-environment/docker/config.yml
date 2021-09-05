@@ -121,6 +121,8 @@
       REDIS_INSIGHT_enable: true
       REDIS_COMMANDER_enable: true
       CASSANDRA_enable: true
+      CASSANDRA_major_version: 4
+      REAPER_enable: false
       DATASTAX_enable: false
       DATASTAX_nodes: 3
       MONGO_enable: true
