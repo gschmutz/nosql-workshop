@@ -142,7 +142,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: cassandra:3.11
+    image: cassandra:4.0
     container_name: cassandra-1
     hostname: cassandra-1
     ports:
@@ -154,7 +154,7 @@ services:
       - CASSANDRA_CLUSTER_NAME="Test Cluster"
       - CASSANDRA_DC=se1
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
-      - LOCAL_JMX=no
+#      - LOCAL_JMX=no
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
