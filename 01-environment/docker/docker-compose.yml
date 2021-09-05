@@ -157,6 +157,8 @@ services:
 #      - LOCAL_JMX=no
     volumes:
       - ./data-transfer:/data-transfer
+      - ./conf/cassandra/jmxremote.access:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/management/jmxremote.access
+      - ./conf/cassandra/jmxremote.password:/etc/cassandra/jmxremote.password
     restart: unless-stopped
   cassandra-web:
     image: trivadis/cassandra-web
