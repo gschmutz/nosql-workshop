@@ -142,7 +142,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: cassandra:4.0
+    image: cassandra:3.11
     container_name: cassandra-1
     hostname: cassandra-1
     ports:
