@@ -1,12 +1,13 @@
 # =======================================================================
 # Platform Name            nosql-platform
 # Platform Stack:          trivadis/platys-modern-data-platform
-# Platform Stack Version:  1.11.0
+# Platform Stack Version:  1.13.0-preview
 # =======================================================================
 version: '3.5'
 networks:
   default:
     name: nosql-platform
+# Enable PostgreSQL or MySQL for MLflow server
 services:
   #  ================================== Zeppelin ========================================== #
   zeppelin:
@@ -48,7 +49,7 @@ services:
       ZEPPELIN_SPARK_MASTER: spark://spark-master:7077
       ZEPPELIN_NOTEBOOK_CRON_ENABLE: 'True'
       PYSPARK_PYTHON: python3
-      SPARK_SUBMIT_OPTIONS: --conf spark.ui.port=4050 --conf spark.driver.host=${DOCKER_HOST_IP} --conf spark.driver.port=5050 --conf spark.driver.bindAddress=0.0.0.0 --conf spark.blockManager.port=6060 --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4
+      SPARK_SUBMIT_OPTIONS: ' --conf spark.ui.port=4050 --conf spark.driver.host=${DOCKER_HOST_IP} --conf spark.driver.port=5050 --conf spark.driver.bindAddress=0.0.0.0 --conf spark.blockManager.port=6060 --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4'
     volumes:
       - ./data-transfer:/data-transfer
       - ./plugins/spark/jars:/extra-jars
@@ -75,7 +76,7 @@ services:
     restart: unless-stopped
   #  ================================== Grafana ========================================== #
   grafana:
-    image: grafana/grafana:7.3.4
+    image: grafana/grafana:8.1.2
     hostname: grafana
     container_name: grafana
     labels:
@@ -86,15 +87,17 @@ services:
     ports:
       - 3000:3000
     environment:
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=abc123!
+      - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - ./data-transfer:/data-transfer
       - ./plugins/grafana:/etc/grafana/provisioning
     restart: unless-stopped
   #  ================================== Redis ========================================== #
   redis-1:
-    image: bitnami/redis:6.0.9
+    image: bitnami/redis:6.0.15
     hostname: redis-1
     container_name: redis-1
     ports:
@@ -139,7 +142,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: cassandra:3
+    image: cassandra:3.11
     container_name: cassandra-1
     hostname: cassandra-1
     ports:
@@ -173,7 +176,7 @@ services:
     restart: unless-stopped
   #  ================================== MongoDB ========================================== #
   mongo-1:
-    image: mongo:4.4.2
+    image: mongo:5.0
     container_name: mongo-1
     hostname: mongo-1
     ports:
@@ -215,7 +218,7 @@ services:
     restart: unless-stopped
   #  ================================== Elasticsearch ========================================== #
   elasticsearch-1:
-    image: elasticsearch:7.10.1
+    image: elasticsearch:7.14.0
     hostname: elasticsearch-1
     container_name: elasticsearch-1
     labels:
@@ -233,6 +236,7 @@ services:
       http.cors.allow-origin: http://dejavu:1358,http://dataplatform:28125,http://analyticsplatform:28125,http://${PUBLIC_IP}:28125,http://${DOCKER_HOST_IP}:28125,http://127.0.0.1:1358
       http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       http.cors.allow-credentials: 'true'
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
@@ -274,7 +278,7 @@ services:
     restart: unless-stopped
   #  ================================== Kibana ========================================== #
   kibana:
-    image: kibana:7.10.1
+    image: kibana:7.14.0
     hostname: kibana
     container_name: kibana
     labels:
@@ -299,7 +303,7 @@ services:
     restart: unless-stopped
      #  ================================== Neo4J ========================================== #
   neo4j-1:
-    image: neo4j:4.2.0
+    image: neo4j:4.2
     hostname: neo4j-1
     container_name: neo4j-1
     labels:
@@ -346,7 +350,7 @@ services:
     restart: unless-stopped
   #  ================================== InfluxData Chronograf ========================================== #
   chronograf:
-    image: chronograf:1.8
+    image: chronograf:1.9
     hostname: chronograf
     container_name: chronograf
     labels:
@@ -366,7 +370,7 @@ services:
     restart: unless-stopped
   #  ================================== InfluxData Telegraf ========================================== #
   telegraf:
-    image: telegraf:1.15
+    image: telegraf:1.19
     container_name: telegraf
     hostname: telegraf
     environment:
@@ -386,11 +390,13 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD=abc123!
-      - POSTGRES_USER=demo
-      - POSTGRES_DB=demodb
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_MULTIPLE_DATABASES=demodb
+      - POSTGRES_MULTIPLE_USERS=demo
+      - POSTGRES_MULTIPLE_PASSWORDS=abc123!
       - PGDATA=/var/lib/postgresql/data/pgdata
       - DB_SCHEMA=demo
-      - DB_ANON_ROLE=appuser
     volumes:
       - ./data-transfer:/data-transfer
       - ./init/postgresql:/docker-entrypoint-initdb.d/
@@ -449,7 +455,7 @@ services:
     restart: unless-stopped
   #  ================================== markdown-viewer ========================================== #
   markdown-viewer:
-    image: minimum/markdown-web:latest
+    image: trivadis/markdown-web:latest
     container_name: markdown-viewer
     hostname: markdown-viewer
     labels:
