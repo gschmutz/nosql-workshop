@@ -271,7 +271,7 @@ VALUES (0000168,
 		  'Shaven head',
 		  'Kangol hats',
 		  'Often plays hotheaded characters with a fiery temper',
-		  "Often shouts the word 'motherf*****' at some point in a film",
+		  'Often shouts the word "motherf*****" at some point in a film',
 		  'Frequently cast by Quentin Tarantino']);
 
 // insert "Uma Thurman" - 0000235
