@@ -257,17 +257,8 @@ Notice that, in addition to the data you specified, there’s an `_id` field. Ev
 You can either generate one yourself or let MongoDB generate a value for you which has the type `ObjectId`. Most of the time you’ll probably want to let MongoDB generate it for you. By default, the `_id` field is indexed - which can be checked using the `db.persons.getIndexes()` command
 
 ```
-> db.persons.getIndexes()
-[
-	{
-		"v" : 2,
-		"key" : {
-			"_id" : 1
-		},
-		"name" : "_id_",
-		"ns" : "filmdb.persons"
-	}
-]
+> db.movies.getIndexes()
+[ { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_" } ]
 ```
 
 What you’re seeing is the name of the index, the database and collection it was created against and the fields included in the index. 
