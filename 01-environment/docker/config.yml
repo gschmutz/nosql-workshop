@@ -57,6 +57,7 @@
 
       #spark
       SPARK_enable: false
+      SPARK_base_version: 3.2
       SPARK_workers: 2
 
       # misc spark 'addons'
@@ -118,10 +119,20 @@
 
       # NoSQL
       REDIS_enable: true
+      REDIS_replicasets: 0
+      REDIS_allow_empty_password: yes
+      REDIS_disable_commands:
+      REDIS_password: abc123!
+      REDIS_aof_enabled: no
+      REDIS_volume_map_data: false
+            
       REDIS_INSIGHT_enable: true
+      
       REDIS_COMMANDER_enable: true
+      
       CASSANDRA_enable: true
       CASSANDRA_major_version: 4
+      
       REAPER_enable: false
       DATASTAX_enable: false
       DATASTAX_nodes: 3
@@ -133,9 +144,17 @@
       ELASTICHQ_enable: true
 
       NEO4J_enable: true
+      # either "community" or "enterprise"
+      NEO4J_edition: community
+      NEO4J_dbms_memory_pagecache_size: ''
+      NEO4J_dbms_memory_heap_max_size: ''
       NEO4J_volume_map_data: false
       NEO4J_volume_map_logs: false
-
+      NEO4J_extension_script: ''
+      NEO4J_plugins: ''
+      NEO4J_dbms_logs_debug_level: 'INFO'
+      
+      
       # Influx DB 1.x
       INFLUXDB_enable: true
       INFLUXDB_volume_map_data: false
@@ -147,7 +166,13 @@
 
       # Influx DB 2.x
       INFLUXDB2_enable: false
+      INFLUXDB2_volume_map_config: false
       INFLUXDB2_volume_map_data: false
+      INFLUXDB2_username: influx
+      INFLUXDB2_password: abc123abc123!
+      INFLUXDB2_admin_token: 
+      INFLUXDB2_org: demo
+      INFLUXDB2_bucket: demo-bucket
 
       # NoSQL - Prometeus
       PROMETHEUS_enable: false
