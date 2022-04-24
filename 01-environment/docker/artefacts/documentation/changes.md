@@ -12,6 +12,8 @@ The Modern Data Platform version 1.15.0 contains the following bug fixes and enh
  * Quine
  * NiFi Toolkit
  * Conduit
+ * ReTool
+ * Airbyte
 
 ### New Cookbook Recipes
 
@@ -20,11 +22,11 @@ The Modern Data Platform version 1.15.0 contains the following bug fixes and enh
 ### Version upgrades
 
  * Update `Apache NiFi` to `1.15.3` and `Apache NiFi Registry` to `1.15.3`
- * Update `Trino` to `376`
- * Update `Starburst Enterprise` to `375-e`
+ * Update `Trino` to `378`
+ * Update `Starburst Enterprise` to `377-e`
  * Update `dremio` to `20.1`
  * Update `Debezium Server` to `1.9`
- * Update `DataHub` to `v0.8.32`
+ * Update `DataHub` to `v0.8.33`
  * Update `ksqldb` to `0.24.0`
  * Update `spring-cloud-dataflow-server` to `2.9.3`
  * Update `spring-cloud-skipper-server` to `2.8.3`
@@ -48,6 +50,8 @@ The Modern Data Platform version 1.15.0 contains the following bug fixes and enh
  * Add support for Nifi Cluster (setting the new config seeting `NIFI_create_cluster` to `true`
  * Apache NiFi is now secure by default, so you have to use https to get to the UI and then authenticate using the user and password specified.
  * Zeppelin images are now in Sync with Spark version (all 3 digits x.x.x).
+ * Option for installing Adventureworks demo database with SQL Server
+ * Externalize version of the container used when `PROVISIONING_DATA_enable` is activated
 
 ### Bug Fixes
 

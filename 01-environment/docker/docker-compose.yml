@@ -12,7 +12,7 @@ networks:
 services:
   #  ================================== Zeppelin ========================================== #
   zeppelin:
-    image: trivadis/apache-zeppelin:0.10.0-spark2.4.8-hadoop2.8
+    image: trivadis/apache-zeppelin:0.10.0-spark3.2.1-hadoop3.2
     container_name: zeppelin
     hostname: zeppelin
     labels:
@@ -525,7 +525,5 @@ services:
       - ./artefacts:/output
       - ./data-transfer:/data-transfer
 volumes:
-  airbyte-workspace-vol:
-    name: airbyte_workspace_vol
-  airbyte-db-vol:
-    name: airbyte_db_vol
+  data-transfer-vol:
+    name: data_transfer_vol
