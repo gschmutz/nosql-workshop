@@ -1,4 +1,5 @@
 # Working with MongoDB
+
 In this workshop we will learn how to use the MongoDB NoSQL database.
 
 We assume that the platform described [here](../01-environment) is running and accessible. 
@@ -7,7 +8,7 @@ We assume that the platform described [here](../01-environment) is running and a
 
 ### Using the MongoDB Command Line utility
 
-You can find the `mongo` command line utility inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command 
+You can find the `mongo` command line utility inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command
 
 ```
 docker exec -ti mongo-1 mongo
@@ -62,7 +63,7 @@ In a browser window, navigate to <http://dataplatform:28123/> and you should dir
 ![Alt Image Text](./images/mongo-express-home.png "Mongo Express")
 
 #### Admin Mongo
-The second one is [Admin Mongo](https://adminmongo.markmoffat.com/), an open source admin user interface for your MongoDB.
+The second one is [Admin Mongo](https://github.com/adicom-systems/adminMongo), an open source admin user interface for your MongoDB.
 
 In a browser window navigate to <http://dataplatform:28124/> and you should directly arrive on the home screen as shown below. 
 
@@ -78,17 +79,15 @@ A Click on the **Connect** button brings you to the Admin Mongo details page for
 
 There are also various desktop applications for MongoDB management and administration, which can be downloaded and installed on a Desktop. From there you can connect either to a local or remote Mongo instance.
 
-#### Robo 3T (formerly Robomongo)
+#### Studio 3T (formerly known as Robo 3T or Robomongo)
 
-The one we are showing here is [Robo 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
+The one we are showing here is [Studio 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
 
-![Alt Image Text](./images/robo3t.png "Robo 3T")
+![Alt Image Text](./images/studio3T.png "Studio 3T")
 
-Click on the **Connect** icon in the left upper corner and click on Create link to create a new connection. 
+Click on the **Connect** icon in the left upper corner and click on **New Connection** to create a new connection. 
 
-Enter `Data Platform` into the **Name** field and the IP address of your Docker Host into the **Address** field. Leave the port on 27017 and click on **Save**.
-
-Select the **Data Platform** connection and click Connect. The Robo 3T main screen should appear. 
+Enter `dataplatform` or the IP address of your Docker Host into the **Server** field. Leave the port on 27017 and click on **Save**. With the newly created connection selected, click **Connect**. On the right side you should now see a list of available databases. 
 
 ## Working with MongoDB
 
