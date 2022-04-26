@@ -447,28 +447,6 @@ services:
       - ./data-transfer:/data-transfer
       - ./plugins/grafana:/etc/grafana/provisioning
     restart: unless-stopped
-  #  ================================== cAdvisor ========================================== #
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.36.0
-    container_name: cadvisor
-    hostname: cadvisor
-    labels:
-      com.platys.name: cadvisor
-      com.platys.webui.title: cAdvisor UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28138
-    ports:
-      - 28138:8080
-    volumes:
-      - ./data-transfer:/data-transfer
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    devices:
-      - /dev/kmsg
-    tty: true
-    privileged: true
-    restart: unless-stopped
   #  ================================== Wetty ========================================== #
   wetty:
     image: svenihoney/wetty:latest

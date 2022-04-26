@@ -226,7 +226,7 @@
 
       # Container Mgmt
       PORTAINER_enable: false
-      CADVISOR_enable: true
+      CADVISOR_enable: false
 
       # ===== Wetty ========
       WETTY_enable: true
