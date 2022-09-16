@@ -7,6 +7,19 @@
         platform-stack-version: '1.15.0'
         structure: 'flat'
 
+      # ========================================================================
+      # Global configuration, valid for all or a group of services
+      # ========================================================================
+      # Timezone, use a Linux string such as Europe/Zurich or America/New_York
+      use_timezone: ''
+      # the name of the repository to use for private images, which are not on docker hub (currently only Oracle images)
+      private_docker_repository_name: 'trivadis'
+      # the UID to use when using the "user" property in a service to override the user inside the container
+      uid: '1000'
+      data_centers: 'dc1,dc2'
+      data_center_to_use: 0
+      copy_cookbook_data_folder: false
+
       #zookeeper
       ZOOKEEPER_enable: false
       ZOOKEEPER_volume_map_data: false
@@ -57,7 +70,7 @@
 
       #spark
       SPARK_enable: false
-      SPARK_base_version: 3.2
+      SPARK_base_version: 3.1
       SPARK_workers: 2
 
       # misc spark 'addons'
