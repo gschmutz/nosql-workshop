@@ -615,6 +615,12 @@ redis:6379> HDEL user:1000 visits
     
 Check the full list of [Hash commands](https://redis.io/commands#hash) for more information.
 
+## Redis Benchmark
+
+```bash
+docker run -it --rm --network nosql-platform bitnami/redis redis-benchmark -h redis-1 -a "abc123!" -q -n 100000
+```
+
 ## Python
 
 ```
@@ -633,3 +639,5 @@ r.ping()
 ```
 r.set('foo','bar')
 ```
+
+
