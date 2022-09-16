@@ -1,7 +1,7 @@
 # =======================================================================
 # Platform Name            nosql-platform
 # Platform Stack:          trivadis/platys-modern-data-platform
-# Platform Stack Version:  1.15.0-preview
+# Platform Stack Version:  1.15.0
 # =======================================================================
 version: '3.5'
 networks:
@@ -138,10 +138,10 @@ services:
       - 7199:7199
       - 9160:9160
     environment:
-      - CASSANDRA_SEEDS=cassandra-1
       - CASSANDRA_CLUSTER_NAME="Test Cluster"
       - CASSANDRA_DC=se1
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_NUM_TOKENS=128
       - LOCAL_JMX=no
     volumes:
       - ./data-transfer:/data-transfer
@@ -153,7 +153,7 @@ services:
     container_name: cassandra-web
     hostname: cassandra-web
     labels:
-      com.platys.name: cassandra
+      com.platys.name: cassandra-web
       com.platys.webui.title: Cassandra Web UI
       com.platys.webui.url: http://${PUBLIC_IP}:28120
     ports:
@@ -230,7 +230,7 @@ services:
       xpack.security.enabled: 'false'
       xpack.monitoring.enabled: 'false'
       http.cors.enabled: 'true'
-      http.cors.allow-origin: http://dejavu:1358,http://dataplatform:28125,http://analyticsplatform:28125,http://${PUBLIC_IP}:28125,http://${DOCKER_HOST_IP}:28125,http://127.0.0.1:1358
+      http.cors.allow-origin: http://${DOCKER_HOST_IP}:28275,http://${PUBLIC_IP}:28275,http://dejavu:1358,http://dataplatform:28125,http://dataplatform:28125,http://${PUBLIC_IP}:28125,http://${DOCKER_HOST_IP}:28125,http://127.0.0.1:1358
       http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
       http.cors.allow-credentials: 'true'
       ES_JAVA_OPTS: -Xms512m -Xmx512m
@@ -302,7 +302,7 @@ services:
       - ./data-transfer:/data-transfer
     command: [/bin/bash, -c, /usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker]
     restart: unless-stopped
-     #  ================================== Neo4J ========================================== #
+  #  ================================== Neo4J ========================================== #
   neo4j-1:
     image: neo4j:4.4
     hostname: neo4j-1
@@ -423,6 +423,7 @@ services:
       - 28131:8080
     volumes:
       - ./data-transfer:/data-transfer
+    command: php -S 0.0.0.0:8080 -t /var/www/html
     restart: unless-stopped
   #  ================================== Grafana ========================================== #
   grafana:
@@ -494,7 +495,7 @@ services:
       DATAPLATFORM_HOME: ${DATAPLATFORM_HOME}
       PLATYS_PLATFORM_NAME: nosql-platform
       PLATYS_PLATFORM_STACK: trivadis/platys-modern-data-platform
-      PLATYS_PLATFORM_STACK_VERSION: 1.15.0-preview
+      PLATYS_PLATFORM_STACK_VERSION: 1.15.0
       PLATYS_COPY_COOKBOOK_DATA: 'False'
     volumes:
       - ./artefacts/templates:/templates
