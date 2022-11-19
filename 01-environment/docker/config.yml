@@ -178,12 +178,12 @@
       INFLUXDB_KAPACITOR_volume_map_data: false
 
       # Influx DB 2.x
-      INFLUXDB2_enable: false
+      INFLUXDB2_enable: true
       INFLUXDB2_volume_map_config: false
       INFLUXDB2_volume_map_data: false
       INFLUXDB2_username: influx
       INFLUXDB2_password: abc123abc123!
-      INFLUXDB2_admin_token: 
+      INFLUXDB2_admin_token: '' 
       INFLUXDB2_org: demo
       INFLUXDB2_bucket: demo-bucket
 
