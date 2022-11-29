@@ -1,7 +1,7 @@
 # =======================================================================
 # Platform Name            nosql-platform
 # Platform Stack:          trivadis/platys-modern-data-platform
-# Platform Stack Version:  1.15.0
+# Platform Stack Version:  1.16.0-preview
 # =======================================================================
 version: '3.5'
 networks:
@@ -57,7 +57,7 @@ services:
       - ./data-transfer:/data-transfer
       - ./plugins/spark/jars:/extra-jars
       - ./container-volume/spark/logs/:/var/log/spark/logs
-      - ./conf/s3cfg:/root/.s3cfg.template
+      - ./conf/awscli/s3cfg.template:/root/.s3cfg.template
     restart: unless-stopped
   #  ================================== Jupyter ========================================== #
   jupyter:
@@ -70,13 +70,21 @@ services:
       com.platys.webui.url: http://${PUBLIC_IP}:28888
     ports:
       - 28888:8888
+      - 14040-14044:4040-4044
+    user: root
     environment:
-      JUPYTER_ENABLE_LAB: 'true'
-      JUPYTER_TOKEN: abc123!
-      GRANT_SUDO: 'true'
-      TINI_SUBREAPER: 'true'
+      JUPYTER_ENABLE_LAB: "'yes'"
+      GRANT_SUDO: "'yes'"
+      DOCKER_STACKS_JUPYTER_CMD: lab
     volumes:
       - ./data-transfer:/data-transfer
+    # - ./custom-conf/jupyter/spark-defaults.conf:/usr/local/spark-3.1.1-bin-hadoop3.2/conf/spark-defaults.conf
+    command:
+      # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
+      - bash
+      - -c
+      - |
+        start-notebook.sh
     restart: unless-stopped
   #  ================================== Redis ========================================== #
   redis-1:
@@ -128,7 +136,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: cassandra:4.0
+    image: bitnami/cassandra:4.0
     container_name: cassandra-1
     hostname: cassandra-1
     labels:
@@ -139,7 +147,10 @@ services:
       - 9160:9160
     environment:
       - CASSANDRA_CLUSTER_NAME="Test Cluster"
-      - CASSANDRA_DC=se1
+      - CASSANDRA_DATACENTER=se1
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
       - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
       - CASSANDRA_NUM_TOKENS=128
       - LOCAL_JMX=no
@@ -354,7 +365,7 @@ services:
     restart: unless-stopped
   #  ================================== InfluxData Chronograf ========================================== #
   chronograf:
-    image: chronograf:1.9
+    image: chronograf:1.1
     hostname: chronograf
     container_name: chronograf
     labels:
@@ -375,7 +386,7 @@ services:
     restart: unless-stopped
   #  ================================== InfluxData Telegraf ========================================== #
   telegraf:
-    image: telegraf:1.19
+    image: telegraf:1.24.3
     container_name: telegraf
     hostname: telegraf
     labels:
@@ -390,7 +401,7 @@ services:
     restart: unless-stopped
   #  ================================== InfluxDB 2 ========================================== #
   influxdb2:
-    image: influxdb:2.1.1
+    image: influxdb:2.5.1
     hostname: influxdb2
     container_name: influxdb2
     labels:
@@ -428,6 +439,7 @@ services:
       - POSTGRES_MULTIPLE_DATABASES=demodb
       - POSTGRES_MULTIPLE_USERS=demo
       - POSTGRES_MULTIPLE_PASSWORDS=abc123!
+      - POSTGRES_MULTIPLE_ADDL_ROLES=
       - PGDATA=/var/lib/postgresql/data/pgdata
       - DB_SCHEMA=demo
     volumes:
@@ -521,7 +533,7 @@ services:
       DATAPLATFORM_HOME: ${DATAPLATFORM_HOME}
       PLATYS_PLATFORM_NAME: nosql-platform
       PLATYS_PLATFORM_STACK: trivadis/platys-modern-data-platform
-      PLATYS_PLATFORM_STACK_VERSION: 1.15.0
+      PLATYS_PLATFORM_STACK_VERSION: 1.16.0-preview
       PLATYS_COPY_COOKBOOK_DATA: 'False'
     volumes:
       - ./artefacts/templates:/templates

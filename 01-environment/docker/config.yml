@@ -4,7 +4,7 @@
       platys:
         platform-name: 'nosql-platform'
         platform-stack: 'trivadis/platys-modern-data-platform'
-        platform-stack-version: '1.15.0'
+        platform-stack-version: '1.16.0-preview'
         structure: 'flat'
 
       # ========================================================================
@@ -145,7 +145,13 @@
       
       CASSANDRA_enable: true
       CASSANDRA_major_version: 4
+      CASSANDRA_nodes: 1
+      CASSANDRA_local_jmx: no
+      CASSANDRA_username: cassandra
+      CASSANDRA_password: cassandra
       
+      CASSANDRA_WEB_enable: true
+
       REAPER_enable: false
       DATASTAX_enable: false
       DATASTAX_nodes: 3

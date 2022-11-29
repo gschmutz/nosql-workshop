@@ -10,13 +10,13 @@ We assume that the platform described [here](../01-environment) is running and a
 You can find the `cqlsh` command line utility inside the Cassandra docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command
 
 ```
-docker exec -ti cassandra-1 cqlsh
+docker exec -ti cassandra-1 cqlsh -u cassandra -p cassandra
 ```
 
 This will connect you into the `cassandra-1` container and run the `cqlsh` inside id. You should see an output similar to this one.
 
 ```
-bigdata@bigdata:~$ docker exec -ti cassandra-1 cqlsh
+bigdata@bigdata:~$ docker exec -ti cassandra-1 cqlsh-u cassandra -p cassandra
 Connected to Test Cluster at 127.0.0.1:9042.
 [cqlsh 5.0.1 | Cassandra 3.11.5 | CQL spec 3.4.4 | Native protocol v4]
 Use HELP for help.
@@ -79,7 +79,7 @@ Zeppelin has a Cassandra interpreter, which we will use here. But before we can 
 
 ![Alt Image Text](./images/apache-zeppelin-navigate-interpreter.png "Apache Zeppelin Interpreter")
 
-Navigate to the **Cassandra** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **cassandra.host** property to `cassandra-1`, which is the service name of our Cassandra node in the docker-compose configuration.
+Navigate to the **Cassandra** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **cassandra.credentials.username** to `cassandra`,  **cassandra.credentials.password** to `cassandra` and **cassandra.host** property to `cassandra-1` (the service name of our Cassandra node in the docker-compose configuration).
 
 ![Alt Image Text](./images/apache-zeppelin-interpreter-cassandra.png "Apache Zeppelin Cassandra Interpreter")
 
