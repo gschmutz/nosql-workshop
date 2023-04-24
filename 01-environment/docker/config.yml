@@ -128,9 +128,15 @@
 
       # Visualization
       GRAFANA_enable: true
-      KIBANA_enable: true #needs to have elasticsearch enabled to work
+      
+      #
+      # ===== Elastic Kibana ========
+      #
+      KIBANA_enable: true    #needs to have elasticsearch enabled to work      
 
-      # NoSQL
+      #
+      # ===== Redis ========
+      #
       REDIS_enable: true
       REDIS_replicasets: 0
       REDIS_allow_empty_password: yes
@@ -139,32 +145,93 @@
       REDIS_aof_enabled: no
       REDIS_volume_map_data: false
             
+      #
+      # ===== Redis Insight ========
+      #
       REDIS_INSIGHT_enable: true
-      
+
+      #
+      # ===== Redis Commander ========
+      #
       REDIS_COMMANDER_enable: true
       
+      
+      #
+      # ===== Apache Casandra ========
+      #
       CASSANDRA_enable: true
+      # either 3 or 4
       CASSANDRA_major_version: 4
+      CASSANDRA_volume_map_data: false
       CASSANDRA_nodes: 1
       CASSANDRA_local_jmx: no
       CASSANDRA_username: cassandra
       CASSANDRA_password: cassandra
-      
+
       CASSANDRA_WEB_enable: true
 
       REAPER_enable: false
+
+      #
+      # ===== DataStax ========
+      #
       DATASTAX_enable: false
       DATASTAX_nodes: 3
+      
+      #
+      # ===== MongoDB ========
+      #
       MONGO_enable: true
+      MONGO_nodes: 1
+      MONGO_root_username: root
+      MONGO_root_password: abc123!
+
+      #
+      # ===== SolR ========
+      #
       SOLR_enable: false
+
+
+      #
+      # ===== Elasticsearch ========
+      #
       ELASTICSEARCH_enable: true
+      ELASTICSEARCH_major_version: 8
+      # one of 'oss', 'elastic',
+      ELASTICSEARCH_edition: 'oss'
+      
+      #
+      # ===== OpenSearch ========
+      #
+      OPENSEARCH_enable: false
+      OPENSEARCH_nodes: 1
+      OPENSEARCH_volume_map_data: false
+      OPENSEARCH_DASHBOARDS_enable: false
+
+      #
+      # ===== Various UIs for Elasticsearch & OpenSearch ========
+      #
       DEJAVU_enable: true
       CEREBRO_enable: true
       ELASTICHQ_enable: true
+      ELASTICVUE_enable: true      
+      
+      #
+      # ===== JanusGraph ========
+      #
+      JANUSGRAPH_enable: false
+      # `berkeleyje`, `berkeleyje-es`, `berkeleyje-lucene`, `cql-es`, `cql`, `inmemory`
+      JANUSGRAPH_props_template: berkeleyje 
+      #
+      # ===== Gremlin Console ========
+      #
+      GREMLIN_CONSOLE_enable: false
+      GREMLIN_CONSOLE_remote_host: janusgraph      
 
       NEO4J_enable: true
       # either "community" or "enterprise"
       NEO4J_edition: community
+      NEO4J_admin_password: abc123abc123
       NEO4J_dbms_memory_pagecache_size: ''
       NEO4J_dbms_memory_heap_max_size: ''
       NEO4J_volume_map_data: false
@@ -173,23 +240,75 @@
       NEO4J_plugins: ''
       NEO4J_dbms_logs_debug_level: 'INFO'
       
+      # Neo4J Streams Source (Neo4J -> Kafka)
+      NEO4J_source_enabled: true
+      NEO4J_topic_name: neo4j
+      NEO4J_streams_source_topic_nodes: ''
+      NEO4J_streams_source_topic_relationships: ''
+      NEO4J_kafka_acks: 1
+      NEO4J_kafka_transactional_id: ''      
+      
+      #
+      # ===== Memgraph ========
+      #
+      MEMGRAPH_enable: false
+      # either 'db' or 'platform'
+      MEMGRAPH_edition: 'platform'
+      MEMGRAPH_with_mage: false
+      MEMGRAPH_volume_map_data: false
+      MEMGRAPH_volume_map_log: false
+      MEMGRAPH_volume_map_custom_conf: false
+
+      #
+      # ===== ArcadeDB ========
+      #
+      ARCADEDB_enable: false
+      ARCADEDB_volume_map_data: false
+      # password must be at least 8 characters
+      ARCADEDB_root_password: abc123abc123
+      ARCADEDB_provision_sample_data: false
+      
+      #
+      # ===== DGraph ========
+      #
+      DGRAPH_enable: false
+
+      #
+      # ===== Stardog ========
+      #
+      STARDOG_enable: false
+      STARDOG_volume_map_data: false
+      STARDOG_STUDIO_enable: false
+      
+      #
+      # ===== Ontotext GraphDB ========
+      #
+      GRAPHDB_enable: false
+      # one of 'free', 'se', 'ee'
+      GRAPHDB_edition: 'free'
+      GRAPHDB_heap_size: 2G
+      GRAPHDB_volume_map_data: false
+      GRAPHDB_workbench_import_dir: '/opt/graphdb/examples'
       
       # Influx DB 1.x
-      INFLUXDB_enable: true
+      INFLUXDB_enable: false
       INFLUXDB_volume_map_data: false
-      INFLUXDB_TELEGRAF_enable: true
-      INFLUXDB_CHRONOGRAF_enable: true
+      INFLUXDB_TELEGRAF_enable: false
+      INFLUXDB_CHRONOGRAF_enable: false
       INFLUXDB_CHRONOGRAF_volume_map_data: false
       INFLUXDB_KAPACITOR_enable: false
       INFLUXDB_KAPACITOR_volume_map_data: false
 
-      # Influx DB 2.x
+
+      #
+      # ===== Influx DB 2.x ========
+      #
       INFLUXDB2_enable: true
       INFLUXDB2_volume_map_config: false
       INFLUXDB2_volume_map_data: false
       INFLUXDB2_username: influx
       INFLUXDB2_password: abc123abc123!
-      INFLUXDB2_admin_token: '' 
+      INFLUXDB2_admin_token: ''
       INFLUXDB2_org: demo
       INFLUXDB2_bucket: demo-bucket
 
@@ -211,6 +330,11 @@
       TIMESCALEDB_volume_map_data: false
 
       ADMINER_enable: true
+
+      #
+      # ===== Cloudbeaver DB UI ========
+      #
+      CLOUDBEAVER_enable: true
 
       # Event Store
       AXON_enable: false

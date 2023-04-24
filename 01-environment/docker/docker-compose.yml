@@ -7,12 +7,11 @@ version: '3.5'
 networks:
   default:
     name: nosql-platform
-# backward compatiblity to platform < 1.14.0
-# Enable PostgreSQL or MySQL for MLflow server
+#  
 services:
   #  ================================== Zeppelin ========================================== #
   zeppelin:
-    image: trivadis/apache-zeppelin:0.10.0-spark3.1.3-hadoop3.2
+    image: trivadis/apache-zeppelin:0.10.1-spark3.1.3-hadoop3.2
     container_name: zeppelin
     hostname: zeppelin
     labels:
@@ -27,14 +26,15 @@ services:
     env_file:
       - ./conf/hadoop.env
     environment:
+      SPARK_INSTALL_JARS_PACKAGES: ',io.delta:delta-core_2.12:1.0.1,io.delta:delta-storage:1.0.1,org.apache.iceberg:iceberg-spark-runtime-3.1_2.12:1.1.0,org.apache.hudi:hudi-spark3.1-bundle_2.12:0.13.0'
       SPARK_DEFAULTS_CONF_spark_jars_repositories:
-      SPARK_DEFAULTS_CONF_spark_jars_packages:
+      SPARK_DEFAULTS_CONF_spark_jars_packages: ''
       SPARK_DEFAULTS_CONF_spark_jars_excludes:
       SPARK_DEFAULTS_CONF_spark_jars:
       SPARK_DEFAULTS_CONF_spark_jars_ivySettings:
       SPARK_DEFAULTS_CONF_spark_sql_catalogImplementation: in-memory
       CORE_CONF_fs_defaultFS: file:///tmp
-      SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir: file:///hive/warehouse
+      SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir:
       SPARK_DEFAULTS_CONF_spark_yarn_dist_files: /spark/conf/hive-site.xml
       SPARK_DEFAULTS_CONF_spark_driver_extraJavaOptions:
       SPARK_DEFAULTS_CONF_spark_executor_extraJavaOptions:
@@ -88,7 +88,7 @@ services:
     restart: unless-stopped
   #  ================================== Redis ========================================== #
   redis-1:
-    image: bitnami/redis:6.2
+    image: bitnami/redis:7.0
     hostname: redis-1
     container_name: redis-1
     labels:
@@ -136,7 +136,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: bitnami/cassandra:4.0
+    image: bitnami/cassandra:4.1
     container_name: cassandra-1
     hostname: cassandra-1
     labels:
@@ -179,7 +179,7 @@ services:
     restart: unless-stopped
   #  ================================== MongoDB ========================================== #
   mongo-1:
-    image: mongo:5.0
+    image: mongo:6.0
     container_name: mongo-1
     hostname: mongo-1
     labels:
@@ -187,6 +187,8 @@ services:
     ports:
       - 27017:27017
     environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=abc123!
       - MONGO_INITDB_DATABASE=sample
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=admin
@@ -225,7 +227,7 @@ services:
     restart: unless-stopped
   #  ================================== Elasticsearch ========================================== #
   elasticsearch-1:
-    image: elasticsearch:7.17.0
+    image: elasticsearch:8.7.0
     hostname: elasticsearch-1
     container_name: elasticsearch-1
     labels:
@@ -239,7 +241,7 @@ services:
     environment:
       discovery.type: single-node
       xpack.security.enabled: 'false'
-      xpack.monitoring.enabled: 'false'
+      xpack.monitoring.collection.enabled: 'false'
       http.cors.enabled: 'true'
       http.cors.allow-origin: http://${DOCKER_HOST_IP}:28275,http://${PUBLIC_IP}:28275,http://dejavu:1358,http://dataplatform:28125,http://dataplatform:28125,http://${PUBLIC_IP}:28125,http://${DOCKER_HOST_IP}:28125,http://127.0.0.1:1358
       http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
@@ -287,9 +289,23 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
+  #  ================================== ElasticVue ========================================== #
+  elasticvue:
+    image: cars10/elasticvue:latest
+    container_name: elasticvue
+    hostname: elasticvue
+    labels:
+      com.platys.name: elasticvue
+      com.platys.webui.title: ElasticVue UI
+      com.platys.webui.url: http://${PUBLIC_IP}:28275
+    ports:
+      - 28275:8080
+    volumes:
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
   #  ================================== Kibana ========================================== #
   kibana:
-    image: kibana:7.17.0
+    image: kibana:8.7.0
     hostname: kibana
     container_name: kibana
     labels:
@@ -315,7 +331,7 @@ services:
     restart: unless-stopped
   #  ================================== Neo4J ========================================== #
   neo4j-1:
-    image: neo4j:4.4
+    image: neo4j:5
     hostname: neo4j-1
     container_name: neo4j-1
     labels:
@@ -326,7 +342,7 @@ services:
       - 7474:7474
       - 7687:7687
     environment:
-      - NEO4J_AUTH=neo4j/abc123!
+      - NEO4J_AUTH=neo4j/abc123abc123
       - NEO4JLABS_PLUGINS=[""]
       - NEO4J_dbms_logs_debug_level=INFO
       - EXTENSION_SCRIPT=
@@ -335,73 +351,9 @@ services:
       - ./init/neo4j:/init
       - ./plugins/neo4j/:/plugins:rw
     restart: unless-stopped
-  #  ================================== InfluxData InfluxDB ========================================== #
-  influxdb:
-    image: influxdb:1.8
-    container_name: influxdb
-    hostname: influxdb
-    labels:
-      com.platys.name: influxdb
-      com.platys.restapi.title: InfluxDB Rest API
-      com.platys.restapi.url: http://${PUBLIC_IP}:8086
-    ports:
-      - 8086:8086
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./conf/influxdata/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
-    restart: unless-stopped
-  influxdb-ui:
-    image: timeseriesadmin/timeseriesadmin:latest
-    container_name: influxdb-ui
-    hostname: influxdb-ui
-    labels:
-      com.platys.name: influxdb
-      com.platys.webui.title: InfluxDB UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28128
-    ports:
-      - 28128:80
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
-  #  ================================== InfluxData Chronograf ========================================== #
-  chronograf:
-    image: chronograf:1.1
-    hostname: chronograf
-    container_name: chronograf
-    labels:
-      com.platys.name: chronograf
-      com.platys.webui.title: Chronograf UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28129
-    depends_on:
-      - influxdb
-    ports:
-      - 28129:8888
-    environment:
-      RESOURCES_PATH: /usr/share/chronograf/resources
-      PORT: 8888
-      HOST: chronograf
-      INFLUXDB_URL: http://influxdb:8086
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
-  #  ================================== InfluxData Telegraf ========================================== #
-  telegraf:
-    image: telegraf:1.24.3
-    container_name: telegraf
-    hostname: telegraf
-    labels:
-      com.platys.name: telegraf
-    environment:
-      HOSTNAME: telegraf
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./conf/influxdata/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-      # Mount for Docker API access
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
   #  ================================== InfluxDB 2 ========================================== #
   influxdb2:
-    image: influxdb:2.5.1
+    image: influxdb:2.7
     hostname: influxdb2
     container_name: influxdb2
     labels:
@@ -425,7 +377,7 @@ services:
     restart: unless-stopped
   #  ================================== PostgreSQL ========================================== #
   postgresql:
-    image: postgres:13
+    image: postgres:15
     container_name: postgresql
     hostname: postgresql
     labels:
@@ -461,9 +413,24 @@ services:
       - ./data-transfer:/data-transfer
     command: php -S 0.0.0.0:8080 -t /var/www/html
     restart: unless-stopped
+  #  ================================== Cloudbeaver ========================================== #
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: cloudbeaver
+    hostname: cloudbeaver
+    labels:
+      com.platys.name: cloudbeaver
+      com.platys.webui.title: Cloudbeaver UI
+      com.platys.webui.url: http://${PUBLIC_IP}:8978
+    ports:
+      - 8978:8978
+    volumes:
+      - ./data-transfer:/data-transfer
+      - ./conf/cloudbeaver/data-sources.json:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
+    restart: unless-stopped
   #  ================================== Grafana ========================================== #
   grafana:
-    image: grafana/grafana:8.3.4
+    image: grafana/grafana:9.3.11
     hostname: grafana
     container_name: grafana
     labels:
@@ -482,7 +449,9 @@ services:
       - GF_FEATURE_TOGGLES_ENABLE=
     volumes:
       - ./data-transfer:/data-transfer
-      - ./plugins/grafana:/etc/grafana/provisioning
+      - ./scripts/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./scripts/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./plugins/grafana/plugins:/var/lib/grafana/plugins
     restart: unless-stopped
   #  ================================== Wetty ========================================== #
   wetty:
