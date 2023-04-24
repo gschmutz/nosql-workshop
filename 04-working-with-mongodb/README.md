@@ -11,33 +11,40 @@ We assume that the platform described [here](../01-environment) is running and a
 You can find the `mongo` command line utility inside the MongoDB docker container running as part of the platform. Connect via SSH onto the Docker Host and run the following `docker exec` command
 
 ```
-docker exec -ti mongo-1 mongo
+docker exec -ti mongo-1 mongosh -u "root" -p "abc123!"
 ```
 
 This will connect you into the `mongo` container and run the `mongo` shell inside it. 
 
 You should see an output similar to this one below. 
 
-```
-bigdata@bigdata:~$ docker exec -ti mongo-1 mongo
-MongoDB shell version v3.4.24
-connecting to: mongodb://127.0.0.1:27017
-MongoDB server version: 3.4.24
-Welcome to the MongoDB shell.
-For interactive help, type "help".
-For more comprehensive documentation, see
-	http://docs.mongodb.org/
-Questions? Try the support group
-	http://groups.google.com/group/mongodb-user
-Server has startup warnings:
-2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten]
-2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten] ** WARNING: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine
-2020-02-10T07:33:04.365+0000 I STORAGE  [initandlisten] **          See http://dochub.mongodb.org/core/prodnotes-filesystem
-2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten]
-2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten] ** WARNING: Access control is not enabled for the database.
-2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten] **          Read and write access to data and configuration is unrestricted.
-2020-02-10T07:33:04.846+0000 I CONTROL  [initandlisten]
->
+```bash
+bigdata@bigdata:~$ docker exec -ti mongo-1 mongosh -u "root" -p "abc123!"
+Current Mongosh Log ID:6446cf419d459282bba79eebConnecting to:mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0
+Using MongoDB:6.0.5
+Using Mongosh:1.8.0
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting 
+   2023-04-24T18:06:04.486+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-04-24T18:06:08.233+00:00: vm.max_map_count is too low
+------
+
+------
+   Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+   metrics about your deployment (disk utilization, CPU, operation statistics, etc). 
+   
+   The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+   and anyone you share the URL with. MongoDB may use this information to make product 
+   improvements and to suggest MongoDB products and deployment options to you.      
+   
+   To enable free monitoring, run the following command: db.enableFreeMonitoring()   
+   To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+------
+
+test> 
 ```
 
 You are now at the MongoDB command prompt, ready to execute any MongoDB statements. We can also see the version of the MongoDB server as well as of the MongoDB shell.
