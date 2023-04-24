@@ -186,6 +186,7 @@
       MONGO_root_username: root
       MONGO_root_password: abc123!
 
+      MONGO_EXPRESS_enable: true
       #
       # ===== SolR ========
       #
