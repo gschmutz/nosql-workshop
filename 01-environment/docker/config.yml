@@ -299,7 +299,6 @@
       INFLUXDB_KAPACITOR_enable: false
       INFLUXDB_KAPACITOR_volume_map_data: false
 
-
       #
       # ===== Influx DB 2.x ========
       #
