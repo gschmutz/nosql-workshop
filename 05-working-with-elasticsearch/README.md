@@ -140,10 +140,8 @@ To create the mapping for the year type in Elasticsearch run the following curl 
 curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
-        "movie": {
-            "properties": {
-                "year": { "type": "date"}
-            }
+        "properties": {
+            "year": { "type": "date"}
         }
     }
 }'
