@@ -153,11 +153,9 @@ and you should get a result similar to the one bellow
 gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
                   {
                       "mappings": {
-                          "movie": {
-                              "properties": {
-                                  "year": { "type": "date"}
-                              }
-                          }
+                           "properties": {
+                              "year": { "type": "date"}
+                           }
                       }
                   }'
 
@@ -166,9 +164,8 @@ gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://dataplat
 
 Check that the mapping was correctly loaded by getting it back using the following command:
 
-
 ```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_mapping/movie?pretty
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_mapping?pretty
 ```
 
 ## Insert, Update and Delete Operations 
