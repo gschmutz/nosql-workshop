@@ -1,9 +1,65 @@
 # Working with Neo4J
+
 In this workshop we will learn how to use the Neo4J NoSQL database.
 
 We assume that the platform described [here](../01-environment/README.md) is running and accessible. 
 
 In this workshop you learn how to use the Neo4J for querying, visualisation, and data interaction. [Neo4J Browser](https://neo4j.com/developer/guide-neo4j-browser/) is part of Neo4J and offers a browser-based interface for adding data, running queries, creating relationships, and more. It also provides an easy way to visualise the data in the database.
+
+
+## Connecting to the Cypher Shell (optional)
+
+To use the `cypher-shell`, in a terminal window execute
+
+```bash
+docker exec -ti neo4j-1 ./bin/cypher-shell -u neo4j -p abc123abc123
+```
+
+and you should get the Neo4J command prompt:
+
+```bash
+eadp@eadp-virtual-machine:~$ docker exec -ti neo4j-1 ./bin/cypher-shell -u neo4j -p abc123abc123
+Connected to Neo4j using Bolt protocol version 5.2 at neo4j://localhost:7687 as user neo4j.
+Type :help for a list of available commands or :exit to exit the shell.
+Note that Cypher queries must end with a semicolon.
+neo4j@neo4j>
+```
+
+Type `:help` to get a list of available commands 
+
+```bash
+neo4j@neo4j> :help
+
+Available commands:
+  :begin       Open a transaction
+  :commit      Commit the currently open transaction
+  :connect     Connects to a database
+  :disconnect  Disconnects from database
+  :exit        Exit the logger
+  :help        Show this help message
+  :history     Statement history
+  :impersonate Impersonate user
+  :param       Set the value of a query parameter
+  :rollback    Rollback the currently open transaction
+  :source      Executes Cypher statements from a file
+  :use         Set the active database
+
+For help on a specific command type:
+    :help command
+
+Keyboard shortcuts:
+    Up and down arrows to access statement history.
+    Tab for autocompletion of commands, hit twice to select suggestion from list using arrow keys.
+
+For help on cypher please visit:
+    https://neo4j.com/docs/cypher-manual/current/
+```
+
+You can also execute any valid Cypher statements. 
+
+Enter `:exit` to leave the CLI.
+
+For the workshop we will be using Neo4J Browser, as it includes an easy way to load a tutorial database.
 
 ## Connecting with Neo4J Browser
 
