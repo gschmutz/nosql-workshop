@@ -11,7 +11,7 @@ In a browser window, navigate to <http://dataplatform:7474> and you should direc
 
 ![Alt Image Text](./images/neo4j-login.png "Neo4J Browser")
 
-Enter `bolt://dataplatform:7687` into the **Connect URL**, `neo4j` into the **Username** and `abc123!` into the **Password** field and click **Connect**. 
+Enter `bolt://dataplatform:7687` into the **Connect URL**, `neo4j` into the **Username** and `abc123abc123` into the **Password** field and click **Connect**. 
 
 If successfully connected, you should see a page similar to the one shown below:
 
