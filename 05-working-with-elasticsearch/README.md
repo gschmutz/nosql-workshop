@@ -136,7 +136,7 @@ For all the commands which follow now in this workshop, you can either use one o
 
 To create the mapping for the year type in Elasticsearch run the following curl command:
 
-```
+```bash
 curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
@@ -149,7 +149,7 @@ curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -
 
 and you should get a result similar to the one bellow
 
-```
+```bash
 gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
                   {
                       "mappings": {
@@ -164,7 +164,7 @@ gus@gusmacbook ~> curl -H "Content-Type: application/json" -XPUT http://dataplat
 
 Check that the mapping was correctly loaded by getting it back using the following command:
 
-```
+```bash
 curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_mapping?pretty
 ```
 
@@ -175,8 +175,8 @@ First we use a single movie and see the various modify operations on Elasticsear
 
 Let's insert the movie "Pulp Fiction" into the `movies` index we have created before
 
-```
-curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' -d'
+```bash
+curl -XPUT "http://dataplatform:9200/movies/_doc/110912" -H 'Content-Type: application/json' -d'
 {
     "id": "110912", 
     "title": "Pulp Fiction",
@@ -222,28 +222,28 @@ You can now use the `GET` http method against the **movies** index to check if t
 
 First let's search for all documents 
 
-```
-curl -XGET http://dataplatform:9200/movies/movie/_search
+```bash
+curl -XGET http://dataplatform:9200/movies/_search
 ```
 
 We can also tell the REST API to pretty print the results, i.e. where the Json document is nicely formatted
 
-```
-curl -XGET http://dataplatform:9200/movies/movie/_search?pretty
+```bash
+curl -XGET http://dataplatform:9200/movies/_search?pretty
 ```
 
 but of course as we know the id of the document, we can also retrieve specifically that document
 
-```
-curl -XGET http://dataplatform:9200/movies/movie/110912
+```bash
+curl -XGET http://dataplatform:9200/movies/_doc/110912
 ```
 
 ### Update the movie
 
 Now let's see how we can update the title of the movie we have stored before. Let's say we want to append the `year` to the `title` field. 
 
-```
-curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/movie/110912/_update?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/_update/110912?pretty -d '
 {
     "doc": {
         "title": "The Matrix (1999)"
@@ -253,33 +253,32 @@ curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/
 
 in the answer we can see that the version of the document has been increase to 2. 
 
-```
-bash-3.2$ curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/movie/110912/_update?pretty -d '
-> {
->     "doc": {
->         "title": "The Matrix (1999)"
->     }
-> }'
+```bash
+bash-3.2$ curl -H "Content-Type: application/json" -XPOST http://dataplatform:9200/movies/_update/110912?pretty -d '
+{
+    "doc": {
+        "title": "The Matrix (1999)"
+    }
+}'
 {
   "_index" : "movies",
-  "_type" : "movie",
   "_id" : "110912",
-  "_version" : 6,
-  "result" : "updated",
+  "_version" : 2,
+  "result" : "noop",
   "_shards" : {
-    "total" : 2,
-    "successful" : 1,
+    "total" : 0,
+    "successful" : 0,
     "failed" : 0
   },
-  "_seq_no" : 8,
+  "_seq_no" : 1,
   "_primary_term" : 1
 }
 ```
 
 Let's see if the update was successful
 
-```
-curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
+```bash
+curl -XGET http://dataplatform:9200/movies/_doc/110912?pretty
 ```
 
 We can also see the version of the document in the header. 
@@ -288,19 +287,19 @@ We can also see the version of the document in the header.
 
 Last but not least let's remove the movie by using the DELETE method on the URI.
 
-```
-curl -XDELETE http://dataplatform:9200/movies/movie/110912
+```bash
+curl -XDELETE http://dataplatform:9200/movies/_doc/110912
 ```
 
 Let's see if the delete was successful
 
-```
-curl -XGET http://dataplatform:9200/movies/movie/110912
+```bash
+curl -XGET http://dataplatform:9200/movies/_doc/110912?pretty
 ```
 
 We should no longer get the document back but instead get a `"found" : false` result
 
-```
+```bash
 bash-3.2$ curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 {
   "_index" : "movies",
@@ -314,26 +313,26 @@ bash-3.2$ curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 
 Now let's add some more movies. This time we are using a file to hold the document and reference it from the curl command.
 
+```bash
+curl -XPUT "http://dataplatform:9200/movies/_doc/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
+
+curl -XPUT "http://dataplatform:9200/movies/_doc/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
+
+curl -XPUT "http://dataplatform:9200/movies/_doc/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
+
+curl -XPUT "http://dataplatform:9200/movies/_doc/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
+
+curl -XPUT "http://dataplatform:9200/movies/_doc/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
+
+curl -XPUT "http://dataplatform:9200/movies/_doc/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
 ```
-curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
-
-curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
-
-curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
-
-curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
-
-curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
-```
-
-## Analyzers
+## Analysers
 
 Firstly let's try some searches. First lets try a match search for 'The Matrix':
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match": { 
@@ -343,12 +342,12 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 }'
 ```
 
-You will notice that **The Godfather** and **The Lord of the Rings** is listed as well as **The Matrix**. This is because the analyser used is the default full text / partial match analyser. Additionally, **The Godfather** appears even above (with more relevance) **The Matrix** due to the small number of documents across many shards. A larger corpus of documents will fix/improve the relevancy.
+You will notice that **The Godfather** and **The Lord of the Rings** is listed as well as **The Matrix**. This is because the analyser used is the default full text / partial match analyser. Additionally, **The Godfather** appears even above (with more relevance) than **The Matrix** due to the small number of documents across many shards. A larger corpus of documents would fix/improve the relevancy.
 
 Let's search for a genre of 'sci' as follows
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -366,25 +365,23 @@ We can fix these issues by specifying analysers to use at the mapping. To do thi
 
 To delete the index run this command:
 
-```
+```bash
 curl -H "Content-Type: application/json" -XDELETE http://dataplatform:9200/movies
 ```
 
 Then update the mappings as follows:
 
-```
+```bash
 curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
-        "movie": {
-            "properties": {
-                "id": { "type": "integer"},
-                "year": { "type": "date"},
-                "genres": { "type": "keyword" },
-                "title": { "type": "text", "analyzer": "english"},
-                "plotOutline": { "type": "text", "analyzer": "english"}
-            }
-        }
+        "properties": {
+             "id": { "type": "integer"},
+             "year": { "type": "date"},
+             "genres": { "type": "keyword" },
+             "title": { "type": "text", "analyzer": "english"},
+             "plotOutline": { "type": "text", "analyzer": "english"}
+         }
     }
 }'
 ```
@@ -395,23 +392,23 @@ So to recap what just happened here:
 
 Now reimport the data
 
-```
-curl -XPUT "http://dataplatform:9200/movies/movie/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
+```bash
+curl -XPUT "http://dataplatform:9200/movies/_doc/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
+curl -XPUT "http://dataplatform:9200/movies/_doc/133093" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-matrix.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
+curl -XPUT "http://dataplatform:9200/movies/_doc/0137523" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/fight-club.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
+curl -XPUT "http://dataplatform:9200/movies/_doc/0068646" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/the-godfather.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
+curl -XPUT "http://dataplatform:9200/movies/_doc/0120737" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/lord-of-the-rings.json
 
-curl -XPUT "http://dataplatform:9200/movies/movie/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
+curl -XPUT "http://dataplatform:9200/movies/_doc/4154796" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/avengers-endgame.json
 ```
 And perform the search for 'The Matrix' again
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match": { 
@@ -423,8 +420,8 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 
 So now our search for a genre of 'sci' will no longer return a result
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -436,8 +433,8 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 
 We now have to search for an exact match, for example we can search for 'sci-fi'
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -449,8 +446,8 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 
 We still don't get any result. The search is even case sensitive, so it really has to be an exact match, so a search for 'Sci-Fi' will return us the movie
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -460,15 +457,15 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 }'
 ```
 
-
 ## Searching in Elasticsearch
 
+In order to have some more data, let's import some more data.
 
 ### Inserting Top-250 movies
 
-In order to have some more data, we can import the Top 250 rated movies, available in [data/top250-movies.json>](./data/top250-movies.json)
+We can import the Top 250 rated movies, available in [data/top250-movies.json>](./data/top250-movies.json)
 
-```
+```bash
 curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/_bulk?pretty --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/top250-movies.json
 ```
 
@@ -478,21 +475,62 @@ Short hand query syntax which can be useful for debugging and testing out search
 
 Let's find all movies where the title contains 'matrix'
 
+```bash
+curl http://dataplatform:9200/movies/_search?q=title:matrix 
 ```
-curl http://dataplatform:9200/movies/movie/_search?q=title:matrix 
+
+and you should get a result similar to the one bellow
+
+```bash
+gus@gusmacbook ~> curl http://dataplatform:9200/movies/_search?q=title:matrix
+{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":2,"relation":"eq"},"max_score":5.900235,"hits":[{"_index":"movies","_id":"133093","_score":5.900235,"_source":{
+    "id": "0133093",
+    "title": "The Matrix",
+    "year": 1999,
+    "runtime": 136,
+    "languages": ["en"],
+    "rating": 8.7,
+    "votes": 1496538,
+    "genres": ["Action", "Sci-Fi"],
+    "plotOutline": "Thomas A. Anderson is a man living two lives. By day he is an average computer programmer and by night a hacker known as Neo. Neo has always questioned his reality, but the truth is far beyond his imagination. Neo finds himself targeted by the police when he is contacted by Morpheus, a legendary computer hacker branded a terrorist by the government. Morpheus awakens Neo to the real world, a ravaged wasteland where most of humanity have been captured by a race of machines that live off of the humans body heat and electrochemical energy and who imprison their minds within an artificial reality known as the Matrix. As a rebel against the machines, Neo must return to the Matrix and confront the agents: super-powerful computer programs devoted to snuffing out Neo and the entire human rebellion.",
+    "coverUrl": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX101_CR0,0,101,150_.jpg",
+    "actors": [
+        { "actorID": "0000206", "name": "Keanu Reeves"},
+        { "actorID": "0000401", "name": "Laurence Fishburne"},
+        { "actorID": "0005251", "name": "Carrie-Anne Moss"},
+        { "actorID": "0915989", "name": "Hugo Weaving"},
+        { "actorID": "0287825", "name": "Gloria Foster"},
+        { "actorID": "0001592", "name": "Joe Pantoliano"},
+        { "actorID": "0159059", "name": "Marcus Chong"},
+        { "actorID": "0032810", "name": "Julian Arahanga"},
+        { "actorID": "0000246", "name": "Bruce Willis"},
+        { "actorID": "0000609", "name": "Ving Rahmes"},
+        { "actorID": "0000235", "name": "Uma Thurman"},
+        { "actorID": "0000233", "name": "Quentin Tarantino"}
+    ],
+    "directors": [
+        { "directorID": "0905154", "name": "Lana Wachowski"},
+        { "directorID": "0905152", "name": "Lilly Wachowski"}
+    ],
+    "producers": [
+        { "producerID": "0075732", "name": "Bruce Berman"},
+        { "producerID": "0185621", "name": "Dan Cracchiolo"},
+        { "producerID": "0400492", "name": "Carol Hughes"}
+    ]
+}},{"_index":"movies","_id":"0133093","_score":5.900235,"_source":{"id": "0133093", "title": "The Matrix", "year": 1999, "runtime": ["136"], "languages": ["en"], "rating": 8.6, "votes": 1496768, "genres": ["Action", "Sci-Fi"], "plotOutline": "Thomas A. Anderson is a man living two lives. By day he is an average computer programmer and by night a hacker known as Neo. Neo has always questioned his reality, but the truth is far beyond his imagination. Neo finds himself targeted by the police when he is contacted by Morpheus, a legendary computer hacker branded a terrorist by the government. Morpheus awakens Neo to the real world, a ravaged wasteland where most of humanity have been captured by a race of machines that live off of the humans' body heat and electrochemical energy and who imprison their minds within an artificial reality known as the Matrix. As a rebel against the machines, Neo must return to the Matrix and confront the agents: super-powerful computer programs devoted to snuffing out Neo and the entire human rebellion.", "rank": 19}}]}}
 ```
 
 We can include the `explain` parameter, so that for each hit an explanation of how scoring of the hits is computed and returned
 
-```
-curl http://dataplatform:9200/movies/movie/_search?q=title:matrix&explain=true
+```bash
+curl http://dataplatform:9200/movies/_search?q=title:matrix&explain=true
 ```
 
-Because their is now body needed, you can also directly execute them from a browser
+Because their is no body needed, you can also directly execute them from a browser
 
 ![Alt Image Text](./images/query-lite-from-browser.png "Query lite in Browser")
 
-**Note:** Do not use this approach in Production. It's easy to break, URL may need to be encoded, is a security risk, it's very fragile.
+**Note:** Do not use this approach in Production. It's easy to break, URL may need to be encoded, is a security risk and it's very fragile.
 
 For more details, refer to the [Elasticsearch URI Search](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html) documentation.
 
@@ -509,8 +547,8 @@ In the query below we have a bool query - which is essentially allowing us to co
 
 So we basically want to see all the movies which have `star` in the title and have been release after `2010`
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "bool": { 
@@ -542,8 +580,8 @@ For more details, refer to the [Elasticsearch Query DSL](https://www.elastic.co/
 
 Use `match_phrase` and, optionally, `slop. In the following example the search would find the document containing *'NYPD cop John McClane'* because the match_phrase query is 'nypd cop' with a slop of 1.
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -559,8 +597,8 @@ For more details, refer to the [Elasticsearch Match Phrase Query](https://www.el
 
 Let's say you want to find documents and give them a higher relevance when certain words are close together, then set the slop to a high number. In the following example the search would find the document containing *'NYPD cop John McClane goes on a Christmas vacation to visit his wife Holly in Los Angeles where she works for the Nakatomi Corporation. While they are at the Nakatomi headquarters for a Christmas party, a group of robber...'* because the match_phrase query is 'cop robber' with a slop of 50.
 
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
+```bash
+curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/_search?pretty -d '
 {
     "query": {
         "match_phrase": { 
@@ -574,27 +612,26 @@ curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/m
 
 In a URL Search, sorting can be enabled by adding the `sort` parameter
 
-```
-http://localhost:9200/movies/movie/_search?sort=year
+```bash
+curl -H "Content-Type: application/json" -XGET http://localhost:9200/movies/_search?sort=year
 ```
 
 Sorting works out of the box for things like integers, years etc, but not for text fields that are analysed for full text search because they exist in the inverted index as individual terms and not as the full string.
 
 Trying to sort on `title`
 
-```
-http://localhost:9200/movies/movie/_search?sort=title 
+```bash
+curl -H "Content-Type: application/json" -XGET http://localhost:9200/movies/_search?sort=title 
 ```
 
 will result in an error because title is of type text. 
 
 There is a way around this which is to keep a non-analyzed copy of the field. You need to consider this at the mapping/index stage. Here is a mapping example to do this (**Remember:** to apply this you first have to DELETE the current `movies` index, then apply this mapping and re-import the movies data!)
 
-```
+```bash
 curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -d '
 {
     "mappings": {
-        "movie": {
             "properties": {
                 "id": { "type": "integer"},
                 "year": { "type": "date"},
@@ -603,30 +640,12 @@ curl -H "Content-Type: application/json" -XPUT http://dataplatform:9200/movies -
                                      "analyzer": "english",
                                      "fields": { "raw": { "type": "keyword" }}}
             }
-        }
     }
 }'
 ```
 
 With that in place, the sorting query will work using the `title.raw` field instead of just the `title` field
 
+```bash
+curl -H "Content-Type: application/json" -XGET http://localhost:9200/movies/_search?sort=title.raw
 ```
-http://localhost:9200/movies/movie/_search?sort=title.raw
-```
-
-### Fuzzy Queries
-
-Note the following query will not match any results because 'Pulb Fiction' is spelt incorrectly (the 'b' at the end of Pulb should in fact be a 'p')
-
-```
-curl -H "Content-Type: application/json" -XGET http://dataplatform:9200/movies/movie/_search?pretty -d '
-{
-    "query": {
-        "match": { 
-            "title": "Pulb Fiction" 
-        }
-    }
-}'
-```
-
-For more details, refer to the [Elasticsearch Fuzzy Query](https://www.elastic.co/guide/en/elasticsearch/reference/7.0/query-dsl-fuzzy-query.html) documentation.
