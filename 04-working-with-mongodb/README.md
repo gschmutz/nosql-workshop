@@ -484,7 +484,7 @@ db.movies.insertMany([
 After executing the multi insert, we can check that we have in fact 50 movies in our `movies` collection. 
 
 ```
-> db.movies.find().count()
+> db.movies.find().countDocuments()
 50 
 ```
  
