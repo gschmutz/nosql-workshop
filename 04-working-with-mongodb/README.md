@@ -372,16 +372,22 @@ So now let's also check that we have all 4 persons added to the collection
 db.persons.find()
 ```
 
-We can also use the `count()` method to return the number of documents within the collection. 
+We can also use the `countDocuments()` method to return the number of documents within the collection. 
 
 ```
-db.persons.find().count()
+db.persons.find().countDocuments()
+```
+
+or the `estimatedDocumentCount()` method to get an estimated count (based on metadata)
+
+```
+db.persons.estimatedDocumentCount
 ```
 
 Which in that case (because we don't specify a query selector) is the same as 
 
 ```
-db.persons.count()
+db.persons.countDocuments()
 ```
 
 Note: notice that not all documents are exactly the same. The "Sandra Bullock" document does not contain the `tradeMark` array. The collections are schema-less, there is only a JSON parsing being done and therefore the document has to be valid JSON. Let's see what happens if we are using an invalid document.
