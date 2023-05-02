@@ -381,7 +381,7 @@ db.persons.find().countDocuments()
 or the `estimatedDocumentCount()` method to get an estimated count (based on metadata)
 
 ```
-db.persons.estimatedDocumentCount
+db.persons.estimatedDocumentCount()
 ```
 
 Which in that case (because we don't specify a query selector) is the same as 
