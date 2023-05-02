@@ -558,7 +558,7 @@ Make sure to replace the `<the-object-id>` by an actual value of one of the movi
 In its simplest form, update takes two parameters: the selector (where) to use and what updates to apply to fields. Let's say that we want to change the rating of the movie "Fight Club" to 9, you might expect that we should execute:
 
 ```
-db.movies.update( {"title": "Fight Club"}, {"rating": 9} )
+db.movies.update( {"title": "Fight Club"}, { "$set" : {"rating": 9} } )
 ```
 
 in the result (when using the console) we can see that one movies has been updated
