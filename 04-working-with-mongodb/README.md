@@ -497,7 +497,7 @@ To get all Family movies, we can perform
 db.movies.find({"genres": "Family"})
 ```
 
-If we want get all movies that weight more than 700 pounds, we could do:
+If we want get all movies that have been published in 2010 and after, we could do:
 
 ```
 db.movies.find({"genres":"Action", "year": { $gte :  2010 } })
