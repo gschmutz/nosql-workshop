@@ -812,11 +812,11 @@ db.movies.find( { $text: { $search: "fight terrorist" } } )
 
 Therefore we will also get back a 3rd movie, the movie "The Matrix" which uses the word Terrorist in the plot outline.
 
-## Aggregating Data
+## Aggregating Data
 
 Aggregation pipeline gives you a way to transform and combine documents in your collection. You do it by passing the documents through a pipeline that’s somewhat analogous to the Unix “pipe” where you send output from one command to another to a third, etc.
 
-The simplest aggregation you are probably already familiar with is the SQL group by expression. We already saw the simple `count()` method, but what if we want to see how many movies we have for the different ratings?
+The simplest aggregation you are probably already familiar with is the SQL group by expression. We already saw the simple `countDocuments()` and `count()` method, but what if we want to see how many movies we have for the different ratings?
 
 ```
 db.movies.aggregate( [{$group:{_id:'$rating', total: { $sum:1 }}}]) 
