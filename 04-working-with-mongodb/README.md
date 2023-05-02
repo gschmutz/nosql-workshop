@@ -375,7 +375,7 @@ db.persons.find()
 We can also use the `countDocuments()` method to return the number of documents within the collection. 
 
 ```
-db.persons.find().countDocuments()
+db.persons.find().count()
 ```
 
 or the `estimatedDocumentCount()` method to get an estimated count (based on metadata)
@@ -484,7 +484,7 @@ db.movies.insertMany([
 After executing the multi insert, we can check that we have in fact 50 movies in our `movies` collection. 
 
 ```
-> db.movies.find().countDocuments()
+> db.movies.find().count()
 50 
 ```
  
