@@ -51,7 +51,7 @@ You are now at the MongoDB command prompt, ready to execute any MongoDB statemen
 
 The shell runs JavaScript. There are some global commands you can execute, like help or exit. Commands that you execute against the current database are executed against the db object, such as `db.help()` or `db.stats()`. 
 
-Commands that you execute against a specific collection, which is what we’ll be doing a lot of, are executed against the `db.COLLECTION_NAME` object, such as `db.movies.help()` or `db.movies.count()`.
+Commands that you execute against a specific collection, which is what we’ll be doing a lot of, are executed against the `db.COLLECTION_NAME` object, such as `db.movies.help()` or `db.movies.countDocuments()`.
 
 Go ahead and enter `db.help()`, you’ll get a list of commands that you can execute against the db object.
 
