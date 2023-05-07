@@ -1,4 +1,4 @@
-# Working with InfluxDB
+# Working with InfluxDB 1.x
 
 In this workshop we will learn how to use the InfluxDB NoSQL database.
 

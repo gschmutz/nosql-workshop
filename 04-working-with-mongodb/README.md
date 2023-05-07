@@ -564,7 +564,7 @@ db.movies.update( {"title": "Fight Club"}, { "$set" : {"rating": 9} } )
 in the result (when using the console) we can see that one movies has been updated
 
 ```
-> db.movies.update( {"title": "Fight Club"}, {"rating": 9} )
+> db.movies.update( {"title": "Fight Club"}, { "$set" : {"rating": 9} } )
 WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
 ```
 

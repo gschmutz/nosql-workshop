@@ -359,6 +359,21 @@ services:
       - ./init/neo4j:/init
       - ./plugins/neo4j/:/plugins:rw
     restart: unless-stopped
+  #  ================================== InfluxData Telegraf ========================================== #
+  telegraf:
+    image: telegraf:1.26
+    container_name: telegraf
+    hostname: telegraf
+    labels:
+      com.platys.name: telegraf
+    environment:
+      HOSTNAME: telegraf
+    volumes:
+      - ./data-transfer:/data-transfer
+      - ./conf/influxdata/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      # Mount for Docker API access
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
   #  ================================== InfluxDB 2 ========================================== #
   influxdb2:
     image: influxdb:2.7
