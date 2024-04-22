@@ -12,7 +12,7 @@
 |[elastichq](./documentation/services/elastichq )|[Web UI](http://192.168.1.102:28127)|28127<br>|5000<br>|UI for Elasticsearch
 |[elasticsearch-1](./documentation/services/elasticsearch )|[Rest API](http://192.168.1.102:9200)|9200<br>9300<br>|9200<br>9300<br>|Search-engine NoSQL store
 |[elasticvue](./documentation/services/elasticvue )|[Web UI](http://192.168.1.102:28275)|28275<br>|8080<br>|UI for Elasticsearch
-|[grafana](./documentation/services/grafana )|[Web UI](http://192.168.1.102:3000) - [Rest API](http://192.168.1.102:3000/api/org)|3000<br>|3000<br>|Data visualization and dashboarding
+|[graphdb-1](./documentation/services/graphdb )|[Web UI](http://192.168.1.102:17200)|17200<br>|7200<br>|Graph Database
 |[influxdb2](./documentation/services/influxdb2 )|[Web UI](http://192.168.1.102:19999) - [Rest API](http://192.168.1.102:19999/api/v2)|19999<br>|8086<br>|Timeseries Database
 |[jupyter](./documentation/services/jupyter )|[Web UI](http://192.168.1.102:28888)|28888<br>14040-14044<br>|8888<br>4040-4044<br>|Web-based interactive development environment for notebooks, code, and data
 |[kibana](./documentation/services/kibana )|[Web UI](http://192.168.1.102:5601)|5601<br>|5601<br>|Visualization for Elasticsearch
@@ -26,8 +26,6 @@
 |[redis-insight](./documentation/services/redis-insight )|[Web UI](http://192.168.1.102:28174)|28174<br>|5540<br>|Graphical interface for Redis
 |[telegraf](./documentation/services/telegraf )||||Agent for collecting, processing, aggregating, and writing metrics
 |[vector-admin](./documentation/services/vector-admin )|[Web UI](http://192.168.1.102:28350)|28350<br>3355<br>8288<br>|3001<br>3355<br>8288<br>|Graphical Frontend for vector databases
-|[weaviate](./documentation/services/weaviate )|[Web UI](http://192.168.1.102:28354)|28354<br>50051<br>|8080<br>50051<br>|AI-native vector database
-|[wetty](./documentation/services/wetty )|[Web UI](http://192.168.1.102:3001)|3001<br>|3000<br>|A terminal window in Web-Browser
-|[zeppelin](./documentation/services/zeppelin )|[Web UI](http://192.168.1.102:28080)|28080<br>6060<br>5050<br>4050-4054<br>|8080<br>6060<br>5050<br>4050-4054<br>|Data Science Notebook|
+|[wetty](./documentation/services/wetty )|[Web UI](http://192.168.1.102:3001)|3001<br>|3000<br>|A terminal window in Web-Browser|
 
 **Note:** init container ("init: true") are not shown

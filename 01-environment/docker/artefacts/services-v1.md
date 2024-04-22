@@ -12,7 +12,7 @@
 |[elastichq](./documentation/services/elastichq )|<http://192.168.1.102:28127>|
 |[elasticsearch-1](./documentation/services/elasticsearch )||<http://192.168.1.102:9200>
 |[elasticvue](./documentation/services/elasticvue )|<http://192.168.1.102:28275>|
-|[grafana](./documentation/services/grafana )|<http://192.168.1.102:3000>|<http://192.168.1.102:3000/api/org>
+|[graphdb-1](./documentation/services/graphdb )|<http://192.168.1.102:17200>|
 |[influxdb2](./documentation/services/influxdb2 )|<http://192.168.1.102:19999>|<http://192.168.1.102:19999/api/v2>
 |[jupyter](./documentation/services/jupyter )|<http://192.168.1.102:28888>|
 |[kibana](./documentation/services/kibana )|<http://192.168.1.102:5601>|
@@ -26,8 +26,6 @@
 |[redis-insight](./documentation/services/redis-insight )|<http://192.168.1.102:28174>|
 |[telegraf](./documentation/services/telegraf )||
 |[vector-admin](./documentation/services/vector-admin )|<http://192.168.1.102:28350>|
-|[weaviate](./documentation/services/weaviate )|<http://192.168.1.102:28354>|
-|[wetty](./documentation/services/wetty )|<http://192.168.1.102:3001>|
-|[zeppelin](./documentation/services/zeppelin )|<http://192.168.1.102:28080>||
+|[wetty](./documentation/services/wetty )|<http://192.168.1.102:3001>||
 
 **Note:** init container ("init: true") are not shown
