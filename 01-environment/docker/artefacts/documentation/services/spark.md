@@ -11,3 +11,6 @@ platys init --enable-services SPARK
 platys gen
 ```
 
+## How to use it?
+
+Navigate to <http://192.168.1.102:28304> to see the Spark Master UI.

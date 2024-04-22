@@ -1,7 +1,7 @@
 ---
 technologies:       nifi,nifi-registry
-version:				1.16.0
-validated-at:			6.3.2023
+version:				1.17.0
+validated-at:			15.12.2023
 ---
 
 # NiFi Registry with Git Flow Persistence Provider
@@ -14,7 +14,7 @@ First [initialise a platys-supported data platform](../documentation/getting-sta
 
 ```bash
 export DATAPLATFORM_HOME=${PWD}
-platys init --enable-services NIFI,NIFI_REGISTRY -s trivadis/platys-modern-data-platform -w 1.16.0
+platys init --enable-services NIFI,NIFI_REGISTRY -s trivadis/platys-modern-data-platform -w 1.17.0
 ```
 
 Before we can generate the platform, we need to create a Git Repository and extend the `config.yml` with the necessary configuration.
@@ -43,10 +43,10 @@ Create a `.env` file
 nano .env
 ```
 
-and add the following environment variable to specify the password for the Git Repo
+and add the following environment variable to specify the access token for the Git Repo (
 
 ```bash
-PLATYS_NIFI_REGISTRY_GIT_PASSWORD=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
+PLATYS_NIFI_REGISTRY_GIT_PASSWORD=XXXXXXXXXXXXXXXXXXXX
 ```
 
 Save the file and generate and start the data platform.
@@ -58,11 +58,11 @@ docker-compose up -d
 
 Now let's use NiFi together with the Registry. Here we will only show the most important steps, you can find a more tutorial like documentation [here](https://nifi.apache.org/docs/nifi-registry-docs/index.html). 
 
-Navigate to the NiFi Registry: <http://dataplatform:19090/nifi-registry> and create a new bucket and name it `my-bucket`.
+Navigate to the NiFi Registry: <http://192.168.1.102:19090/nifi-registry> and create a new bucket and name it `my-bucket`.
 
 ![](./images/create-bucket.png)
 
-Navigate to NiFi <https://dataplatform:18080> and login as user `nifi` with password `1234567890ACD`.
+Navigate to NiFi <https://192.168.1.102:18080> and login as user `nifi` with password `1234567890ACD`.
 
 Click on the Sandwich menu in the top right and open **Controller Settings**. Navigate to the **Registry Clients** tab and add a new Registry Client. 
 
@@ -95,5 +95,24 @@ Enable authentication by adding the following settings to the `config.yml`
       NIFI_REGISTRY_git_remote: origin
       NIFI_REGISTRY_git_user: gschmutz
       NIFI_REGISTRY_git_repo: http://github.com/<owner>/nifi-git-flow-provider
-      NIFI_REGISTRY_flow_storage_folder_on_dockerhost: ./nifi-git-flow-provider
+      NIFI_REGISTRY_flow_storage_folder_on_dockerhost: ./container-volume/nifi-registry/flow-storage
 ```
+
+## Using Git Flow Persistence Provider with SSH authentication
+
+To enable authentication by SSH key, change the settings in the `config.yml` to
+
+```yaml
+      NIFI_REGISTRY_flow_provider: git
+      NIFI_REGISTRY_git_remote: origin
+      NIFI_REGISTRY_git_user:
+      NIFI_REGISTRY_git_use_ssh_auth: true
+      NIFI_REGISTRY_git_repo:
+      NIFI_REGISTRY_flow_storage_folder_on_dockerhost: ./<git-repo-folder>
+```
+
+
+cp /home/${USER}/.ssh/id_rsa.pub ./security/nifi-registry/git/ssh
+
+When using SSH authentication, the automatic Git Clone will not work. Therefore manually clone the repo to `./<git-repo-folder>` and then start the `nifi-registry` service.
+

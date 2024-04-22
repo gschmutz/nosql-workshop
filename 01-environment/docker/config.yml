@@ -4,7 +4,7 @@
       platys:
         platform-name: 'nosql-platform'
         platform-stack: 'trivadis/platys-modern-data-platform'
-        platform-stack-version: '1.16.0-preview'
+        platform-stack-version: 'develop'
         structure: 'flat'
 
       # ========================================================================
@@ -139,12 +139,44 @@
       #
       REDIS_enable: true
       REDIS_replicasets: 0
+      REDIS_volume_map_data: false            
       REDIS_allow_empty_password: yes
       REDIS_disable_commands:
       REDIS_password: abc123!
-      REDIS_aof_enabled: no
-      REDIS_volume_map_data: false
-            
+      REDIS_password_file:
+      REDIS_acl_file:
+      REDIS_disable_commands:
+      REDIS_rdb_enable: false
+      REDIS_rdb_save_policy:
+      REDIS_aof_enable: true
+      REDIS_io_threads:
+      REDIS_io_threads_do_reads_enable: false
+      REDIS_overrides_config_file:
+      # one of 'nothing', 'warning', 'notice', 'verbose', 'debug' 
+      REDIS_log_level: 'notice'
+      #
+      # ===== Redis Stack ========
+      #
+      REDIS_STACK_enable: false
+      REDIS_STACK_volume_map_data: false
+      REDIS_STACK_password:
+
+      #
+      # ===== Redis (Metrics) Exporter ========
+      #
+      REDIS_EXPORTER_enable: false
+      REDIS_EXPORTER_password_file:
+      REDIS_EXPORTER_check_keys: ''
+      REDIS_EXPORTER_check_single_keys: ''
+      REDIS_EXPORTER_count_keys: ''
+      REDIS_EXPORTER_redis_only_metrics: false
+      REDIS_EXPORTER_incl_config_metrics: false
+      REDIS_EXPORTER_incl_system_metrics: false
+      REDIS_EXPORTER_redact_config_metrics: false
+      REDIS_EXPORTER_ping_on_connect: false
+      REDIS_EXPORTER_export_client_list: false
+      REDIS_EXPORTER_check_key_groups: ''
+      REDIS_EXPORTER_max_distinct_key_groups: 0      
       #
       # ===== Redis Insight ========
       #
@@ -160,7 +192,7 @@
       # ===== Apache Casandra ========
       #
       CASSANDRA_enable: true
-      # either 3 or 4
+      # either 3 or 4 or 5 (still beta)
       CASSANDRA_major_version: 4
       CASSANDRA_volume_map_data: false
       CASSANDRA_nodes: 1
@@ -183,15 +215,20 @@
       #
       MONGO_enable: true
       MONGO_nodes: 1
+      MONGO_volume_map_data: false
+      MONGO_volume_map_log: false      
       MONGO_root_username: root
       MONGO_root_password: abc123!
+      MONGO_init_database:      
 
       MONGO_EXPRESS_enable: true
+      # one of 'defult', 'ambient', 'dracula', ... see here for more: https://codemirror.net/5/demo/theme.html#default
+      MONGO_EXPRESS_editor_theme: 'default'
+
       #
       # ===== SolR ========
       #
       SOLR_enable: false
-
 
       #
       # ===== Elasticsearch ========
@@ -216,7 +253,18 @@
       CEREBRO_enable: true
       ELASTICHQ_enable: true
       ELASTICVUE_enable: true      
-      
+      #
+      # ===== Splunk ========
+      #
+      SPLUNK_enable: false
+      # one of 'free', 'enterprise',
+      SPLUNK_edition: 'free'
+
+      #
+      # ===== Quine ========
+      #
+      QUINE_enable: false
+
       #
       # ===== JanusGraph ========
       #
@@ -228,7 +276,16 @@
       #
       GREMLIN_CONSOLE_enable: false
       GREMLIN_CONSOLE_remote_host: janusgraph      
+      
+      #
+      # ===== Invana Studio & Engine ========
+      #
+      INVANA_ENGINE_enable: false
+      INVANA_STUDIO_enable: false
 
+      #
+      # ===== Neo4J ========
+      #
       NEO4J_enable: true
       # either "community" or "enterprise"
       NEO4J_edition: community
@@ -239,7 +296,10 @@
       NEO4J_volume_map_logs: false
       NEO4J_extension_script: ''
       NEO4J_plugins: ''
-      NEO4J_dbms_logs_debug_level: 'INFO'
+      NEO4J_dbms_security_procedures_unrestricted: ''
+      NEO4J_dbms_logs_debug_level: 'INFO'      
+      # only valid for major version 5
+      NEO4J_server_config_strict_validation_enabled: true
       
       # Neo4J Streams Source (Neo4J -> Kafka)
       NEO4J_source_enabled: true
@@ -284,19 +344,27 @@
       #
       # ===== Ontotext GraphDB ========
       #
-      GRAPHDB_enable: false
+      GRAPHDB_enable: true
       # one of 'free', 'se', 'ee'
       GRAPHDB_edition: 'free'
       GRAPHDB_heap_size: 2G
       GRAPHDB_volume_map_data: false
       GRAPHDB_workbench_import_dir: '/opt/graphdb/examples'
       
-      # Influx DB 1.x
+      #
+      # ===== Influx DB 1.x ========
+      #
       INFLUXDB_enable: false
       INFLUXDB_volume_map_data: false
-      INFLUXDB_TELEGRAF_enable: true
+
+      #
+      # ===== InfluxDB Chronograf 1.x ========
+      #
       INFLUXDB_CHRONOGRAF_enable: false
       INFLUXDB_CHRONOGRAF_volume_map_data: false
+      #
+      # ===== InfluxDB Kapacitor 1.x ========
+      #      
       INFLUXDB_KAPACITOR_enable: false
       INFLUXDB_KAPACITOR_volume_map_data: false
 
@@ -312,7 +380,76 @@
       INFLUXDB2_org: demo
       INFLUXDB2_bucket: demo-bucket
 
-      # NoSQL - Prometeus
+      #
+      # ===== Influx Telegraf ========
+      #
+      INFLUXDB_TELEGRAF_enable: false
+      
+      #
+      # ===== QuestDB ========
+      #
+      QUESTDB_enable: false
+      QUESTDB_volume_map_data: false
+      #
+      # ===== Kudu ========
+      #
+      KUDU_enable: false
+
+      #
+      # ===== Chroma (VectorDB) ========
+      #
+      CHROMA_enable: false
+      CHROMA_volume_map_data: false
+      CHROMA_auth_token:
+      CHROMA_enable_telemetry: false
+
+      #
+      # ===== Qdrant (VectorDB) ========
+      #
+      QDRANT_enable: false
+      QDRANT_volume_map_data: false
+
+      #
+      # ===== Weaviate (VectorDB) ========
+      #
+      WEAVIATE_enable: true
+      WEAVIATE_volume_map_data: false
+      WEAVIATE_modules: 
+
+      #
+      # ===== Milvus (VectorDB) + Attu (UI) ========
+      #
+      MILVUS_enable: false
+      MILVUS_volume_map_data: false
+      ATTU_enable: false
+
+      #
+      # ===== Vector Admin ========
+      #      
+      VECTOR_ADMIN_enable: true
+      VECTOR_ADMIN_postgresql_database: ''
+      VECTOR_ADMIN_postgresql_user: ''
+      VECTOR_ADMIN_postgresql_password: ''
+
+
+      #
+      # ===== Druid ========
+      #
+      DRUID_enable: false
+      # one of 'oss-sandbox', 'oss-cluster'
+      DRUID_edition: 'oss-sandbox'
+      DRUID_volume_map_data: false
+
+      #
+      # ===== Pinot ========
+      #
+      PINOT_enable: false
+      PINOT_servers: 1
+      PINOT_volume_map_data: false
+
+      #
+      # ===== Prometheus ========
+      #
       PROMETHEUS_enable: false
       PROMETHEUS_volume_map_data: false
       PROMETHEUS_PUSHGATEWAY_enable: false
@@ -320,21 +457,178 @@
       # NoSQL - Tile38
       TILE38_enable: false
 
-      # RDBMS
-      MYSQL_enable: false
-      SQLSERVER_enable: false
+      #
+      # ===== Yugabyte ========
+      #
+      YUGABYTE_enable: false
 
+      #
+      # ===== SingleStore ========
+      #
+      SINGLE_STORE_ENABLE: false
+      SINGLE_STORE_license: 
+      #
+      # ===== Oracle XE RDBMS ========
+      #
+      ORACLE_XE_enable: false
+      # one of 'slim', 'regular', 'full'
+      ORACLE_XE_edition: 'regular'
+      ORACLE_XE_use_faststart: false
+      ORACLE_XE_volume_map_data: false
+      # For Oracle 18 and higher, specify the name of the pluggable database
+      ORACLE_XE_database: ''
+      ORACLE_XE_password: 'EAo4KsTfRR'
+      # set to true, if a random password should be generated
+      ORACLE_XE_random_password: ''
+      ORACLE_XE_app_user: ''
+      ORACLE_XE_app_user_password: ''
+
+      #
+      # ===== Oracle Free RDBMS ========
+      #
+      ORACLE_FREE_enable: false
+      # one of 'slim', 'regular', 'full'
+      ORACLE_FREE_edition: 'regular'
+      ORACLE_FREE_use_faststart: false
+      ORACLE_FREE_volume_map_data: false
+      ORACLE_FREE_database: ''
+      ORACLE_FREE_password: 'EAo4KsTfRR'
+      # set to true, if a random password should be generated
+      ORACLE_FREE_random_password: ''
+      ORACLE_FREE_app_user: ''
+      ORACLE_FREE_app_user_password: ''
+
+      #
+      # ===== Oracle RDBMS ========
+      #
+      ORACLE_EE_enable: false
+      ORACLE_EE_volume_map_data: false
+      ORACLE_EE_container_enable: false
+      ORACLE_EE_password: 'EAo4KsTfRR'
+
+      #
+      # ===== Oracle SQLcl ========
+      #
+      ORACLE_SQLCL_enable: false
+
+      #
+      # ===== Oracle REST Data Service ========
+      #
+      ORACLE_REST_DATA_SERVICE_enable: false
+
+      #
+      # ===== MySQL ========
+      #
+      MYSQL_enable: false
+      MYSQL_database: sample
+      MYSQL_user: sample
+      MYSQL_password: sample
+
+      #
+      # ===== MariaDB ========
+      #
+      MARIADB_enable: false
+      MARIADB_volume_map_data: false
+      MARIADB_database: sample
+      MARIADB_user: sample
+      MARIADB_password: sample
+
+      #
+      # ===== SQL Server ========
+      #
+      SQLSERVER_enable: false
+      SQLSERVER_provision_adventure_works: false
+      # either oltp, datawarehouse or light
+      SQLSERVER_provision_adventure_works_edition: oltp
+
+      #
+      # ===== PostgreSQL ========
+      #
       POSTGRESQL_enable: true
       POSTGRESQL_volume_map_data: false
+      POSTGRESQL_database: postgres
+      POSTGRESQL_user: postgres
+      POSTGRESQL_password: abc123!
+      POSTGRESQL_schema: demo
+      POSTGRESQL_multiple_databases: 'demodb'
+      POSTGRESQL_multiple_users: 'demo'
+      POSTGRESQL_multiple_passwords: 'abc123!'
+      POSTGRESQL_multiple_addl_roles: ''
+      # one of the valid Postgresql wal_levels: "replica", "minimal", "logical". Use logical if you want to work with Debezium.
+      POSTGRESQL_wal_level: 
+      #POSTGRESQL_anon_role: appuser
+      
+      #
+      # ===== Posgrest ========
+      #
+      POSTGREST_enable: false
+
+      #
+      # ===== pgAdmin ========
+      #
+      PGADMIN_enable: false
+
+      #
+      # ===== TimeScale DB ========
+      #
       TIMESCALEDB_enable: false
       TIMESCALEDB_volume_map_data: false
 
+      #
+      # ===== Adminer DB UI ========
+      #
       ADMINER_enable: true
 
       #
       # ===== Cloudbeaver DB UI ========
       #
       CLOUDBEAVER_enable: true
+
+      #
+      # ===== SQLPad UI ========
+      #
+      SQLPAD_enable: false
+
+      #
+      # ===== SQLChat UI ========
+      #
+      SQLCHAT_enable: false
+      SQLCHAT_api_key: ''
+      SQLCHAT_api_endpoint: 'https://api.openai.com'
+      SQLCHAT_database_less: false
+
+      #
+      # ===== Querybook ========
+      #
+      QUERYBOOK_enable: false
+
+      #
+      # ===== NocoDB UI ========
+      #
+      NOCODB_enable: false
+      NOCODB_volume_map_data: false
+
+      #
+      # ===== Quix Presto UI ========
+      #
+      QUIX_enable: false
+
+      #
+      # ===== Hazelcast IMDG ========
+      #
+      HAZELCAST_enable: false
+      HAZELCAST_nodes: 1
+      HAZELCAST_volume_map_custom_config: false
+      HAZELCAST_use_jet: true
+      HAZELCAST_MC_enable: true
+
+      #
+      # ===== Apache Ignite IMDG ========
+      #
+      IGNITE_enable: false
+      IGNITE_servers: 1
+      # A list of modules to enable such as: 'ignite-rest-http,ignite-cassandra-store,ignite-cassandra-serializers'
+      IGNITE_option_libs: 'ignite-rest-http' 
 
       # Event Store
       AXON_enable: false

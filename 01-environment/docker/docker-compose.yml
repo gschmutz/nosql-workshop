@@ -1,13 +1,13 @@
 # =======================================================================
 # Platform Name            nosql-platform
 # Platform Stack:          trivadis/platys-modern-data-platform
-# Platform Stack Version:  1.16.0-preview
+# Platform Stack Version:  develop
 # =======================================================================
 version: '3.5'
 networks:
   default:
     name: nosql-platform
-#  
+# enforce some dependencies
 services:
   #  ================================== Zeppelin ========================================== #
   zeppelin:
@@ -16,8 +16,9 @@ services:
     hostname: zeppelin
     labels:
       com.platys.name: zeppelin
+      com.platys.description: Data Science Notebook
       com.platys.webui.title: Apache Zeppelin UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28080
+      com.platys.webui.url: http://dataplatform:28080
     ports:
       - 28080:8080
       - 6060:6060
@@ -26,18 +27,10 @@ services:
     env_file:
       - ./conf/hadoop.env
     environment:
-      SPARK_INSTALL_JARS_PACKAGES: ',io.delta:delta-core_2.12:1.0.1,io.delta:delta-storage:1.0.1,org.apache.iceberg:iceberg-spark-runtime-3.1_2.12:1.1.0,org.apache.hudi:hudi-spark3.1-bundle_2.12:0.13.0'
-      SPARK_DEFAULTS_CONF_spark_jars_repositories:
-      SPARK_DEFAULTS_CONF_spark_jars_packages: ''
-      SPARK_DEFAULTS_CONF_spark_jars_excludes:
-      SPARK_DEFAULTS_CONF_spark_jars:
-      SPARK_DEFAULTS_CONF_spark_jars_ivySettings:
-      SPARK_DEFAULTS_CONF_spark_sql_catalogImplementation: in-memory
+      ZEPPELIN_SPARK_MASTER: spark://spark-master:7077
+      SPARK_HOME: /opt/spark
       CORE_CONF_fs_defaultFS: file:///tmp
       SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir:
-      SPARK_DEFAULTS_CONF_spark_yarn_dist_files: /spark/conf/hive-site.xml
-      SPARK_DEFAULTS_CONF_spark_driver_extraJavaOptions:
-      SPARK_DEFAULTS_CONF_spark_executor_extraJavaOptions:
       ZEPPELIN_ADDR: 0.0.0.0
       ZEPPELIN_PORT: '8080'
       ZEPPELIN_MEM: -Xms1024m -Xmx1024m -XX:MaxMetaspaceSize=512m
@@ -48,7 +41,6 @@ services:
       ZEPPELIN_USER_USERNAME: zeppelin
       ZEPPELIN_USER_PASSWORD: abc123!
       # set spark-master for Zeppelin interpreter
-      ZEPPELIN_SPARK_MASTER: spark://spark-master:7077
       ZEPPELIN_NOTEBOOK_DIR: notebook
       ZEPPELIN_NOTEBOOK_CRON_ENABLE: 'True'
       PYSPARK_PYTHON: python3
@@ -66,8 +58,9 @@ services:
     hostname: jupyter
     labels:
       com.platys.name: jupyter
+      com.platys.description: Web-based interactive development environment for notebooks, code, and data
       com.platys.webui.title: Jupyter UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28888
+      com.platys.webui.url: http://dataplatform:28888
     ports:
       - 28888:8888
       - 14040-14044:4040-4044
@@ -78,7 +71,8 @@ services:
       DOCKER_STACKS_JUPYTER_CMD: lab
     volumes:
       - ./data-transfer:/data-transfer
-    # - ./custom-conf/jupyter/spark-defaults.conf:/usr/local/spark-3.1.1-bin-hadoop3.2/conf/spark-defaults.conf
+      - ./scripts/docker/docker-maven-download.sh:/maven-download.sh
+#        # - ./custom-conf/jupyter/spark-defaults.conf:/usr/local/spark-3.1.1-bin-hadoop3.2/conf/spark-defaults.conf
     command:
       # In the command section, $ are replaced with $$ to avoid the error 'Invalid interpolation format for "command" option'
       - bash
@@ -88,42 +82,53 @@ services:
     restart: unless-stopped
   #  ================================== Redis ========================================== #
   redis-1:
-    image: bitnami/redis:7.0
+    image: bitnami/redis:7.2
     hostname: redis-1
     container_name: redis-1
     labels:
       com.platys.name: redis
+      com.platys.description: Key-value store
     ports:
       - 6379:6379
     environment:
-      - REDIS_REPLICATION_MODE=master
+      - REDIS_PORT_NUMBER=6379
       - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_PASSWORD=abc123!
-      - REDIS_AOF_ENABLED=no
+      - REDIS_AOF_ENABLED=yes
+      - REDIS_RDB_POLICY_DISABLED=yes
     volumes:
       - ./data-transfer:/data-transfer
+    command: /opt/bitnami/scripts/redis/run.sh --loglevel notice
     restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, redis-cli --no-auth-warning ping | grep PONG]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+  #  ================================== Redis Insight ========================================== #
   redis-insight:
-    image: redislabs/redisinsight:latest
+    image: redis/redisinsight:latest
     container_name: redis-insight
     hostname: redis-insight
     labels:
       com.platys.name: redis-insight
+      com.platys.description: Graphical interface for Redis
       com.platys.webui.title: Redis Insight UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28174
+      com.platys.webui.url: http://dataplatform:28174
     ports:
-      - 28174:8001
+      - 28174:5540
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
+  #  ================================== Redis Commander ========================================== #
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: redis-commander
     hostname: redis-commander
     labels:
       com.platys.name: redis-commander
+      com.platys.description: Graphical interface for Redis
       com.platys.webui.title: Redis Commander UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28119
+      com.platys.webui.url: http://dataplatform:28119
     ports:
       - 28119:8081
     environment:
@@ -141,6 +146,7 @@ services:
     hostname: cassandra-1
     labels:
       com.platys.name: cassandra
+      com.platys.description: wide-column NoSQL database
     ports:
       - 29042:9042
       - 7199:7199
@@ -165,8 +171,9 @@ services:
     hostname: cassandra-web
     labels:
       com.platys.name: cassandra-web
+      com.platys.description: Cassandra Web UI
       com.platys.webui.title: Cassandra Web UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28120
+      com.platys.webui.url: http://dataplatform:28120
     ports:
       - 28120:3000
     environment:
@@ -179,23 +186,23 @@ services:
     restart: unless-stopped
   #  ================================== MongoDB ========================================== #
   mongo-1:
-    image: mongo:6.0
+    image: mongo:7.0
     container_name: mongo-1
     hostname: mongo-1
     labels:
       com.platys.name: mongodb
+      com.platys.description: Document NoSQL database
     ports:
       - 27017:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=abc123!
-      - MONGO_INITDB_DATABASE=sample
-      - MONGO_INITDB_USERNAME=admin
-      - MONGO_INITDB_PASSWORD=admin
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/data/log
     volumes:
       - ./data-transfer:/data-transfer
       # seeding scripts
-      - ./conf/mongo-entrypoint:/docker-entrypoint-initdb.d
+      - ./init/mongo:/docker-entrypoint-initdb.d
     restart: unless-stopped
   mongo-express:
     image: mongo-express:latest
@@ -203,8 +210,9 @@ services:
     hostname: mongo-express
     labels:
       com.platys.name: mongo-express
+      com.platys.description: MongoDB UI
       com.platys.webui.title: Mongo Express UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28123
+      com.platys.webui.url: http://dataplatform:28123
     ports:
       - 28123:8081
     environment:
@@ -222,8 +230,9 @@ services:
     hostname: admin-mongo
     labels:
       com.platys.name: admin-mongo
+      com.platys.description: MongoDB Admin UI
       com.platys.webui.title: Admin Mongo UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28124
+      com.platys.webui.url: http://dataplatform:28124
     ports:
       - 28124:1234
     volumes:
@@ -231,13 +240,14 @@ services:
     restart: unless-stopped
   #  ================================== Elasticsearch ========================================== #
   elasticsearch-1:
-    image: elasticsearch:8.7.0
+    image: elasticsearch:8.13.0
     hostname: elasticsearch-1
     container_name: elasticsearch-1
     labels:
       com.platys.name: elasticsearch
+      com.platys.description: Search-engine NoSQL store
       com.platys.restapi.title: Elasticsearch REST API
-      com.platys.restapi.url: http://${PUBLIC_IP}:9200
+      com.platys.restapi.url: http://dataplatform:9200
       com.platys.manual.step.msgs: sudo sysctl -w vm.max_map_count=262144
     ports:
       - 9200:9200
@@ -258,14 +268,21 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -u admin:testing -s http://localhost:9200/_cat/health?h=status | grep -q green
+      retries: 300
+      interval: 1s
   dejavu:
     image: appbaseio/dejavu:latest
     container_name: dejavu
     hostname: dejuvu
     labels:
       com.platys.name: dejavu
+      com.platys.description: UI for Elasticsearch
       com.platys.webui.title: Elasticsearch Dejavu UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28125
+      com.platys.webui.url: http://dataplatform:28125
     ports:
       - 28125:1358
     volumes:
@@ -277,8 +294,9 @@ services:
     hostname: cerebro
     labels:
       com.platys.name: cerbero
+      com.platys.description: UI for Elasticsearch
       com.platys.webui.title: Elasticsearch Cerbero UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28126
+      com.platys.webui.url: http://dataplatform:28126
     ports:
       - 28126:9000
     volumes:
@@ -290,8 +308,9 @@ services:
     hostname: elatichq
     labels:
       com.platys.name: elastichq
+      com.platys.description: UI for Elasticsearch
       com.platys.webui.title: ElasticHQ UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28127
+      com.platys.webui.url: http://dataplatform:28127
     ports:
       - 28127:5000
     volumes:
@@ -304,8 +323,9 @@ services:
     hostname: elasticvue
     labels:
       com.platys.name: elasticvue
+      com.platys.description: UI for Elasticsearch
       com.platys.webui.title: ElasticVue UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28275
+      com.platys.webui.url: http://dataplatform:28275
     ports:
       - 28275:8080
     volumes:
@@ -313,13 +333,14 @@ services:
     restart: unless-stopped
   #  ================================== Kibana ========================================== #
   kibana:
-    image: kibana:8.7.0
+    image: kibana:8.13.0
     hostname: kibana
     container_name: kibana
     labels:
       com.platys.name: kibana
+      com.platys.description: Visualization for Elasticsearch
       com.platys.webui.title: Kibana UI
-      com.platys.webui.url: http://${PUBLIC_IP}:5601
+      com.platys.webui.url: http://dataplatform:5601
     depends_on:
       - elasticsearch-1
     ports:
@@ -337,21 +358,27 @@ services:
       - ./data-transfer:/data-transfer
     command: [/bin/bash, -c, /usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker]
     restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - curl -u beats:testing -s http://localhost:5601/api/status?v8format=true | grep -q '\"overall\":{\"level\":\"available\"'
+      retries: 600
   #  ================================== Neo4J ========================================== #
   neo4j-1:
-    image: neo4j:5
+    image: neo4j:5.19
     hostname: neo4j-1
     container_name: neo4j-1
     labels:
       com.platys.name: neo4j
+      com.platys.description: Native graph database management system
       com.platys.webui.title: Neo4J UI
-      com.platys.webui.url: http://${PUBLIC_IP}:7474
+      com.platys.webui.url: http://dataplatform:7474
     ports:
       - 7474:7474
       - 7687:7687
     environment:
       - NEO4J_AUTH=neo4j/abc123abc123
-      - NEO4JLABS_PLUGINS=[""]
+      - NEO4J_PLUGINS=[""]
       - NEO4J_dbms_logs_debug_level=INFO
       - EXTENSION_SCRIPT=
     volumes:
@@ -359,13 +386,19 @@ services:
       - ./init/neo4j:/init
       - ./plugins/neo4j/:/plugins:rw
     restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, wget --no-verbose --tries=1 --spider localhost:7474 || exit 1]
+      interval: 15s
+      timeout: 30s
+      retries: 10
   #  ================================== InfluxData Telegraf ========================================== #
   telegraf:
-    image: telegraf:1.26
+    image: telegraf:1.28
     container_name: telegraf
     hostname: telegraf
     labels:
       com.platys.name: telegraf
+      com.platys.description: Agent for collecting, processing, aggregating, and writing metrics
     environment:
       HOSTNAME: telegraf
     volumes:
@@ -381,10 +414,11 @@ services:
     container_name: influxdb2
     labels:
       com.platys.name: influxdb2
+      com.platys.description: Timeseries Database
       com.platys.webui.title: InfluxDB 2.0 UI
-      com.platys.webui.url: http://${PUBLIC_IP}:19999
+      com.platys.webui.url: http://dataplatform:19999
       com.platys.restapi.title: InfluxDB 2.0 Rest API
-      com.platys.restapi.url: http://${PUBLIC_IP}:19999/api/v2
+      com.platys.restapi.url: http://dataplatform:19999/api/v2
     ports:
       - 19999:8086
     environment:
@@ -396,15 +430,71 @@ services:
       DOCKER_INFLUXDB_INIT_RETENTION: 1w
     volumes:
       - ./data-transfer:/data-transfer
+      - ./init/influxdb2:/docker-entrypoint-initdb.d
     command: --reporting-disabled
+    restart: unless-stopped
+  #  ================================== Weaviate VectorDB ========================================== #
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.24.10
+    container_name: weaviate
+    hostname: weaviate
+    labels:
+      com.platys.name: weaviate
+      com.platys.description: AI-native vector database
+      com.platys.webui.title: Weaviate UI
+      com.platys.webui.url: http://dataplatform:28354
+    ports:
+      - 28354:8080
+      - 50051:50051
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: none
+      CLUSTER_HOSTNAME: node1
+      LOG_LEVEL: info
+    volumes:
+      - ./data-transfer:/data-transfer
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    restart: unless-stopped
+  vector-admin:
+    image: mintplexlabs/vectoradmin:latest
+    container_name: vector-admin
+    hostname: vector-admin
+    labels:
+      com.platys.name: vector-admin
+      com.platys.description: Graphical Frontend for vector databases
+      com.platys.webui.title: Vector Admin UI
+      com.platys.webui.url: http://dataplatform:28350
+    ports:
+      - 28350:3001
+      - 3355:3355
+      - 8288:8288
+    environment:
+      SERVER_PORT: 3001
+      DATABASE_CONNECTION_STRING: postgresql://postgres:abc123!@postgresql:5432/postgres
+      STORAGE_DIR: ./backend/storage
+      JWT_SECRET: abc123!
+      INNGEST_LANDING_PAGE: true
+      INNGEST_EVENT_KEY: background_workers
+      INNGEST_SIGNING_KEY: random-string-goes-here
+    volumes:
+      - ./data-transfer:/data-transfer
     restart: unless-stopped
   #  ================================== PostgreSQL ========================================== #
   postgresql:
-    image: postgres:15
+    image: postgres:16
     container_name: postgresql
     hostname: postgresql
     labels:
       com.platys.name: postgresql
+      com.platys.description: Open-Source object-relational database system
     ports:
       - 5432:5432
     environment:
@@ -428,8 +518,9 @@ services:
     hostname: adminer
     labels:
       com.platys.name: adminer
+      com.platys.description: Relational Database Admin UI
       com.platys.webui.title: Adminer UI
-      com.platys.webui.url: http://${PUBLIC_IP}:28131
+      com.platys.webui.url: http://dataplatform:28131
     ports:
       - 28131:8080
     volumes:
@@ -443,8 +534,9 @@ services:
     hostname: cloudbeaver
     labels:
       com.platys.name: cloudbeaver
+      com.platys.description: Cloud Database Manager
       com.platys.webui.title: Cloudbeaver UI
-      com.platys.webui.url: http://${PUBLIC_IP}:8978
+      com.platys.webui.url: http://dataplatform:8978
     ports:
       - 8978:8978
     volumes:
@@ -453,28 +545,41 @@ services:
     restart: unless-stopped
   #  ================================== Grafana ========================================== #
   grafana:
-    image: grafana/grafana:9.3.11
+    image: grafana/grafana:10.2.0
     hostname: grafana
     container_name: grafana
     labels:
       com.platys.name: grafana
+      com.platys.description: Data visualization and dashboarding
       com.platys.webui.title: Grafana UI
-      com.platys.webui.url: http://${PUBLIC_IP}:3000
+      com.platys.webui.url: http://dataplatform:3000
+      com.platys.restapi.title: Grafana API
+      com.platys.restapi.url: http://dataplatform:3000/api/org
     expose:
       - 3000
     ports:
       - 3000:3000
     environment:
-      - GF_INSTALL_PLUGINS=None
+      - GF_SERVER_HTTP_ADDR=0.0.0.0
+      - GF_SERVER_HTTP_PORT=3000
+      - GF_AUTH_ANONYMOUS_ENABLED=False
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=abc123!
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_FEATURE_TOGGLES_ENABLE=
     volumes:
       - ./data-transfer:/data-transfer
-      - ./scripts/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./scripts/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./scripts/grafana/dashboards/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./scripts/grafana/dashboards/docker/monitor_services.json:/etc/grafana/provisioning/dashboards/docker/monitor_services.json
+      - ./scripts/grafana/datasources/influx-datasource.yml:/etc/grafana/provisioning/datasources/influx-datasource.yml
     restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/3000; exit $$?;'
+      interval: 1s
+      timeout: 5s
+      retries: 5
   #  ================================== Wetty ========================================== #
   wetty:
     image: wettyoss/wetty:latest
@@ -482,8 +587,9 @@ services:
     hostname: wetty
     labels:
       com.platys.name: wetty
+      com.platys.description: A terminal window in Web-Browser
       com.platys.webui.title: WeTTY UI
-      com.platys.webui.url: http://${PUBLIC_IP}:3001
+      com.platys.webui.url: http://dataplatform:3001
     ports:
       - 3001:3000
     environment:
@@ -498,25 +604,35 @@ services:
     restart: unless-stopped
   #  ================================== markdown-viewer ========================================== #
   markdown-viewer:
-    image: trivadis/markdown-web:latest
+    image: dannyben/madness:latest
     container_name: markdown-viewer
     hostname: markdown-viewer
     labels:
       com.platys.name: markdown-viewer
+      com.platys.description: Platys Platform homepage viewer
       com.platys.webui.title: Markdown Viewer UI
-      com.platys.webui.url: http://${PUBLIC_IP}:80
+      com.platys.webui.url: http://dataplatform:80
     ports:
-      - 80:80
+      - 80:3000
     volumes:
-      - ./artefacts:/home/python/markdown
+      - ./artefacts:/docs
+      - ./conf/markdown-viewer/markdown-madness.yml:/docs/.madness.yml
       - ./data-transfer:/data-transfer
+    command: server
     restart: unless-stopped
+    healthcheck:
+      test: [CMD, curl, -f, http://dataplatform:80]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 1m
   markdown-renderer:
     image: trivadis/jinja2-renderer:latest
     container_name: markdown-renderer
     hostname: markdown-renderer
     labels:
       com.platys.name: markdown-renderer
+      com.platys.description: Platys Platform homepage rendering
     environment:
       USE_PUBLIC_IP: 'True'
       PUBLIC_IP: ${PUBLIC_IP}
@@ -524,14 +640,16 @@ services:
       DATAPLATFORM_HOME: ${DATAPLATFORM_HOME}
       PLATYS_PLATFORM_NAME: nosql-platform
       PLATYS_PLATFORM_STACK: trivadis/platys-modern-data-platform
-      PLATYS_PLATFORM_STACK_VERSION: 1.16.0-preview
+      PLATYS_PLATFORM_STACK_VERSION: develop
       PLATYS_COPY_COOKBOOK_DATA: 'False'
+      SERVICE_LIST_VERSION: 2
     volumes:
       - ./artefacts/templates:/templates
       - ./artefacts/templates:/scripts
       - .:/variables
       - ./artefacts:/output
       - ./data-transfer:/data-transfer
+    init: true
 volumes:
   data-transfer-vol:
     name: data_transfer_vol
