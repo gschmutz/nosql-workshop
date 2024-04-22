@@ -15,4 +15,4 @@ platys gen
 
 ## How to use it?
 
-Navigate to <http://192.168.1.102:1880>
+Navigate to <http://dataplatform:1880>

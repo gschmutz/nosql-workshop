@@ -9,48 +9,6 @@ networks:
     name: nosql-platform
 # enforce some dependencies
 services:
-  #  ================================== Zeppelin ========================================== #
-  zeppelin:
-    image: trivadis/apache-zeppelin:0.10.1-spark3.1.3-hadoop3.2
-    container_name: zeppelin
-    hostname: zeppelin
-    labels:
-      com.platys.name: zeppelin
-      com.platys.description: Data Science Notebook
-      com.platys.webui.title: Apache Zeppelin UI
-      com.platys.webui.url: http://dataplatform:28080
-    ports:
-      - 28080:8080
-      - 6060:6060
-      - 5050:5050
-      - 4050-4054:4050-4054
-    env_file:
-      - ./conf/hadoop.env
-    environment:
-      ZEPPELIN_SPARK_MASTER: spark://spark-master:7077
-      SPARK_HOME: /opt/spark
-      CORE_CONF_fs_defaultFS: file:///tmp
-      SPARK_DEFAULTS_CONF_spark_sql_warehouse_dir:
-      ZEPPELIN_ADDR: 0.0.0.0
-      ZEPPELIN_PORT: '8080'
-      ZEPPELIN_MEM: -Xms1024m -Xmx1024m -XX:MaxMetaspaceSize=512m
-      ZEPPELIN_INTERPRETER_CONNECT_TIMEOUT: 120000
-      ZEPPELIN_INTERPRETER_DEP_MVNREPO: https://repo.maven.apache.org/maven2
-      ZEPPELIN_ADMIN_USERNAME: admin
-      ZEPPELIN_ADMIN_PASSWORD: abc123!
-      ZEPPELIN_USER_USERNAME: zeppelin
-      ZEPPELIN_USER_PASSWORD: abc123!
-      # set spark-master for Zeppelin interpreter
-      ZEPPELIN_NOTEBOOK_DIR: notebook
-      ZEPPELIN_NOTEBOOK_CRON_ENABLE: 'True'
-      PYSPARK_PYTHON: python3
-      SPARK_SUBMIT_OPTIONS: ' --conf spark.ui.port=4050 --conf spark.driver.host=zeppelin --conf spark.driver.port=5050 --conf spark.driver.bindAddress=0.0.0.0 --conf spark.blockManager.port=6060 --conf spark.driver.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4 --conf spark.executor.extraJavaOptions=-Dcom.amazonaws.services.s3.enableV4'
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./plugins/spark/jars:/extra-jars
-      - ./container-volume/spark/logs/:/var/log/spark/logs
-      - ./conf/awscli/s3cfg.template:/root/.s3cfg.template
-    restart: unless-stopped
   #  ================================== Jupyter ========================================== #
   jupyter:
     image: jupyter/minimal-notebook:latest
@@ -391,6 +349,35 @@ services:
       interval: 15s
       timeout: 30s
       retries: 10
+  #  ================================== GraphDB ========================================== #
+  graphdb-1:
+    image: khaller/graphdb-free:10.6.2
+    hostname: graphdb-1
+    container_name: graphdb-1
+    labels:
+      com.platys.name: graphdb
+      com.platys.description: Graph Database
+      com.platys.webui.title: GraphDBs UI
+      com.platys.webui.url: http://dataplatform:17200
+    ports:
+      - 17200:7200
+    environment:
+      GDB_HEAP_SIZE: 2G
+      GDB_JAVA_OPTS: >-
+        -Xmx2g -Xms2g
+        -Dgraphdb.home=/opt/graphdb
+        -Dgraphdb.workbench.importDirectory=/opt/graphdb/examples
+        -Dgraphdb.workbench.cors.enable=true
+        -Denable-context-index=true
+        -Dentity-pool-implementation=transactional
+        -Dhealth.max.query.time.seconds=60
+        -Dgraphdb.append.request.id.headers=true
+        -Dreuse.vars.in.subselects=true
+    volumes:
+      - ./data-transfer:/data-transfer
+      - ./init/graphdb:/repository.init/
+      - ./licences/graphdb:/opt/graphdb/home
+    restart: unless-stopped
   #  ================================== InfluxData Telegraf ========================================== #
   telegraf:
     image: telegraf:1.28
@@ -432,36 +419,6 @@ services:
       - ./data-transfer:/data-transfer
       - ./init/influxdb2:/docker-entrypoint-initdb.d
     command: --reporting-disabled
-    restart: unless-stopped
-  #  ================================== Weaviate VectorDB ========================================== #
-  weaviate:
-    image: cr.weaviate.io/semitechnologies/weaviate:1.24.10
-    container_name: weaviate
-    hostname: weaviate
-    labels:
-      com.platys.name: weaviate
-      com.platys.description: AI-native vector database
-      com.platys.webui.title: Weaviate UI
-      com.platys.webui.url: http://dataplatform:28354
-    ports:
-      - 28354:8080
-      - 50051:50051
-    environment:
-      QUERY_DEFAULTS_LIMIT: 25
-      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
-      PERSISTENCE_DATA_PATH: /var/lib/weaviate
-      DEFAULT_VECTORIZER_MODULE: none
-      CLUSTER_HOSTNAME: node1
-      LOG_LEVEL: info
-    volumes:
-      - ./data-transfer:/data-transfer
-    command:
-      - --host
-      - 0.0.0.0
-      - --port
-      - '8080'
-      - --scheme
-      - http
     restart: unless-stopped
   vector-admin:
     image: mintplexlabs/vectoradmin:latest
@@ -543,43 +500,6 @@ services:
       - ./data-transfer:/data-transfer
       - ./conf/cloudbeaver/data-sources.json:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
     restart: unless-stopped
-  #  ================================== Grafana ========================================== #
-  grafana:
-    image: grafana/grafana:10.2.0
-    hostname: grafana
-    container_name: grafana
-    labels:
-      com.platys.name: grafana
-      com.platys.description: Data visualization and dashboarding
-      com.platys.webui.title: Grafana UI
-      com.platys.webui.url: http://dataplatform:3000
-      com.platys.restapi.title: Grafana API
-      com.platys.restapi.url: http://dataplatform:3000/api/org
-    expose:
-      - 3000
-    ports:
-      - 3000:3000
-    environment:
-      - GF_SERVER_HTTP_ADDR=0.0.0.0
-      - GF_SERVER_HTTP_PORT=3000
-      - GF_AUTH_ANONYMOUS_ENABLED=False
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=abc123!
-      - GF_USERS_ALLOW_SIGN_UP=false
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./scripts/grafana/dashboards/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
-      - ./scripts/grafana/dashboards/docker/monitor_services.json:/etc/grafana/provisioning/dashboards/docker/monitor_services.json
-      - ./scripts/grafana/datasources/influx-datasource.yml:/etc/grafana/provisioning/datasources/influx-datasource.yml
-    restart: unless-stopped
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - bash -c 'printf \"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/3000; exit $$?;'
-      interval: 1s
-      timeout: 5s
-      retries: 5
   #  ================================== Wetty ========================================== #
   wetty:
     image: wettyoss/wetty:latest
