@@ -25,7 +25,6 @@
 |[redis-commander](./documentation/services/redis-commander )|[Web UI](http://192.168.1.102:28119)|28119<br>|8081<br>|Graphical interface for Redis
 |[redis-insight](./documentation/services/redis-insight )|[Web UI](http://192.168.1.102:28174)|28174<br>|5540<br>|Graphical interface for Redis
 |[telegraf](./documentation/services/telegraf )||||Agent for collecting, processing, aggregating, and writing metrics
-|[vector-admin](./documentation/services/vector-admin )|[Web UI](http://192.168.1.102:28350)|28350<br>3355<br>8288<br>|3001<br>3355<br>8288<br>|Graphical Frontend for vector databases
 |[wetty](./documentation/services/wetty )|[Web UI](http://192.168.1.102:3001)|3001<br>|3000<br>|A terminal window in Web-Browser|
 
 **Note:** init container ("init: true") are not shown

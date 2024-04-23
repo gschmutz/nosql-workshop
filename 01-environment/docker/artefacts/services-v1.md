@@ -25,7 +25,6 @@
 |[redis-commander](./documentation/services/redis-commander )|<http://192.168.1.102:28119>|
 |[redis-insight](./documentation/services/redis-insight )|<http://192.168.1.102:28174>|
 |[telegraf](./documentation/services/telegraf )||
-|[vector-admin](./documentation/services/vector-admin )|<http://192.168.1.102:28350>|
 |[wetty](./documentation/services/wetty )|<http://192.168.1.102:3001>||
 
 **Note:** init container ("init: true") are not shown
