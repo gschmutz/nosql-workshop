@@ -7,7 +7,6 @@ version: '3.5'
 networks:
   default:
     name: nosql-platform
-# enforce some dependencies
 services:
   #  ================================== Jupyter ========================================== #
   jupyter:
@@ -420,30 +419,6 @@ services:
       - ./data-transfer:/data-transfer
       - ./init/influxdb2:/docker-entrypoint-initdb.d
     command: --reporting-disabled
-    restart: unless-stopped
-  vector-admin:
-    image: mintplexlabs/vectoradmin:latest
-    container_name: vector-admin
-    hostname: vector-admin
-    labels:
-      com.platys.name: vector-admin
-      com.platys.description: Graphical Frontend for vector databases
-      com.platys.webui.title: Vector Admin UI
-      com.platys.webui.url: http://dataplatform:28350
-    ports:
-      - 28350:3001
-      - 3355:3355
-      - 8288:8288
-    environment:
-      SERVER_PORT: 3001
-      DATABASE_CONNECTION_STRING: postgresql://postgres:abc123!@postgresql:5432/postgres
-      STORAGE_DIR: ./backend/storage
-      JWT_SECRET: abc123!
-      INNGEST_LANDING_PAGE: true
-      INNGEST_EVENT_KEY: background_workers
-      INNGEST_SIGNING_KEY: random-string-goes-here
-    volumes:
-      - ./data-transfer:/data-transfer
     restart: unless-stopped
   #  ================================== PostgreSQL ========================================== #
   postgresql:
