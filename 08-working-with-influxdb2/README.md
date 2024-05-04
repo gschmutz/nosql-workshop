@@ -6,6 +6,8 @@ We assume that the platform described [here](../01-environment) is running and a
 
 For this workshop we will be using an IoT device/sensor simulator available via the [MQTTX CLI](https://mqttx.app/docs/cli) command line client.
 
+![](./images/architecture.png)
+
 ## Running the Simulator and publish to MQTT
 
 The MQTT CLI is part of the platform we have started using docker compose. We can use it via `docker exec` command. 
