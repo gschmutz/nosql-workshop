@@ -84,7 +84,7 @@ Click on SPARQL in the navigation menu to the left and we will get to the SPARQL
 
 The most basic SPARQL select statement is pre-filled in the query window.
 
-```
+```sparql
 select * where {
     ?s ?p ?o .
 } limit 100
