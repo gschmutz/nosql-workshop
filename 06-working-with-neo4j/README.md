@@ -4,7 +4,7 @@ In this workshop we will learn how to use the Neo4J NoSQL database.
 
 We assume that the platform described [here](../01-environment/README.md) is running and accessible. 
 
-In this workshop you learn how to use the Neo4J for querying, visualisation, and data interaction. [Neo4J Browser](https://neo4j.com/developer/guide-neo4j-browser/) is part of Neo4J and offers a browser-based interface for adding data, running queries, creating relationships, and more. It also provides an easy way to visualise the data in the database.
+In this workshop you learn how to use Neo4J for querying, visualisation, and data interaction. [Neo4J Browser](https://neo4j.com/developer/guide-neo4j-browser/) is part of Neo4J and offers a browser-based interface for adding data, running queries, creating relationships, and more. It also provides an easy way to visualise the data in the database.
 
 
 ## Connecting to the Cypher Shell (optional)
