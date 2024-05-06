@@ -8,7 +8,11 @@ In this workshop you learn how to load RDF data into GraphDB and then use the SP
 
 ## Loading RDF data
 
-Open the GraphDB workbench by navigating to <http://dataplatform:17200>.
+We will use the Movies data taken from a tutorial provided by GraphDB. The data is available in turtle syntax, a common data format for storing RDF data in the GitHub project under this link <https://raw.githubusercontent.com/gschmutz/nosql-workshop/master/07-working-with-graphdb/data/movies.ttl>. If you click on the link you will see the data as shown below 
+
+![](./images/graphdb-movies-data.png)
+
+We will use the GraphDB workbench to load the data. In a browser, navigate to <http://dataplatform:17200> to open the GraphDB workbench.
 
 ![](./images/graphdb-workbench-1.png)
 
