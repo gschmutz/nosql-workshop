@@ -10,6 +10,13 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
 
  * Langflow 
  * Langfuse
+ * Kyuubi
+ * NeoDash
+ * Fluent Bit
+ * NATS
+ * MQTTX Web & MQTTX CLI
+ * Web Protégé
+ * Jena-Fuseki
 
 ### Version upgrades
 
@@ -51,7 +58,16 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update `redis-stack` to `7.2.0-v10`
  * Update `flowise` to `1.6.5`
  * Update `stardog` to `latest`
+ * Update `minio` to `RELEASE.2024-04-06T05-26-02Z`
+ * Update `datahub` to `v0.13.2`
+ * Update `risingwave` to `v1.8.2`
 
+### Breaking Changes
+
+ * Remove `NEO4J_dbms_logs_debug_level` setting from Neo4J
+ * Change to config settings to configure memory in Neo4J: `NEO4J_server_memory_pagecache_size`, `NEO4J_server_memory_heap_initial_size` and `NEO4J_server_memory_heap_max_size`
+ * Lenses no longer uses external port `3030` but `28369`
+ 
 ## What's new in 1.17.1
 
 The Modern Data Platform version 1.17.1 contains no new services but a few small enhancements:

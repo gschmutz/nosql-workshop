@@ -335,10 +335,18 @@ services:
       - 7474:7474
       - 7687:7687
     environment:
+      - NEO4J_server_bolt_listen__address=0.0.0.0:7687
       - NEO4J_AUTH=neo4j/abc123abc123
       - NEO4J_PLUGINS=[""]
-      - NEO4J_dbms_logs_debug_level=INFO
+      - NEO4J_dbms_security_allow__csv__import__from__file__urls=False
+      - NEO4J_server_directories_import=
+      - NEO4J_server_logs_debug_enabled=False
       - EXTENSION_SCRIPT=
+      - NEO4J_apoc_export_file_enabled=False
+      - NEO4J_apoc_import_file_enabled=False
+      - NEO4J_apoc_import_file_use__neo4j__config=True
+      - NEO4J_apoc_trigger_enabled=False
+      - NEO4J_apoc_trigger_refresh=60000
     volumes:
       - ./data-transfer:/data-transfer
       - ./init/neo4j:/init
@@ -356,7 +364,7 @@ services:
     container_name: graphdb-1
     labels:
       com.platys.name: graphdb
-      com.platys.description: Graph Database
+      com.platys.description: Triple/RDF Store
       com.platys.webui.title: GraphDBs UI
       com.platys.webui.url: http://dataplatform:17200
     ports:
@@ -376,7 +384,6 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
       - ./init/graphdb:/repository.init/
-      - ./licences/graphdb:/opt/graphdb/home
     restart: unless-stopped
   #  ================================== InfluxData Telegraf ========================================== #
   telegraf:
@@ -388,6 +395,9 @@ services:
       com.platys.description: Agent for collecting, processing, aggregating, and writing metrics
     environment:
       HOSTNAME: telegraf
+      INFLUXDB_TOKEN: ${PLATYS_INFLUXDB_TOKEN:-}
+      INFLUXDB_ORGANIZATION: demo
+      INFLUXDB_BUCKET: demo-bucket
     volumes:
       - ./data-transfer:/data-transfer
       - ./conf/influxdata/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
@@ -475,6 +485,52 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
       - ./conf/cloudbeaver/data-sources.json:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
+    restart: unless-stopped
+  #  ================================== Mosquitto ========================================== #
+  mosquitto-1:
+    image: eclipse-mosquitto:2.0
+    hostname: mosquitto-1
+    container_name: mosquitto-1
+    labels:
+      com.platys.name: mosquitto
+      com.platys.description: MQTT Broker
+    ports:
+      - 1883:1883
+      - 9101:9001
+    volumes:
+      - ./data-transfer:/data-transfer
+      - ./conf/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: unless-stopped
+  #  ================================== MQTTX Web ========================================== #
+  mqttx-cli:
+    image: emqx/mqttx-cli:latest
+    container_name: mqttx-cli
+    hostname: mqttx-cli
+    labels:
+      com.platys.name: mqttx
+      com.platys.description: a CLI for MQTT
+    volumes:
+      - ./data-transfer:/data-transfer
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        while [ 1 -eq 1 ];do sleep 60;done
+    restart: unless-stopped
+  #  ================================== MQTT UI ========================================== #
+  mqtt-ui:
+    image: vergissberlin/hivemq-mqtt-web-client:latest
+    container_name: mqtt-ui
+    hostname: mqtt-ui
+    labels:
+      com.platys.name: hivemq-ui
+      com.platys.description: MQTT UI
+      com.platys.webui.title: HiveMQ UI
+      com.platys.webui.url: http://dataplatform:28136
+    ports:
+      - 28136:80
+    volumes:
+      - ./data-transfer:/data-transfer
     restart: unless-stopped
   #  ================================== Wetty ========================================== #
   wetty:

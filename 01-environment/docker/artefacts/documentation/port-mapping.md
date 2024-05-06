@@ -66,7 +66,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 3005 | 3000 | marquez-web |
 3010 | 3000 | postman |
 3006 | 3000 | retool-api |
-3030 | 3030 | lenses |
+3030 | 3030 | jena-fuseki |
 3100 | 3100 | loki |
 3200 | 3200 | tempo |
 3306 | 3306 | mysql |
@@ -91,12 +91,14 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 4195 | 4195 | benthos-1 |
 4196 | 4196 | benthos-server |
 4200 | 4200 | cribl-master |
+4222 | 4222 | nats-1 |
 4317 | 4317 | otel-collector |
 4466 | 4466 | curity |
 4566 | 4566 | risingwave |
 5000 | 5000 | amundsenfrontend |
 5001 | 5000 | amundsensearch |
 5002 | 5000 | amundsenmetadata |
+5005 | 5005 | neodash |
 5010 | 5000 | marquez |
 5011 | 5001 | marquez |
 5020 | 5000 | docker-registry |
@@ -128,6 +130,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 6060 | 6060 | zeppelin |
 6066 | 6066 | spark-master |
 6080 | 6080 | ranger-admin |
+6222 | 6222 | nats-1 |
 6333 | 6333 | qdrant |
 6334 | 6334 | qdrant |
 6379 | 6379 | redis-1 |
@@ -188,6 +191,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 8161 | 8161 | activemq |
 8182 | 8182 | janusgraph |
 8200 | 8200 | vault |
+8222 | 8222 | nats-1 |
 8288 | 8288 | vector-admin |
 8443 | 8443 | kong (proxy ssl) |
 8444 | 8444 | kong (admin api ssl) |
@@ -269,6 +273,8 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 10005 | 10000 | nifi-1 |
 10006 | 10000 | nifi-2 |
 10007 | 10000 | nifi-3 |
+10009 | 10009 | kyuubi |
+10099 | 10099 | kyuubi |
 11211 | 11211 | memcached |
 11212 | 11211 | ignite-1 |
 11434 | 11434 | ollama |
@@ -287,6 +293,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 16379 | 6379| yb-tserver-1 |
 16686 | 16686 | jaeger |
 17200 | 7200 | graphdb-1 |
+17300 | 7300 | graphdb-1 |
 17474 | 7474 | amundsen-neo4j |
 17687 | 7687 | amundsen-neo4j |
 17475 | 7474 | datahub-neo4j |
@@ -332,6 +339,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 19999 | 9999 | influxdb2 |
 21000 | 21000 | atlas |
 24224 | 24224 | fluentd |
+24225 | 24224 | fluent-bit |
 26500 | 26500 | zeebe-1 |
 27017 | 27017 | mongodb-1 |
 27018 | 27017 | mongodb-2 |
@@ -617,6 +625,9 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 28364 | 8080 | autogen-studio |
 28365 | 3000 | alpaca-webui |
 28366 | 3000 | langfuse |
+28367 | 80 | mqttx-web |
+28368 | 8080 | web-protege |
+28369 | 3030 | lenses |
 
 
 ## Ports > 28500
