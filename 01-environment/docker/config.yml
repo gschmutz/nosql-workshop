@@ -1179,7 +1179,7 @@
       #
       # ===== Redis ========
       #
-      REDIS_enable: true
+      REDIS_enable: false
       REDIS_replicasets: 0
       REDIS_volume_map_data: false
       REDIS_allow_empty_password: true
@@ -1220,15 +1220,15 @@
       #
       # ===== Redis Insight ========
       #
-      REDIS_INSIGHT_enable: true
+      REDIS_INSIGHT_enable: false
       #
       # ===== Redis Commander ========
       #
-      REDIS_COMMANDER_enable: true
+      REDIS_COMMANDER_enable: false
       #
       # ===== Apache Casandra ========
       #
-      CASSANDRA_enable: true
+      CASSANDRA_enable: false
       # either 3 or 4 or 5 (still beta)
       CASSANDRA_major_version: 4
       CASSANDRA_volume_map_data: false
