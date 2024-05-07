@@ -72,7 +72,7 @@ In a browser window, navigate to <http://dataplatform:28123/> and you should dir
 #### Admin Mongo
 The second one is [Admin Mongo](https://github.com/adicom-systems/adminMongo), an open source admin user interface for your MongoDB.
 
-In a browser window navigate to <http://dataplatform:28124/> and you should directly arrive on the home screen as shown below. 
+In a browser window navigate to <http://dataplatform:28124/> and login with user `admin` and password `pass` and you should see the home screen as shown below. 
 
 ![Alt Image Text](./images/admin-mongo-home.png "Admin Mongo")
 
