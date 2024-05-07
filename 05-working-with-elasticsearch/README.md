@@ -311,7 +311,9 @@ bash-3.2$ curl -XGET http://dataplatform:9200/movies/movie/110912?pretty
 
 ## Let's add a few movies
 
-Now let's add some more movies. This time we are using a file to hold the document and reference it from the curl command.
+**Note:** this only works from a terminal window, not from the graphical UIs (like Kibana).
+
+Now let's add some more movies. This time we are using a file to hold the document and reference it from the `curl` command.
 
 ```bash
 curl -XPUT "http://dataplatform:9200/movies/_doc/110912" -H 'Content-Type: application/json' --data-binary @$DATAPLATFORM_HOME/../../05-working-with-elasticsearch/data/pulp-fiction.json
