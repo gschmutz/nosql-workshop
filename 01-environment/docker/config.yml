@@ -1567,7 +1567,7 @@
       #
       # ===== PostgreSQL ========
       #
-      POSTGRESQL_enable: true
+      POSTGRESQL_enable: false
       POSTGRESQL_volume_map_data: false
       POSTGRESQL_database: postgres
       POSTGRESQL_user: postgres
@@ -1597,11 +1597,11 @@
       #
       # ===== Adminer DB UI ========
       #
-      ADMINER_enable: true
+      ADMINER_enable: false
       #
       # ===== Cloudbeaver DB UI ========
       #
-      CLOUDBEAVER_enable: true
+      CLOUDBEAVER_enable: false
       CLOUDBEAVER_volume_map_workspace: false
       #
       # ===== SQLPad UI ========
