@@ -140,7 +140,7 @@ We can simply insert a document into a new collection. To do so, use the `insert
 Add a document for the movie "Pulp Fiction" to the `movies` collection. The command below can be used from the MongoDB shell. 
 
 ```
-db.movies.insert (
+db.movies.insertOne (
 { 
     "id": "0110912", 
     "title": "Pulp Fiction",
@@ -184,17 +184,20 @@ db.movies.insert (
 after executing the command, you should get back the following result, telling that 1 document has been inserted. 
 
 ```
-WriteResult({ "nInserted" : 1 })
+{
+  acknowledged: true,
+  insertedId: ObjectId('66cb796c8137d3ecf9c76a8d')
+}
 ```
 
-In the graphical tools, most of the time you only have to provide the JSON document, without having to specify the `db.movies.insert()` command. 
+In the graphical tools, most of the time you only have to provide the JSON document, without having to specify the `db.movies.insertOne()` command. 
 
 The above line is executing insert against the **movies** collection, passing it a single parameter. Internally MongoDB uses a binary serialised JSON format called BSON. Externally, this means that we use JSON a lot, as is the case with our parameters. 
 
 Let's also add the movie "The Matrix"
 
 ```
-db.movies.insert (
+db.movies.insertOne (
 { 
     "id": "0133093", 
     "title": "The Matrix",
@@ -236,7 +239,7 @@ If we execute `db.getCollectionNames()` now, we should see the collection we hav
 
 ```
 > db.getCollectionNames()
-[ "movies" ]
+[ 'movies' ]
 ```
 
 You can now use the `find` command against the **movies** collection to return a list of documents:
@@ -276,7 +279,7 @@ Now let's also add some actors to another, new collection named `persons`. We na
 Let's first add the actor "Bruce Willis"
 
 ```
-db.persons.insert (
+db.persons.insertOne (
 { 
     "id": 0000246, 
     "name": "Bruce Willis",
@@ -304,7 +307,7 @@ db.persons.insert (
 then add the actor "Keanu Reeves"
 
 ```
-db.persons.insert (
+db.persons.insertOne (
 { 
     "id": 0000206, 
     "name": "Keanu Reeves",
@@ -324,7 +327,7 @@ db.persons.insert (
 followed by the actress "Sandra Bullock"
 
 ```
-db.persons.insert (
+db.persons.insertOne (
 { 
     "id": 0000113, 
     "name": "Sandra Bullock",
@@ -342,7 +345,7 @@ db.persons.insert (
 and finally we also add "Quentin Tarantino"
 
 ```
-db.persons.insert (
+db.persons.insertOne (
 { 
     "id": 0000233, 
     "name": "Quentin Tarantino",
@@ -390,10 +393,10 @@ Which in that case (because we don't specify a query selector) is the same as
 db.persons.countDocuments()
 ```
 
-Note: notice that not all documents are exactly the same. The "Sandra Bullock" document does not contain the `tradeMark` array. The collections are schema-less, there is only a JSON parsing being done and therefore the document has to be valid JSON. Let's see what happens if we are using an invalid document.
+**Note:** notice that not all documents are exactly the same. The "Sandra Bullock" document does not contain the `tradeMark` array. The collections are schema-less, there is only a JSON parsing being done and therefore the document has to be valid JSON. Let's see what happens if we are using an invalid document.
 
 ```
-db.persons.insert (
+db.persons.insertOne (
 { 
     "id: 0000113, 
     "name": "Invalid Actor"
@@ -403,15 +406,25 @@ db.persons.insert (
 Notice that we have not properly closed the `id` key (missing "). We will get the following error upon insert
 
 ```
-> db.persons.insert (
+> db.persons.insertOne (
 ... {
 ...     "id: 0000113,
-2019-05-06T07:03:57.200+0000 E QUERY    [js] SyntaxError: unterminated string literal @(shell):3:4
->     "name": "Invalid Actor"
-2019-05-06T07:03:57.202+0000 E QUERY    [js] SyntaxError: missing ; before statement @(shell):1:6
-> })
-2019-05-06T07:03:57.204+0000 E QUERY    [js] SyntaxError: expected expression, got '}' @(shell):1:0
->
+Uncaught:
+SyntaxError: Unterminated string constant. (3:4)
+
+  1 | db.persons.insertOne (
+  2 | {
+> 3 |     "id: 0000113,
+    |     ^
+  4 |
+
+filmdb>     "name": "Invalid Actor"
+Uncaught:
+SyntaxError: Missing semicolon. (1:10)
+
+> 1 |     "name": "Invalid Actor"
+    |           ^
+  2 |
 ```
 
 So while documents in one collection can be completely different from other documents in that collection, they always have to valid JSON documents. 
@@ -555,67 +568,10 @@ Make sure to replace the `<the-object-id>` by an actual value of one of the movi
 
 ## Updating Documents
 
-In its simplest form, update takes two parameters: the selector (where) to use and what updates to apply to fields. Let's say that we want to change the rating of the movie "Fight Club" to 9, you might expect that we should execute:
+In its simplest form, `updateOne()` takes two parameters: the selector (where) to use and what updates to apply to fields. Let's say that we want to change the rating of the movie `Fight Club` to `9`
 
 ```
-db.movies.update( {"title": "Fight Club"}, { "$set" : {"rating": 9} } )
-```
-
-in the result (when using the console) we can see that one movies has been updated
-
-```
-> db.movies.update( {"title": "Fight Club"}, { "$set" : {"rating": 9} } )
-WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
-```
-
-Now, if we look at the updated record
-
-```
-db.movies.find( {title: 'Fight Club'})
-```
-
-You should discover the first surprise of `update?. No document is found because the second parameter we supplied didn’t have any update operators, and therefore it was used to **replace** the original document. 
-
-In other words, the update found a document by name and replaced the entire document with the new document (the second parameter). There is no equivalent functionality to this in SQL’s update command. In some situations, this is ideal and can be leveraged for some truly dynamic updates. 
-
-However, when you want to change the value of a field, or add a new field, you must use MongoDB’s `$set` operator. Go ahead and run an update to reset the lost fields. But because we have removed all the fields except of the rating, how can be make sure that we update the correct document?
-
-Let's query the document, without an id field
-
-```
-db.movies.find( { "id": { $exists: false } } )
-```
-
-We should only get one document, the one we have "destroyed" before. And we can see the `_id` of this document. 
-
-```
-> db.movies.find( { "id": { $exists: false } } )
-{ "_id" : ObjectId("5ccfec0cc4df88b359a29f9b"), "rating" : 9 }
-```
-
-This field we can now use to find the right document, and update it using the `$set` operator
-
-```
-db.movies.update( { _id: ObjectId("5ccfec0cc4df88b359a29f9b") },  {$set: { 
-				"title" : "Fight Club", 
-				"genres" : [ "Drama" ], 
-				"year" : 1999, 
-				"rank" : 10 } 
-				} )
-```
-
-This won’t overwrite the new `rating` field since we didn’t specify it. Now if we execute the find again
-
-```
-db.movies.find( {title: 'Fight Club'})
-```
-
-We can see that we have successfully "recovered" the document and that the `rating` is correctly set to 9. 
-
-Therefore, the correct way to have updated the `rating` in the first place is
-
-```
-db.movies.update ( {title: 'Fight Club'} , { $set: {rating: 9} } )
+db.movies.updateOne ( {title: 'Fight Club'} , { $set: {rating: 9} } )
 ```
 
 In addition to `$set`, we can leverage other operators to do some nifty things. All update operators work on fields - so your entire document won’t be wiped out. For example, the `$inc` operator is used to increment a field by a certain positive or negative amount. 
@@ -636,7 +592,7 @@ db.movies.find( {title: 'The Matrix'}, {"votes":1})
 we can execute the following update
 
 ```
-db.movies.update( {title: 'The Matrix'} , { $inc: {votes: 1} } )
+db.movies.updateOne( {title: 'The Matrix'} , { $inc: {votes: 1} } )
 ```
 check the new result using the same find as above a 2nd time
 
@@ -665,48 +621,53 @@ Adding the `explain` method at the end of the find statement will return the fol
 ```
 > db.movies.find ( {title: "The Matrix"} ).explain();
 {
-	"queryPlanner" : {
-		"plannerVersion" : 1,
-		"namespace" : "filmdb.movies",
-		"indexFilterSet" : false,
-		"parsedQuery" : {
-			"title" : {
-				"$eq" : "The Matrix"
-			}
-		},
-		"winningPlan" : {
-			"stage" : "FETCH",
-			"inputStage" : {
-				"stage" : "IXSCAN",
-				"keyPattern" : {
-					"title" : 1
-				},
-				"indexName" : "title_1",
-				"isMultiKey" : false,
-				"multiKeyPaths" : {
-					"title" : [ ]
-				},
-				"isUnique" : false,
-				"isSparse" : false,
-				"isPartial" : false,
-				"indexVersion" : 2,
-				"direction" : "forward",
-				"indexBounds" : {
-					"title" : [
-						"[\"The Matrix\", \"The Matrix\"]"
-					]
-				}
-			}
-		},
-		"rejectedPlans" : [ ]
-	},
-	"serverInfo" : {
-		"host" : "ab00ea7ec157",
-		"port" : 27017,
-		"version" : "4.0.9",
-		"gitVersion" : "fc525e2d9b0e4bceff5c2201457e564362909765"
-	},
-	"ok" : 1
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'filmdb.movies',
+    indexFilterSet: false,
+    parsedQuery: { title: { '$eq': 'The Matrix' } },
+    queryHash: '2495AF30',
+    planCacheKey: 'D2B6550E',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { title: 1 },
+        indexName: 'title_1',
+        isMultiKey: false,
+        multiKeyPaths: { title: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { title: [ '["The Matrix", "The Matrix"]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  command: { find: 'movies', filter: { title: 'The Matrix' }, '$db': 'filmdb' },
+  serverInfo: {
+    host: 'mongo-1',
+    port: 27017,
+    version: '7.0.12',
+    gitVersion: 'b6513ce0781db6818e24619e8a461eae90bc94fc'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted'
+  },
+  ok: 1
 }
 ```
 
@@ -721,14 +682,8 @@ db.movies.createIndex( {id: 1}, {unique: true} );
 If we now try to add one of the movies a 2nd time we get an error:
 
 ```
-> db.movies.insert( {"id": "0111161", "title": "The Shawshank Redemption", "genres": ["Drama"], "year": 1994, "rating": 9.2, "rank": 1} )
-WriteResult({
-	"nInserted" : 0,
-	"writeError" : {
-		"code" : 11000,
-		"errmsg" : "E11000 duplicate key error collection: filmdb.movies index: id_1 dup key: { : \"0111161\" }"
-	}
-})
+> db.movies.insertOne( {"id": "0111161", "title": "The Shawshank Redemption", "genres": ["Drama"], "year": 1994, "rating": 9.2, "rank": 1} )
+MongoServerError: E11000 duplicate key error collection: filmdb.movies index: id_1 dup key: { id: "0111161" }
 ```
 
 We can list the index we currently have on the `movies` collection using `db.movies.getIndexes()`:
@@ -736,31 +691,9 @@ We can list the index we currently have on the `movies` collection using `db.mov
 ```
 > db.movies.getIndexes()
 [
-	{
-		"v" : 2,
-		"key" : {
-			"_id" : 1
-		},
-		"name" : "_id_",
-		"ns" : "filmdb.movies"
-	},
-	{
-		"v" : 2,
-		"unique" : true,
-		"key" : {
-			"id" : 1
-		},
-		"name" : "id_1",
-		"ns" : "filmdb.movies"
-	},
-	{
-		"v" : 2,
-		"key" : {
-			"title" : 1
-		},
-		"name" : "title_1",
-		"ns" : "filmdb.movies"
-	}
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { title: 1 }, name: 'title_1' },
+  { v: 2, key: { id: 1 }, name: 'id_1', unique: true }
 ]
 ```
 
@@ -800,8 +733,53 @@ We should get a result with two movies, one Flight Club where the term can be fo
 
 ```
 db.movies.find( { $text: { $search: "fight" } } )
-{ "_id" : ObjectId("5cd011f1a43cf7c3fa9c84b4"), "id" : "0137523", "title" : "Fight Club", "genres" : [ "Drama" ], "year" : 1999, "rating" : 8.8, "rank" : 10 }
-{ "_id" : ObjectId("5ccfebc1c4df88b359a29f91"), "id" : "0110912", "title" : "Pulp Fiction", "year" : 1994, "runtime" : 154, "languages" : [ "en", "es", "fr" ], "rating" : 8.9, "genres" : [ "Crime", "Drama" ], "plotOutline" : "Jules Winnfield (Samuel L. Jackson) and Vincent Vega (John Travolta) are two hit men who are out to retrieve a suitcase stolen from their employer, mob boss Marsellus Wallace (Ving Rhames). Wallace has also asked Vincent to take his wife Mia (Uma Thurman) out a few days later when Wallace himself will be out of town. Butch Coolidge (Bruce Willis) is an aging boxer who is paid by Wallace to lose his fight. The lives of these seemingly unrelated people are woven together comprising of a series of funny, bizarre and uncalled-for incidents.", "coverUrl" : "https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY150_CR1,0,101,150_.jpg", "actors" : [ { "actorID" : 619", "name" : "Tim Roth" }, { "actorID" : 917", "name" : "Amanda Plummer" }, { "actorID" : 173379", "name" : "Laura Lovelace" }, { "actorID" : 159", "name" : "John Travolta" }, { "actorID" : 168", "name" : "Samuel L. Jackson" }, { "actorID" : 482851", "name" : "Phil LaMarr" }, { "actorID" : 1844", "name" : "Frank Whaley" }, { "actorID" : 824882", "name" : "Burr Steers" }, { "actorID" : 166", "name" : "Bruce Willis" }, { "actorID" : 609", "name" : "Ving Rahmes" }, { "actorID" : 157", "name" : "Uma Thurman" }, { "actorID" : 155", "name" : "Quentin Tarantino" } ], "directors" : [ { "directorID" : 155", "name" : "Quentin Tarantino" } ], "producers" : [ { "producerID" : 2532", "name" : "Lawrence Bender" }, { "producerID" : 242", "name" : "Danny DeVito" }, { "producerID" : 107409", "name" : "Richard N. Gladstein" }, { "producerID" : 787834", "name" : "Michael Shamberg" }, { "producerID" : 792049", "name" : "Stacey Sher" }, { "producerID" : 918424", "name" : "Bob Weinstein" }, { "producerID" : 2916", "name" : "Harvey Weinstein" } ] }
+[
+  {
+    _id: ObjectId('66cb7a728137d3ecf9c76a9b'),
+    rating: 9,
+    genres: [ 'Drama' ],
+    rank: 10,
+    title: 'Fight Club',
+    year: 1999
+  },
+  {
+    _id: ObjectId('66cb796c8137d3ecf9c76a8d'),
+    id: '0110912',
+    title: 'Pulp Fiction',
+    year: 1994,
+    runtime: 154,
+    languages: [ 'en', 'es', 'fr' ],
+    rating: 8.9,
+    votes: 2084331,
+    genres: [ 'Crime', 'Drama' ],
+    plotOutline: 'Jules Winnfield (Samuel L. Jackson) and Vincent Vega (John Travolta) are two hit men who are out to retrieve a suitcase stolen from their employer, mob boss Marsellus Wallace (Ving Rhames). Wallace has also asked Vincent to take his wife Mia (Uma Thurman) out a few days later when Wallace himself will be out of town. Butch Coolidge (Bruce Willis) is an aging boxer who is paid by Wallace to lose his fight. The lives of these seemingly unrelated people are woven together comprising of a series of funny, bizarre and uncalled-for incidents.',
+    coverUrl: 'https://m.media-amazon.com/images/M/MV5BNGNhMDIzZTUtNTBlZi00MTRlLWFjM2ItYzViMjE3YzI5MjljXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SY150_CR1,0,101,150_.jpg',
+    actors: [
+      { actorID: '0000619', name: 'Tim Roth' },
+      { actorID: '0001625', name: 'Amanda Plummer' },
+      { actorID: '0522503', name: 'Laura Lovelace' },
+      { actorID: '0000237', name: 'John Travolta' },
+      { actorID: '0000168', name: 'Samuel L. Jackson' },
+      { actorID: '0482851', name: 'Phil LaMarr' },
+      { actorID: '0001844', name: 'Frank Whaley' },
+      { actorID: '0824882', name: 'Burr Steers' },
+      { actorID: '0000246', name: 'Bruce Willis' },
+      { actorID: '0000609', name: 'Ving Rahmes' },
+      { actorID: '0000235', name: 'Uma Thurman' },
+      { actorID: '0000233', name: 'Quentin Tarantino' }
+    ],
+    directors: [ { directorID: '0000233', name: 'Quentin Tarantino' } ],
+    producers: [
+      { producerID: '0004744', name: 'Lawrence Bender' },
+      { producerID: '0000362', name: 'Danny DeVito' },
+      { producerID: '0321621', name: 'Richard N. Gladstein' },
+      { producerID: '0787834', name: 'Michael Shamberg' },
+      { producerID: '0792049', name: 'Stacey Sher' },
+      { producerID: '0918424', name: 'Bob Weinstein' },
+      { producerID: '0005544', name: 'Harvey Weinstein' }
+    ]
+  }
+]
 ```
 
 If we change the term to `fight terrorist` we can see that the search string will be tokenized into `fight` and `terrorist` and all the movies will be returned matching either of the two terms in the `title` or the `plotOutline` field. 
@@ -846,20 +824,106 @@ db.movies.aggregate([
 Execution should return the following result
 
 ```
-{ "_id" : "Drama", "number" : 11, "minRating" : 8.5, "maxRating" : 9, "avgRating" : 8.636363636363637 }
-{ "_id" : "Adventure", "number" : 7, "minRating" : 8.5, "maxRating" : 8.9, "avgRating" : 8.7 }
-{ "_id" : "Fantasy", "number" : 5, "minRating" : 8.5, "maxRating" : 8.9, "avgRating" : 8.74 }
-{ "_id" : "Thriller", "number" : 4, "minRating" : 8.5, "maxRating" : 9, "avgRating" : 8.675 }
-{ "_id" : "Sci-Fi", "number" : 4, "minRating" : 8.5, "maxRating" : 8.8, "avgRating" : 8.625 }
-{ "_id" : "Crime", "number" : 3, "minRating" : 8.5, "maxRating" : 9, "avgRating" : 8.700000000000001 }
-{ "_id" : "Action", "number" : 3, "minRating" : 8.7, "maxRating" : 9, "avgRating" : 8.833333333333334 }
-{ "_id" : "Biography", "number" : 2, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "Music", "number" : 2, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "Mystery", "number" : 2, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "Comedy", "number" : 1, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "War", "number" : 1, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "Animation", "number" : 1, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
-{ "_id" : "Family", "number" : 1, "minRating" : 8.5, "maxRating" : 8.5, "avgRating" : 8.5 }
+[
+  {
+    _id: 'Drama',
+    number: 11,
+    minRating: 8.5,
+    maxRating: 9,
+    avgRating: 8.636363636363637
+  },
+  {
+    _id: 'Adventure',
+    number: 7,
+    minRating: 8.5,
+    maxRating: 8.9,
+    avgRating: 8.7
+  },
+  {
+    _id: 'Fantasy',
+    number: 5,
+    minRating: 8.5,
+    maxRating: 8.9,
+    avgRating: 8.74
+  },
+  {
+    _id: 'Sci-Fi',
+    number: 4,
+    minRating: 8.5,
+    maxRating: 8.8,
+    avgRating: 8.625
+  },
+  {
+    _id: 'Thriller',
+    number: 4,
+    minRating: 8.5,
+    maxRating: 9,
+    avgRating: 8.675
+  },
+  {
+    _id: 'Crime',
+    number: 3,
+    minRating: 8.5,
+    maxRating: 9,
+    avgRating: 8.700000000000001
+  },
+  {
+    _id: 'Action',
+    number: 3,
+    minRating: 8.7,
+    maxRating: 9,
+    avgRating: 8.833333333333334
+  },
+  {
+    _id: 'Biography',
+    number: 2,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'Mystery',
+    number: 2,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'Music',
+    number: 2,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'Animation',
+    number: 1,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'Family',
+    number: 1,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'Comedy',
+    number: 1,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  },
+  {
+    _id: 'War',
+    number: 1,
+    minRating: 8.5,
+    maxRating: 8.5,
+    avgRating: 8.5
+  }
+]
 ```
 
 There is another powerful pipeline operator called `$project` (analogous to the projection we can specify to the find command) which allows you not just to include certain fields, but to create or calculate new fields based on values in existing fields. For example, you can use math operators to add together values of several fields before finding out the average, or you can use string operators to create a new field that’s a concatenation of some existing fields.
@@ -868,33 +932,26 @@ This just barely scratches the surface of what you can do with aggregations. Con
 
 ## Removing Documents
 
-For removing one or more documents, just use what we have learned about the Query Selectors, but as a parameter to the `remove` command instead of the `find` command. 
+For removing one or more documents, just use what we have learned about the Query Selectors, but as a parameter to the `deleteOne` command instead of the `find` command. 
 
 If we want to remove a specific document, for example the movie "Fight Club", we can perform
 
 ```
-db.movies.remove( { "title": "Fight Club" } )
+db.movies.deleteOne( { "title": "Fight Club" } )
 ```
 
 The result will show how many documents have been removed:
 
 ```
-> db.movies.remove( { "title": "Fight Club" } )
-WriteResult({ "nRemoved" : 1 })
+> db.movies.deleteOne( { "title": "Fight Club" } )
+{ acknowledged: true, deletedCount: 1 }
 ```
 
-We can see that as expected, only one movie has been removed. If there would have been two movies with the exact same title, then both of them would have been deleted. What if we want to assure that we only want to remove one document and otherwise would like to get an error. We can add the `justOne` argument to the remove, which is set to `false` by default.
+We can see that as expected, one movie has been removed. 
+
+We can easily also remove the rest of the additional movies we have added before with the following command, specifying to remove all documents where there is no `plotOutline` field. 
 
 ```
-db.movies.remove( { "title": "The Intouchables" }, { justOne: true } )
-```
-
-Now the document is only removed, if the query selector matches exactly one document. 
-
-
-We can easily also remove the rest of the 48 additional movies we have added before with the following command, specifying to remove all documents where there is no `plotOutline` field. 
-
-```
-db.movies.remove( { "plotOutline": { $exists: false} } )
+db.movies.deleteMany( { "plotOutline": { $exists: false} } )
 ```
 
