@@ -11,7 +11,8 @@ Click **Create instance** to navigate to the **Create an instance** dialog.
 ![Alt Image Text](./images/lightsail-create-instance-1.png "Lightsail Homepage")
 
 Optionally change the **Instance Location** to a AWS region of your liking.
-Keep **Linux/Unix** for the **Select a platform** and click on **OS Only** and select **Ubuntu 18.04 LTS** for the **Select a blueprint**. 
+
+Keep **Linux/Unix** for the **Select a platform** and click on **OS Only** and select **Ubuntu 24.04 LTS** for the **Select a blueprint**. 
 
 ![Alt Image Text](./images/lightsail-create-instance-2.png "Lightsail Homepage")
 
@@ -93,11 +94,13 @@ into the **Launch Script** edit field
  
 ![Alt Image Text](./images/lightsail-create-instance-3.png "Lightsail Homepage")
 
-Under **Choose your instance plan** click on the arrow on the right and select the **16 GB** instance.  
-
-Under **Identify your istance** enter **Ubuntu-NoSQL-1** into the edit field. 
+Scroll further down and under **Choose your instance plan** leave the **Dual Stack** selected and select the **16 GB** instance. It will cost you **$84** per month (but you can stop it anytime).
 
 ![Alt Image Text](./images/lightsail-create-instance-4.png "Lightsail Homepage")
+
+Under **Identify your instance** enter **Ubuntu-NoSQL-1** into the edit field. 
+
+![Alt Image Text](./images/lightsail-create-instance-5.png "Lightsail Homepage")
 
 Click on **Create Instance** to start provisioning the instance. 
 
@@ -105,7 +108,7 @@ The new instance will show up in the Instances list on the Lightsail homepage.
 
 ![Alt Image Text](./images/lightsail-image-started.png "Lightsail Homepage")
 
-Click on the instance to navigate to the image details page. On the right you can find the Public IP address of the newly created instance, which is **18.196.124.212** in this example, of course your Public IP will be different.
+Click on the instance to navigate to the image details page. On the right you can find the **Public IPv4 address** of the newly created instance, which is **18.159.210130** in this example, of course your Public IP will be different.
 
 ![Alt Image Text](./images/lightsail-image-details.png "Lightsail Homepage")
 
