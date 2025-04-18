@@ -1180,6 +1180,8 @@
       # ===== Redis ========
       #
       REDIS_enable: true
+      # either 'redis' or 'valkey'
+      REDIS_edition: redis      
       REDIS_replicasets: 0
       REDIS_volume_map_data: false
       REDIS_allow_empty_password: true

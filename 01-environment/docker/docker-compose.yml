@@ -416,7 +416,7 @@ services:
       INFLUXDB_BUCKET: demo-bucket
     volumes:
       - ./data-transfer:/data-transfer
-      - ./conf/influxdata/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./conf/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
       # Mount for Docker API access
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
