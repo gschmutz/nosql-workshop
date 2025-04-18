@@ -86,9 +86,27 @@ A Click on the **Connect** button brings you to the Admin Mongo details page for
 
 There are also various desktop applications for MongoDB management and administration, which can be downloaded and installed on a Desktop. From there you can connect either to a local or remote Mongo instance.
 
+#### MongoDB Compass
+
+[MongoDB Compass](https://www.mongodb.com/products/tools/compass) is a free interactive tool for querying, optimizing, and analyzing your MongoDB data. Get key insights, drag and drop to build pipelines, and more. You can download it from [here](https://www.mongodb.com/try/download/compass).
+
+![Alt Image Text](./images/mongodb-compass.png "MongoDB Compass")
+
+Click on the **Add new connection** button to create a new connection. 
+
+Enter `mongodb://dataplatform:27017` into the **URI** field.
+
+Scroll down and expand **Advanced Connection Options**. Navigate to the **Authentication** tab and select **Username/Password** for the **Authenticaiton Method**. 
+
+Enter `root` into **Username**, `abc123!` into the **Password** and `admin` into the **Authentication Database** field.
+
+![Alt Image Text](./images/mongodb-compass-add-connection.png "MongoDB Compass")
+ 
+Click **Save & Connect** to connect to the MongoDB instance.
+
 #### Studio 3T (formerly known as Robo 3T or Robomongo)
 
-The one we are showing here is [Studio 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
+Anoher one we are showing here is [Studio 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
 
 ![Alt Image Text](./images/studio3T.png "Studio 3T")
 
