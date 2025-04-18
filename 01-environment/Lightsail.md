@@ -162,6 +162,13 @@ Click on **Create** to save this new Firewall rule and it should be added to the
 
 Your instance is now ready to use. Complete the post installation steps documented the [here](README.md).
 
+## Using Portainer
+
+Portainer Community Edition is a lightweight service delivery platform for containerized applications that can be used to manage Docker, Swarm, Kubernetes and ACI environments. It is also installed with the platform and can be used by navigating to <http://dataplatform:28137>. Enter `admin` for the **Username** and `abc123!abc123!` for the **Password**.
+
+Navigate to **Home** and click on **Live Connect**. Now you can use Portainer to navigate around and manage the containers running in the dataplatform.
+
+![Alt Image Text](./images/portainer.png "Portainer")
 
 ## Using the Web-Terminal
 

@@ -101,9 +101,12 @@ Now let's create a new notebook by clicking on the **Create new note** link. On 
 An empty notebook with one cell will appear. This cell is now ready to be used and has the Elasticsearch interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
 
 For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
+
 #### ElasticVue Application
 
 Another one is [ElasticHQ](https://elasticvue.com/), an open source management and monitoring interface for Elasticsearch.
+
+It is part of the dataplatform but it can also be installed as a [Desktop App](https://elasticvue.com/installation).
 
 In a browser window, navigate to <http://dataplatform:28275> and click on **ADD ELASTICSEARCH CLUSTER**. Enter `http://dataplatform:9200` into the **Uri** field and click **Connect**. You should arrive on the ElasticVie home screen as shown below. 
 
