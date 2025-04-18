@@ -208,7 +208,7 @@ Opening an SSH tunnel is different on Windows and Mac. The following short descr
 
 First you have to install Putty (available at <http://www.chiark.greenend.org.uk/~sgtatham/putty/>). We will use Putty to extract the private key as well as for creating the SSH Tunnel. 
 
-**a). Download the SSH Key of the Lightroom instance and Extract Private Key**
+**a) Download the SSH Key of the Lightroom instance and Extract Private Key**
 
 In order to connect to the lightsail instance, a copy of the private SSH key. You can use the key pair that Lightsail creates. Download the key from the AWS console by choosing **Account** on the top navigation bar and again choose **Account** from the drop-down menu. Navigate to the **SSH Keys** tab. 
 
