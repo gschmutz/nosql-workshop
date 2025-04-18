@@ -76,32 +76,6 @@ In a browser window, navigate to <http://dataplatform:5601> and you should direc
 
 Navigate to **Dev Tools** on the right to open the **Dev Tools Console** window. 
 
-#### Apache Zeppelin
-
-Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://dataplatform:28080/> and you should directly arrive on the home screen as shown below. 
-
-![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
-
-Apache Zeppelin uses a so called "Notebook" based model that enables data-driven,
-Interactive data analytics and collaborative documents with SQL, Scala and more.
-
-Zeppelin uses the concept of interpreters. Each Interpreter has the capability to "talk" to a given data systems. When creating a Notebook, you can specify the "default" interpreter to use, all other interpreters can be used as well, but then the directive `%<interpreter-name>`has to be used in each cell. 
-
-Zeppelin has an Elasticsearch interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter**.
-
-Navigate to the **Elasticsearch** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **elasticsearch.host** property to `elasticsearch-1`, the **elasticsearch.port** to `9200` and the **elasticsearch.client.type** to `http`. 
-
-![Alt Image Text](./images/apache-zeppelin-interpreter-elasticsearch.png "Apache Zeppelin Elasticsearch Interpreter")
-
-Scroll-down to the end of the Interpreter settings and click **Save**. Confirm that you want Zeppelin to restart the Interpreter with the new settings. 
-
-Click on **Zeppelin** in the upper left corner to navigate back to the Home screen. 
-
-Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Elasticsearch` into he **Note Name** field and select **elasticsearch** for the **Default Interpreter** and click **Create**.
-An empty notebook with one cell will appear. This cell is now ready to be used and has the Elasticsearch interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
-
-For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
-
 #### ElasticVue Application
 
 Another one is [ElasticHQ](https://elasticvue.com/), an open source management and monitoring interface for Elasticsearch.
@@ -145,6 +119,32 @@ This tool is not installed by default, but it is supported by [Platys](https://g
 If enabled, then in a browser window, navigate to <http://dataplatform:28126/> and you should directly land on the Cerebro **Connect** screen. Enter `http://dataplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
 
 ![Alt Image Text](./images/cerebro.png "Cerebro")
+
+#### Apache Zeppelin
+
+Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://dataplatform:28080/> and you should directly arrive on the home screen as shown below. 
+
+![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
+
+Apache Zeppelin uses a so called "Notebook" based model that enables data-driven,
+Interactive data analytics and collaborative documents with SQL, Scala and more.
+
+Zeppelin uses the concept of interpreters. Each Interpreter has the capability to "talk" to a given data systems. When creating a Notebook, you can specify the "default" interpreter to use, all other interpreters can be used as well, but then the directive `%<interpreter-name>`has to be used in each cell. 
+
+Zeppelin has an Elasticsearch interpreter, which we will use here. But before we can use it, it has to be configured. Click on **anonymous** drop-down and select **Interpreter**.
+
+Navigate to the **Elasticsearch** Interpreter either by searching for it or scrolling down to reach it. Click on **edit** and change the **elasticsearch.host** property to `elasticsearch-1`, the **elasticsearch.port** to `9200` and the **elasticsearch.client.type** to `http`. 
+
+![Alt Image Text](./images/apache-zeppelin-interpreter-elasticsearch.png "Apache Zeppelin Elasticsearch Interpreter")
+
+Scroll-down to the end of the Interpreter settings and click **Save**. Confirm that you want Zeppelin to restart the Interpreter with the new settings. 
+
+Click on **Zeppelin** in the upper left corner to navigate back to the Home screen. 
+
+Now let's create a new notebook by clicking on the **Create new note** link. On the pop-up window enter `Elasticsearch` into he **Note Name** field and select **elasticsearch** for the **Default Interpreter** and click **Create**.
+An empty notebook with one cell will appear. This cell is now ready to be used and has the Elasticsearch interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
+
+For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
 
 ## Create a Mapping
 
