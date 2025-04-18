@@ -2100,7 +2100,7 @@
       #
       # ===== Portainer Container UI ========
       #
-      PORTAINER_enable: false
+      PORTAINER_enable: true
       #
       # ===== Cetusguard ========
       #

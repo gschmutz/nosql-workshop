@@ -508,6 +508,23 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
+  #  ================================== Portainer ========================================== #
+  portainer:
+    image: portainer/portainer-ce:alpine-sts
+    container_name: portainer
+    hostname: portainer
+    labels:
+      com.platys.name: portainer
+      com.platys.description: Easy Docker and Kubernetes management
+      com.platys.webui.title: Portainer UI
+      com.platys.webui.url: http://dataplatform:28137
+    ports:
+      - 28137:9000
+    volumes:
+      - ./data-transfer:/data-transfer
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --admin-password '$$2y$$05$$Qf7g15yr4ohg8UyxBkVR1OPXVigCcldXoCxS.HgR9xzSALeiv4H.K'
+    restart: unless-stopped
   #  ================================== Wetty ========================================== #
   wetty:
     image: wettyoss/wetty:latest
