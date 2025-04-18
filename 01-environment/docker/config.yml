@@ -857,7 +857,7 @@
       #
       # ===== Zeppelin ========
       #
-      ZEPPELIN_enable: false
+      ZEPPELIN_enable: true
       ZEPPELIN_volume_map_data: false
       ZEPPELIN_admin_username: admin
       ZEPPELIN_admin_password: changeme
@@ -1285,8 +1285,8 @@
       # ===== Various UIs for Elasticsearch & OpenSearch ========
       #
       DEJAVU_enable: true
-      CEREBRO_enable: true
-      ELASTICHQ_enable: true
+      CEREBRO_enable: false
+      ELASTICHQ_enable: false
       ELASTICVUE_enable: true
       #
       # ===== Splunk ========

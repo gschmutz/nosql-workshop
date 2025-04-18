@@ -76,36 +76,6 @@ In a browser window, navigate to <http://dataplatform:5601> and you should direc
 
 Navigate to **Dev Tools** on the right to open the **Dev Tools Console** window. 
 
-#### ElasticHQ Application
-
-The second one is [ElasticHQ](https://www.elastichq.org/), an open source management and monitoring interface for Elasticsearch.
-
-In a browser window, navigate to <http://dataplatform:28127> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://dataplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
-
-![Alt Image Text](./images/elastichq.png "ElasticHQ")
-
-#### Cerebro Application
-
-The second one is [Cerebro](https://github.com/lmenezes/cerebro/), an open source (MIT License) elasticsearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
-
-In a browser window, navigate to <http://dataplatform:28126/> and you should directly land on the Cerebro **Connect** screen. Enter `http://dataplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
-
-![Alt Image Text](./images/cerebro.png "Cerebro")
-
-#### Dejavu Application
-
-[Dejavu](https://opensource.appbase.io/dejavu/) is a Web-based UI for Elasticsearch to import, browse and edit data with rich filters & query views.
-
-In a browser window, navigate to <http://dataplatform:28125/> and you should directly arrive on the home screen as shown below. 
-
-Enter `http://dataplatform:9200` into the URL field and `*` into the `Appname` field and then click **Connect**. 
-
-You will get an error, because there is not yet an index available. 
-
-![Alt Image Text](./images/dejavu.png "Dejavu Home Screen")
-
-But this proves that the connection to Elasticsearch worked and later, after creating the index, the connect will just work fine.
-
 #### Apache Zeppelin
 
 Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). In a browser window, navigate to <http://dataplatform:28080/> and you should directly arrive on the home screen as shown below. 
@@ -131,6 +101,47 @@ Now let's create a new notebook by clicking on the **Create new note** link. On 
 An empty notebook with one cell will appear. This cell is now ready to be used and has the Elasticsearch interpreted assigned. Enter each command into a separate cell and either click on the **play** icon on the right or hit **Ctrl-Enter** to execute the cell. A new cell will automatically appear when executing the current one. 
 
 For all the commands which follow now in this workshop, you can either use one of the various different options shown above. Of course you an also mix to your liking.
+#### ElasticVue Application
+
+Another one is [ElasticHQ](https://elasticvue.com/), an open source management and monitoring interface for Elasticsearch.
+
+In a browser window, navigate to <http://dataplatform:28275> and click on **ADD ELASTICSEARCH CLUSTER**. Enter `http://dataplatform:9200` into the **Uri** field and click **Connect**. You should arrive on the ElasticVie home screen as shown below. 
+
+![Alt Image Text](./images/elasticvue.png "ElasticVue")
+
+#### Dejavu Application
+
+[Dejavu](https://opensource.appbase.io/dejavu/) is a Web-based UI for Elasticsearch to import, browse and edit data with rich filters & query views.
+
+In a browser window, navigate to <http://dataplatform:28125/> and you should directly arrive on the home screen as shown below. 
+
+Enter `http://dataplatform:9200` into the URL field and `*` into the `Appname` field and then click **Connect**. 
+
+You will get an error, because there is not yet an index available. 
+
+![Alt Image Text](./images/dejavu.png "Dejavu Home Screen")
+
+But this proves that the connection to Elasticsearch worked and later, after creating the index, the connect will just work fine.
+
+#### ElasticHQ Application (not installed)
+
+Another one is [ElasticHQ](https://www.elastichq.org/), an open source management and monitoring interface for Elasticsearch.
+
+This tool is not installed by default, but it is supported by [Platys](https://github.com/trivadispf/platys) and you can enable it in the `config.yml`.
+
+If installed, then in a browser window, navigate to <http://dataplatform:28127> and you should directly land on the ElasticHQ **Connect to Elasticsearch** screen. Enter `http://dataplatform:9200` into the URL field and click **Connect**. You should arrive on the ElasticHQ home screen as shown below. 
+
+![Alt Image Text](./images/elastichq.png "ElasticHQ")
+
+#### Cerebro Application (not installed)
+
+Another appliction is [Cerebro](https://github.com/lmenezes/cerebro/), an open source (MIT License) elasticsearch web admin tool built using Scala, Play Framework, AngularJS and Bootstrap.
+
+This tool is not installed by default, but it is supported by [Platys](https://github.com/trivadispf/platys) and you can enable it in the `config.yml`.
+
+If enabled, then in a browser window, navigate to <http://dataplatform:28126/> and you should directly land on the Cerebro **Connect** screen. Enter `http://dataplatform:9200` into the **Node address** field and click **Connect**. You should arrive on the Cerebro home screen as shown below. 
+
+![Alt Image Text](./images/cerebro.png "Cerebro")
 
 ## Create a Mapping
 
