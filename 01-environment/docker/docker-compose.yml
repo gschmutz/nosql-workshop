@@ -151,7 +151,7 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
       # seeding scripts
-      - ./init/mongo:/docker-entrypoint-initdb.d
+      - ./init/mongodb:/docker-entrypoint-initdb.d
     restart: unless-stopped
   mongo-express:
     image: mongo-express:latest
