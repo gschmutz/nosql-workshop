@@ -254,20 +254,6 @@ services:
         - curl -s http://localhost:9200/_cat/health?h=status | grep -q green
       retries: 300
       interval: 10s
-  dejavu:
-    image: appbaseio/dejavu:latest
-    container_name: dejavu
-    hostname: dejuvu
-    labels:
-      com.platys.name: dejavu
-      com.platys.description: UI for Elasticsearch
-      com.platys.webui.title: Elasticsearch Dejavu UI
-      com.platys.webui.url: http://dataplatform:28125
-    ports:
-      - 28125:1358
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
   #  ================================== ElasticVue ========================================== #
   elasticvue:
     image: cars10/elasticvue:latest

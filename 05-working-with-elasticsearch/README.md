@@ -86,7 +86,7 @@ In a browser window, navigate to <http://dataplatform:28275> and click on **ADD 
 
 ![Alt Image Text](./images/elasticvue.png "ElasticVue")
 
-#### Dejavu Application
+#### Dejavu Application (not installed)
 
 [Dejavu](https://opensource.appbase.io/dejavu/) is a Web-based UI for Elasticsearch to import, browse and edit data with rich filters & query views.
 
