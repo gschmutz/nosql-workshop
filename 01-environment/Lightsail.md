@@ -33,8 +33,11 @@ export DOCKER_HOST_IP=$(ip addr show ${NETWORK_NAME} | grep "inet\b" | awk '{pri
 
 # allow login by password
 sudo sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+sudo sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+
 echo "${USERNAME}:${PASSWORD}"|chpasswd
-sudo service sshd restart
+sudo systemctl daemon-reload
+sudo systemctl restart ssh
 
 # add alias "dataplatform" to /etc/hosts
 echo "$DOCKER_HOST_IP     dataplatform" | sudo tee -a /etc/hosts
