@@ -473,12 +473,13 @@ services:
       com.platys.description: Open Source DB Management Tool
       com.platys.webui.title: DbGate UI
       com.platys.webui.url: http://dataplatform:28120
+      com.platys.password.envvars: PLATYS_DBGATE_PASSWORD
     ports:
       - 28120:3000
     environment:
       LOG_LEVEL: info
       LOGIN: dbgate
-      PASSWORD: abc123!
+      PASSWORD: ${PLATYS_DBGATE_PASSWORD:-abc123!}
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped

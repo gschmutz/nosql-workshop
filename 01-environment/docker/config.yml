@@ -1632,6 +1632,8 @@
       DBGATE_edition: 'community'
       DBGATE_volume_map_data: false
       DBGATE_license: ''   
+      DBGATE_user: 'dbgate'
+      DBGATE_password: 'abc123!'
       #
       # ===== NocoDB UI ========
       #

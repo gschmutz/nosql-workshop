@@ -52,14 +52,14 @@ cqlsh> SELECT * FROM system_schema.keyspaces;
 ### Using browser-based GUI
 Instead of working over the command line and therefore having to connect to the Docker Host via SSH, we can also use a browser based GUI to access Cassandra. Two browser-based utilities are available as part of the platform.
 
-#### Cassandra Web
+#### DbGate
 
-The first one is the [Cassandra Web](http://avalanche123.com/cassandra-web/).
+The first one is the [DbGate](https://dbgate.io/).
 In a browser window navigate to <http://dataplatform:28120/> and you should directly get to the home screen as shown below.
 
-![Alt Image Text](./images/cassandra-web.png "Cassandra Web GUI")
+![Alt Image Text](./images/dbgate.md "Cassandra Web GUI")
 
-If you click on **Execute** in the top-right corner, a pop-window will appear where you can enter CQL statements and execute them.
+
 
 #### Apache Zeppelin
 
