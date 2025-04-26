@@ -477,6 +477,8 @@ services:
       - 28120:3000
     environment:
       LOG_LEVEL: info
+      LOGIN: dbgate
+      PASSWORD: abc123!
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
