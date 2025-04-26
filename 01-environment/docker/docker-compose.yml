@@ -111,6 +111,21 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+  #  ================================== Redis Insight ========================================== #
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: redis-insight
+    hostname: redis-insight
+    labels:
+      com.platys.name: redis-insight
+      com.platys.description: Graphical interface for Redis
+      com.platys.webui.title: Redis Insight UI
+      com.platys.webui.url: http://dataplatform:28174
+    ports:
+      - 28174:5540
+    volumes:
+      - ./data-transfer:/data-transfer
+    restart: unless-stopped
   #  ================================== Redis Commander ========================================== #
   redis-commander:
     image: rediscommander/redis-commander:latest
