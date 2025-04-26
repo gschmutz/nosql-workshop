@@ -1628,7 +1628,10 @@
       # ===== Querybook ========
       #
       DBGATE_enable: true
-      DBGATE_volume_map_data: false      
+      # either 'community' or 'premium'
+      DBGATE_edition: 'community'
+      DBGATE_volume_map_data: false
+      DBGATE_license: ''   
       #
       # ===== NocoDB UI ========
       #

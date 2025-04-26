@@ -465,7 +465,7 @@ services:
     restart: unless-stopped
   #  ================================== DbGate ========================================== #
   dbgate:
-    image: nocodb/nocodb:latest
+    image: dbgate/dbgate:latest
     container_name: dbgate
     hostname: dbgate
     labels:
@@ -476,7 +476,7 @@ services:
     ports:
       - 28120:3000
     environment:
-      DUMMY: 1
+      LOG_LEVEL: info
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
