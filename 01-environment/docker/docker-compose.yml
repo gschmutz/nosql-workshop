@@ -433,26 +433,6 @@ services:
       - ./init/influxdb2:/docker-entrypoint-initdb.d
     command: --reporting-disabled
     restart: unless-stopped
-  #  ================================== Cloudbeaver ========================================== #
-  cloudbeaver:
-    image: dbeaver/cloudbeaver:latest
-    container_name: cloudbeaver
-    hostname: cloudbeaver
-    labels:
-      com.platys.name: cloudbeaver
-      com.platys.description: Cloud Database Manager
-      com.platys.webui.title: Cloudbeaver UI
-      com.platys.webui.url: http://dataplatform:8978
-    ports:
-      - 8978:8978
-    environment:
-      CB_SERVER_NAME: Cloudbeaver
-      CB_ADMIN_NAME: cbadmin
-      CB_ADMIN_PASSWORD: Abc123!abc123!    
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./conf/cloudbeaver/data-sources.json:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
-    restart: unless-stopped
   #  ================================== DbGate ========================================== #
   dbgate:
     image: dbgate/dbgate:latest

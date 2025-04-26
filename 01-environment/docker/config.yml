@@ -1607,9 +1607,10 @@
       #
       # ===== Cloudbeaver DB UI ========
       #
-      CLOUDBEAVER_enable: true
-      CLOUDBEAVER_edition:
+      CLOUDBEAVER_enable: false
       CLOUDBEAVER_volume_map_workspace: false
+      CLOUDBEAVER_admin_username: admin
+      CLOUDBEAVER_admin_password: Abc123!abc123!      
       #
       # ===== SQLPad UI ========
       #
