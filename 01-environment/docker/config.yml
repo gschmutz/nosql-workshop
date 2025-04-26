@@ -1607,7 +1607,8 @@
       #
       # ===== Cloudbeaver DB UI ========
       #
-      CLOUDBEAVER_enable: true
+      CLOUDBEAVER_enable: false
+      CLOUDBEAVER_edition:
       CLOUDBEAVER_volume_map_workspace: false
       #
       # ===== SQLPad UI ========

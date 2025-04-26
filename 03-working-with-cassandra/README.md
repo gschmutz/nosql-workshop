@@ -55,11 +55,15 @@ Instead of working over the command line and therefore having to connect to the 
 #### DbGate
 
 The first one is the [DbGate](https://dbgate.io/).
-In a browser window navigate to <http://dataplatform:28120/> and you should directly get to the home screen as shown below.
+In a browser window navigate to <http://dataplatform:28120/> and login in as user `dbgate` and password `abc123!`.
 
-![Alt Image Text](./images/dbgate.md "Cassandra Web GUI")
+Click on the **Add new connection** (`+`) menu under **CONNECTIONS**. 
 
+![Alt Image Text](./images/dbgate.png "Cassandra Web GUI")
 
+Click **Test** to check that connection settings are valid and then click **Connect**. 
+
+The **Cassandra** connection will show up below **CONNECTIONS**. 
 
 #### Apache Zeppelin
 
