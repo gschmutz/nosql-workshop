@@ -59,6 +59,14 @@ In a browser window navigate to <http://dataplatform:28120/> and login in as use
 
 Click on the **Add new connection** (`+`) menu under **CONNECTIONS**. 
 
+Select `Cassandra` for the **Connection type** and enter the following values:
+
+ * **Local Data Center**: `se1`
+ * **Server**: `cassandra-1` 
+ * **User**: `cassandra`
+ * **Password**: `cassandra`
+ * **Display name**: `Cassandra`
+
 ![Alt Image Text](./images/dbgate.png "Cassandra Web GUI")
 
 Click **Test** to check that connection settings are valid and then click **Connect**. 
