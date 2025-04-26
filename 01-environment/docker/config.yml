@@ -1238,7 +1238,9 @@
       CASSANDRA_local_jmx: no
       CASSANDRA_username: cassandra
       CASSANDRA_password: cassandra
-      CASSANDRA_WEB_enable: true
+      #
+      # ===== Reaper ========
+      #
       REAPER_enable: false
       #
       # ===== DataStax ========
@@ -1622,6 +1624,11 @@
       # ===== Querybook ========
       #
       QUERYBOOK_enable: false
+      #
+      # ===== Querybook ========
+      #
+      DBGATE_enable: true
+      DBGATE_volume_map_data: false      
       #
       # ===== NocoDB UI ========
       #

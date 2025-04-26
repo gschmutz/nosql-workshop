@@ -157,25 +157,6 @@ services:
       - ./conf/cassandra/jmxremote.access:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/management/jmxremote.access
       - ./conf/cassandra/jmxremote.password:/etc/cassandra/jmxremote.password
     restart: unless-stopped
-  cassandra-web:
-    image: trivadis/cassandra-web
-    container_name: cassandra-web
-    hostname: cassandra-web
-    labels:
-      com.platys.name: cassandra-web
-      com.platys.description: Cassandra Web UI
-      com.platys.webui.title: Cassandra Web UI
-      com.platys.webui.url: http://dataplatform:28120
-    ports:
-      - 28120:3000
-    environment:
-      - CASSANDRA_HOSTNAME=cassandra-1
-      - CASSANDRA_PORT=9042
-      - CASSANDRA_USERNAME=cassandra
-      - CASSANDRA_PASSWORD=cassandra
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
   #  ================================== MongoDB ========================================== #
   mongo-1:
     image: mongo:8
@@ -481,6 +462,23 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
       - ./conf/cloudbeaver/data-sources.json:/opt/cloudbeaver/workspace/GlobalConfiguration/.dbeaver/data-sources.json
+    restart: unless-stopped
+  #  ================================== DbGate ========================================== #
+  dbgate:
+    image: nocodb/nocodb:latest
+    container_name: dbgate
+    hostname: dbgate
+    labels:
+      com.platys.name: dbgate
+      com.platys.description: Open Source DB Management Tool
+      com.platys.webui.title: DbGate UI
+      com.platys.webui.url: http://dataplatform:28120
+    ports:
+      - 28120:3000
+    environment:
+      DUMMY: 1
+    volumes:
+      - ./data-transfer:/data-transfer
     restart: unless-stopped
   #  ================================== Mosquitto ========================================== #
   mosquitto-1:
