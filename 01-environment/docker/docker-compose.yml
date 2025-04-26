@@ -133,7 +133,7 @@ services:
     restart: unless-stopped
   #  ================================== Cassandra ========================================== #
   cassandra-1:
-    image: bitnami/cassandra:4.1
+    image: bitnami/cassandra:5.0
     container_name: cassandra-1
     hostname: cassandra-1
     labels:
