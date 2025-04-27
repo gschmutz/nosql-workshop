@@ -55,6 +55,16 @@ In a web browser window, navigate to <http://dataplatform:28119>. You should see
 
 ![Redis Commander](./images/redis-commander-home.png)
 
+Click on **+ Add Redis database** and `redis://default@redis-1:6379` into the **Connection URL** field. Click on **Test Connection** to check if the connection is possible. If successfull, click on **Add Database**.
+
+Click on the new connection `redis-1:6379` to connect to the redis instance.
+
+### Using Redis Insight
+
+In a web browser window, navigate to <http://dataplatform:28174>. You should see an image similar to the one shown below
+
+![Redis Commander](./images/redis-insight-1.png)
+
 ## String Data Structure
 
 Enter the commands described in the following sections at the prompt. This can be done either using the Redis CLI or using the Redis Commander. 
