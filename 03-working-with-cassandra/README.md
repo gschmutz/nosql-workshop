@@ -79,7 +79,7 @@ Another universal "data" tool is [Apache Zeppelin](http://zeppelin.apache.org). 
 
 ![Alt Image Text](./images/apache-zeppelin.png "Apache Zeppelin")
 
-Click on **Login** in the top right corner and enter `admin` into the **User Name** and `abc123!` into the **Password** field. Click **Login** and the home screen should refresh to show some preinstalled notebooks.
+Click on **Login** in the top right corner and enter `admin` into the **User Name** and `changeme` into the **Password** field. Click **Login** and the home screen should refresh to show some preinstalled notebooks.
 
 ![Alt Image Text](./images/apache-zeppelin-2.png "Apache Zeppelin")
 
@@ -680,9 +680,9 @@ CREATE TABLE movies.movie_viewed_by_time (movie_id int,
 ) WITH CLUSTERING ORDER BY (year DESC, month DESC);
 ```
 
-Add some sample values to the new table
+Add some sample values to the new table for movie Pulp Fiction
 
-```
+```sql
 // Pulp Fiction Views 2019/03
 UPDATE movies.movie_viewed_by_time
 SET male = male + 1
@@ -729,6 +729,65 @@ WHERE movie_id = 0110912 AND year = 2019 and month = 05;
 UPDATE movies.movie_viewed_by_time
 SET female = female + 1
 WHERE movie_id = 0110912 AND year = 2019 and month = 05;
+```
+
+Add some sample values to the new table for movie The Matrix
+
+```sql
+// The Matrix Views 2019/03
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 03;
+
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 03;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 03;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 03;
+
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 03;
+
+// The Matrix Views 2019/04
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 04;
+
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 04;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 04;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 04;
+
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 04;
+
+// The Matrix Views 2019/05
+UPDATE movies.movie_viewed_by_time
+SET male = male + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 05;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 05;
+
+UPDATE movies.movie_viewed_by_time
+SET female = female + 1
+WHERE movie_id = 133093 AND year = 2019 and month = 05;
 ```
 
 and see the views for the movie "Pulp Fiction" for all the time
