@@ -628,7 +628,7 @@ Check the full list of [Hash commands](https://redis.io/commands#hash) for more 
 ## Redis Benchmark
 
 ```bash
-docker run -it --rm --network nosql-platform bitnami/redis redis-benchmark -h redis-1 -a "abc123!" -q -n 100000
+docker run -it --rm --network nosql-platform bitnami/redis redis-benchmark -h redis-1 -q -n 100000
 ```
 
 ## Python
