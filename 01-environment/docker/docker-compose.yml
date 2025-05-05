@@ -412,27 +412,32 @@ services:
       # Mount for Docker API access
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-  #  ================================== InfluxDB 3 ========================================== #
-  influxdb3:
-    image: influxdb:3-core
-    hostname: influxdb3
-    container_name: influxdb3
+  #  ================================== InfluxDB 2 ========================================== #
+  influxdb2:
+    image: influxdb:2.7
+    hostname: influxdb2
+    container_name: influxdb2
     labels:
-      com.platys.name: influxdb3
+      com.platys.name: influxdb2
       com.platys.description: Timeseries Database
-      com.platys.restapi.title: InfluxDB 3.0 Rest API
-      com.platys.restapi.url: http://dataplatform:28263/api/v3
+      com.platys.webui.title: InfluxDB 2.0 UI
+      com.platys.webui.url: http://dataplatform:19999
+      com.platys.restapi.title: InfluxDB 2.0 Rest API
+      com.platys.restapi.url: http://dataplatform:19999/api/v2
     ports:
-      - 28263:8181
+      - 19999:8086
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: influx
+      DOCKER_INFLUXDB_INIT_PASSWORD: abc123abc123!
+      DOCKER_INFLUXDB_INIT_ORG: demo
+      DOCKER_INFLUXDB_INIT_BUCKET: demo-bucket
+      DOCKER_INFLUXDB_INIT_RETENTION: 1w
     volumes:
       - ./data-transfer:/data-transfer
+      - ./init/influxdb2:/docker-entrypoint-initdb.d
+    command: --reporting-disabled
     restart: unless-stopped
-    command:
-      - influxdb3
-      - serve
-      - --node-id=node0
-      - --object-store=file
-      - --data-dir=/var/lib/influxdb3
   #  ================================== DbGate ========================================== #
   dbgate:
     image: dbgate/dbgate:latest
