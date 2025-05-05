@@ -116,21 +116,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-  #  ================================== Redis Insight ========================================== #
-  redis-insight:
-    image: redis/redisinsight:latest
-    container_name: redis-insight
-    hostname: redis-insight
-    labels:
-      com.platys.name: redis-insight
-      com.platys.description: Graphical interface for Redis
-      com.platys.webui.title: Redis Insight UI
-      com.platys.webui.url: http://dataplatform:28174
-    ports:
-      - 28174:5540
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
   #  ================================== Redis Commander ========================================== #
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -426,32 +411,6 @@ services:
       - ./conf/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
       # Mount for Docker API access
       - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-  #  ================================== InfluxDB 2 ========================================== #
-  influxdb2:
-    image: influxdb:2.7
-    hostname: influxdb2
-    container_name: influxdb2
-    labels:
-      com.platys.name: influxdb2
-      com.platys.description: Timeseries Database
-      com.platys.webui.title: InfluxDB 2.0 UI
-      com.platys.webui.url: http://dataplatform:19999
-      com.platys.restapi.title: InfluxDB 2.0 Rest API
-      com.platys.restapi.url: http://dataplatform:19999/api/v2
-    ports:
-      - 19999:8086
-    environment:
-      DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_USERNAME: influx
-      DOCKER_INFLUXDB_INIT_PASSWORD: abc123abc123!
-      DOCKER_INFLUXDB_INIT_ORG: demo
-      DOCKER_INFLUXDB_INIT_BUCKET: demo-bucket
-      DOCKER_INFLUXDB_INIT_RETENTION: 1w
-    volumes:
-      - ./data-transfer:/data-transfer
-      - ./init/influxdb2:/docker-entrypoint-initdb.d
-    command: --reporting-disabled
     restart: unless-stopped
   #  ================================== InfluxDB 3 ========================================== #
   influxdb3:
