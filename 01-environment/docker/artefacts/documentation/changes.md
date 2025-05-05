@@ -66,6 +66,11 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Supabase
  * Local Deep Researcher
  * DbGate
+ * DuckDB (optionally with UI)
+ * ClickHouse UI
+ * Docker in Docker (DinD)
+ * Jenkins
+ * InfluxDB 3 Core
 
 ### New/Updated Cookbook Recipes
 
@@ -100,8 +105,8 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update `single-store` to `0.2.18`
  * Update `timescaledb` to `2.14.2-pg16`
  * Update `hazelcast` to `5.4`
- * Update `trino` to `470`
- * Update `starburstdata` to `462-e.2`
+ * Update `trino` to `475`
+ * Update `starburstdata` to `472-e`
  * Update `prestodb` to `0.286`
  * Update `ahana` to `0.286`
  * Update `dremio` to `25.2`
@@ -133,8 +138,8 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update `projectnessie` to `0.100.0`
  * Update `lakefs` to `1`
  * Update `vault` to `1.18`
- * Update `opa` to `0.71.0-dev`
- * Update `styra` to `1.30.0-80-debug`
+ * Update `opa` to `1.4.0`
+ * Update `styra` to `1.39.1-83-debug`
  * Update `jikkou` to `main` - to support Mac M1
  * Update `telegraf` to `1.34`
  * Update `cassandra` to `5.0`

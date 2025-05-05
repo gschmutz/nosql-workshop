@@ -111,7 +111,7 @@ The new instance will show up in the Instances list on the Lightsail homepage.
 
 ![Alt Image Text](./images/lightsail-image-started.png "Lightsail Homepage")
 
-Click on the instance to navigate to the image details page. On the right you can find the **Public IPv4 address** of the newly created instance, which is **18.159.210130** in this example, of course your Public IP will be different.
+Click on the instance to navigate to the image details page. On the right you can find the **Public IPv4 address** of the newly created instance, which is **18.159.210.130** in this example, of course your Public IP will be different.
 
 ![Alt Image Text](./images/lightsail-image-details.png "Lightsail Homepage")
 

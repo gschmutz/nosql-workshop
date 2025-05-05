@@ -1222,7 +1222,7 @@
       #
       # ===== Redis Insight ========
       #
-      REDIS_INSIGHT_enable: false
+      REDIS_INSIGHT_enable: true
       #
       # ===== Redis Commander ========
       #
@@ -1413,6 +1413,11 @@
       INFLUXDB2_admin_token: ''
       INFLUXDB2_org: demo
       INFLUXDB2_bucket: demo-bucket
+      #
+      # ===== Influx DB 3.x ========
+      #
+      INFLUXDB3_enable: true
+      INFLUXDB3_volume_map_data: false      
       #
       # ===== Influx Telegraf ========
       #

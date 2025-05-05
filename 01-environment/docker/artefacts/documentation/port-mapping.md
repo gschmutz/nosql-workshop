@@ -62,6 +62,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 2185 | 2185 | zookeeper-5 |
 2186 | 2186 | zookeeper-6 |
 2222 | 22 | sftp |
+2376 | 2376 | docker-dind |
 2379 | 2379 | etcd-1 (client req) |
 2380 | 2380 | etcd-1 (peer comm) |
 2381 | 2381 | etcd-1 (metrics) |
@@ -134,6 +135,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 5500 | 5500 | oracledb-ee-1 |
 5501 | 5500 | oracledb-ee-1 |
 5502 | 5500 | oracledb-ee-1 |
+5521 | 5521 | clickhouse-ui |
 \-     | 5432 | hive-metastore-db |
 \-     | 5432 | hue-db |
 5555 | 5555 | airflow-flower |
@@ -247,6 +249,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 8761 | 8761 | ioevent-cockpit-api |
 8787 | 8787 | r-studio |
 8812 | 8812 | questdb |
+8815 | 8815 | quackflight |
 8888 | 8888 | hue |
 8978 | 8978 | cloudbeaver |
 8983 | 8983 | solr |
@@ -439,6 +442,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 47335 | 47335 | mindsdb |
 47336 | 47336 | mindsdb |
 45678 | 45678 | dremio |
+50000 | 50000 | jenkins |
 50051 | 50051 | weaviate |
 50092 | 50092 | solace-kafka-proxy |
 61613 | 61613 | activemq (stomp) |
@@ -747,7 +751,7 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 28246 | 8081 | kestra |
 28247 | 4040 | ngrok |
 28248 | 3002 | firecrawl-api |
-28249 | | |
+28249 | 8443 | duckdb-ui |
 28250 | 4040 | nvidia-nim-1 |
 28251 | 4040 | nvidia-nim-2 |
 28252 | 4040 | nvidia-nim-3 |
@@ -758,6 +762,9 @@ Container Port(s) | Internal Port(s)           | Service (alternatives) |
 28258 | 8000 | supabase-kong |
 28259 | 8443 | supabase-kong |
 28260 | 8082 | supabase-studio |
+28261 | 8123 | quackflight |
+28262 | 8080 | jenkins |
+28263 | 9999 | influxdb3 |
 
 ## Ports > 28500
 
