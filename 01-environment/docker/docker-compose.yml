@@ -207,20 +207,6 @@ services:
     volumes:
       - ./data-transfer:/data-transfer
     restart: unless-stopped
-  admin-mongo:
-    image: adicom/admin-mongo:latest
-    container_name: admin-mongo
-    hostname: admin-mongo
-    labels:
-      com.platys.name: admin-mongo
-      com.platys.description: MongoDB Admin UI
-      com.platys.webui.title: Admin Mongo UI
-      com.platys.webui.url: http://dataplatform:28124
-    ports:
-      - 28124:1234
-    volumes:
-      - ./data-transfer:/data-transfer
-    restart: unless-stopped
   #  ================================== Elasticsearch ========================================== #
   elasticsearch-1:
     image: elasticsearch:8.17.4
