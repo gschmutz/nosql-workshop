@@ -857,7 +857,7 @@
       #
       # ===== Zeppelin ========
       #
-      ZEPPELIN_enable: true
+      ZEPPELIN_enable: false
       ZEPPELIN_volume_map_data: false
       ZEPPELIN_admin_username: admin
       ZEPPELIN_admin_password: changeme
@@ -1179,7 +1179,7 @@
       #
       # ===== Redis ========
       #
-      REDIS_enable: true
+      REDIS_enable: false
       # either 'redis' or 'valkey'
       REDIS_edition: redis      
       REDIS_replicasets: 0
@@ -1226,11 +1226,11 @@
       #
       # ===== Redis Commander ========
       #
-      REDIS_COMMANDER_enable: true
+      REDIS_COMMANDER_enable: false
       #
       # ===== Apache Casandra ========
       #
-      CASSANDRA_enable: true
+      CASSANDRA_enable: false
       # either 3 or 4 or 5
       CASSANDRA_major_version: 5
       CASSANDRA_volume_map_data: false
@@ -2125,7 +2125,7 @@
       #
       # ===== Portainer Container UI ========
       #
-      PORTAINER_enable: true
+      PORTAINER_enable: false
       #
       # ===== Cetusguard ========
       #
