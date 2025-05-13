@@ -213,6 +213,10 @@ and you should get a result similar to the one below
 Get the value from the `token` property and add it as the `PLATYS_INFLUXDB_TOKEN` environment variable to the `.env` file. 
 
 ```bash
+cd $DATAPLATFORM_HOME
+```
+
+```bash
 ~/w/nosql-workshop/01-environment/docker>cat .env                                                                                                         17:57
 PLATYS_INFLUXDB_TOKEN=6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A==
 ```

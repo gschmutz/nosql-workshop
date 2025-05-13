@@ -119,7 +119,7 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update `memcached` to `1.6.26`
  * Update `redis-stack` to `7.2.0-v10`
  * Update `stardog` to `latest`
- * Update `minio` to `RELEASE.2025-02-07T23-21-09Z`
+ * Update `minio` to `RELEASE.2025-04-22T22-12-26Z`
  * Update `minio-kes` to `2025-01-30T09-41-53Z`
  * Update `datahub` to `v1.0.0rc1`
  * Update `risingwave` to `v2.1.0`
@@ -144,6 +144,7 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update `jikkou` to `main` - to support Mac M1
  * Update `telegraf` to `1.34`
  * Update `cassandra` to `5.0`
+ * Update `iceberg-rest-catalog` to `1.6.0`
 
 ### Enhancements
 
@@ -156,6 +157,7 @@ The Modern Data Platform version 1.18.0 contains the following bug fixes and enh
  * Update LakeFS to the latest version and add more configuration options
  * NiFi 2.0.0 can be run it in parallel to a 1.x version (`NIFI2_enable` config setting)
  * Kafka Open Source docker images are now supported (use `KAFKA_edition` = `oss`)
+ * Hive Metastores docker image is now based on the `apache/hive` image and with that the underlying database can either be an embedded Derby or a separate Postgresql (using the standard docker image).
 
 ### Breaking Changes
 

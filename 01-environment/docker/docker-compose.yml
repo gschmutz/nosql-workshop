@@ -276,7 +276,7 @@ services:
       com.platys.description: Agent for collecting, processing, aggregating, and writing metrics
     environment:
       HOSTNAME: telegraf
-      INFLUXDB_TOKEN: ${PLATYS_INFLUXDB_TOKEN:-}
+      INFLUXDB_TOKEN: ${PLATYS_INFLUXDB_TOKEN:-6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A==}
       INFLUXDB_ORGANIZATION: demo
       INFLUXDB_BUCKET: demo-bucket
     volumes:
