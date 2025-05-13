@@ -74,7 +74,7 @@ To start consuming using the MQTT UI (HiveMQ Web UI), navigate to <http://datapl
 
 and click on Connect to connect to the broker.
 
-When successfully connected, click on Add New Topic Subscription and enter truck/+/position into Topic field
+When successfully connected, click on Add New Topic Subscription and enter `mqttx/simulate/#` into Topic field
 
 ![](./images/hiveMQ-2.png)
 
