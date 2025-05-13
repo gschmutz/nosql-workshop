@@ -222,16 +222,13 @@ Enter a **Description** and click **SAVE** and you should get a new API Token, w
 cd $DATAPLATFORM_HOME
 ```
 
+Create a new file using the following command (replace the token with the one you got in the previous step
+
 ```bash
-~/w/nosql-workshop/01-environment/docker>cat .env                                                                                                         17:57
-PLATYS_INFLUXDB_TOKEN=6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A==
+echo "PLATYS_INFLUXDB_TOKEN=6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A==" >> .env
 ```
 
-Replace the token with the one you got from the InfluxDB 2 UI. 
-
-
-
-Remove and restart the `telegraf` container
+Remove and recreate the `telegraf` container
 
 ```bash
 docker stop telegraf && docker rm telegraf && docker compose up -d telegraf
