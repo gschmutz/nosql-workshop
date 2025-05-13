@@ -1414,7 +1414,7 @@
       INFLUXDB2_volume_map_data: false
       INFLUXDB2_username: influx
       INFLUXDB2_password: abc123abc123!
-      INFLUXDB2_admin_token: ''
+      INFLUXDB2_admin_token: '6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A=='
       INFLUXDB2_org: demo
       INFLUXDB2_bucket: demo-bucket
       #
@@ -1427,7 +1427,7 @@
       #
       INFLUXDB_TELEGRAF_enable: true
       INFLUXDB_TELEGRAF_custom_conf_file: ''
-      INFLUXDB_TELEGRAF_influx_token: '6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A=='      
+      INFLUXDB_TELEGRAF_influx_token: ''      
       INFLUXDB_TELEGRAF_monitor_docker_host_enabled: false      
       #
       # ===== QuestDB ========
