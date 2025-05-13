@@ -74,7 +74,7 @@ To start consuming using the MQTT UI (HiveMQ Web UI), navigate to <http://datapl
 
 and click on Connect to connect to the broker.
 
-When successfully connected, click on Add New Topic Subscription and enter `mqttx/simulate/#` into Topic field
+When successfully connected, click on Add New Topic Subscription and enter truck/+/position into Topic field
 
 ![](./images/hiveMQ-2.png)
 
@@ -210,7 +210,13 @@ and you should get a result similar to the one below
 }
 ```
 
-Get the value from the `token` property and add it as the `PLATYS_INFLUXDB_TOKEN` environment variable to the `.env` file. 
+Get the value from the `token` property and add it as the `PLATYS_INFLUXDB_TOKEN` environment variable to the `.env` file. You can get the Token via the InfluxDB UI. Naviagate to <http://dataplatform:19999> and login as user `influx` and password `abc123abc123!`. In the menu to the left, click on **Load Data** | **API Tokens**. 
+
+![](./images/influxui-token-1.png)
+
+Click on the **GENERATE API TOKEN** button and select **All Access API Token**. 
+
+Enter a **Description** and click **SAVE** and you should get a new API Token, which you have to use below.
 
 ```bash
 cd $DATAPLATFORM_HOME
@@ -220,6 +226,10 @@ cd $DATAPLATFORM_HOME
 ~/w/nosql-workshop/01-environment/docker>cat .env                                                                                                         17:57
 PLATYS_INFLUXDB_TOKEN=6Lv_ywMeuGfLOv4wa0aUz3uGOFPHERPGTOF4GsXobyYgEGIag2D3q8CJ0a91VTakjMtUp3nUuufGOJxrDe_32A==
 ```
+
+Replace the token with the one you got from the InfluxDB 2 UI. 
+
+
 
 Remove and restart the `telegraf` container
 
@@ -244,6 +254,18 @@ A `docker logs -f telegraf` should show no errors
 2024-05-04T16:07:13Z W! Deprecated inputs: 0 and 1 options
 2024-05-04T16:07:13Z I! [agent] Config: Interval:5s, Quiet:false, Hostname:"telegraf", Flush Interval:5s
 2024-05-04T16:07:13Z I! [inputs.prometheus] Using the label selector:  and field selector:
+```
+
+if you see a permission error on `/var/run/docker.sock` then perform
+
+```bash
+sudo chmod 777 /var/run/docker.sock
+```
+
+and restart telegraf
+
+```bash
+docker stop telegraf && docker rm telegraf && docker compose up -d telegraf
 ```
 
 ## Using Telegraf to retrieve values from MQTT and store in InfluxDB
