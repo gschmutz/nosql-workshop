@@ -156,11 +156,11 @@ So let see how we can open the ports on the firewall. Click on the **Networking*
 Click on **Add rule** to add a new Firewall rule.
 
 For simplicity reasons, we allow all TCP traffic by selecting **All TCP** on port range **0 - 65535**. 
-To increase security, you should restrict incoming traffic to one or more IP addresses by selecting the option **Restrict to IP address** and adding the IP address of your client as the **Source IP address**.
+To increase security, you should restrict incoming traffic to one or more IP addresses by selecting the option **Custom IPv4 address** and adding the IP address of your client as the **Source IP address**.
 
 ![Alt Image Text](./images/lightsail-image-networking-add-firewall-rule-1.png "Lightsail Homepage")
 
-To find out your IP address, browse to <https://www.whatismyip.com/> and use the `XXX.XXX.XXX.XXX` value shown right to **My Public IPv4 is:** to replace the `188.60.35.196` value in the image above.
+To find out your IP address, browse to <https://www.whatismyip.com/> and use the `XXX.XXX.XXX.XXX` value shown right to **My Public IPv4 is:** to replace the value in the **Source IP address** field. You can also add multiple Source IP addresses.
 
 Click on **Create** to save this new Firewall rule and it should be added to the list of rules. 
 
