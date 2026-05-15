@@ -152,7 +152,7 @@ Click on the **Add new connection** button to create a new connection.
 
 Enter `mongodb://dataplatform:27017` into the **URI** field.
 
-Scroll down and expand **Advanced Connection Options**. Navigate to the **Authentication** tab and select **Username/Password** for the **Authenticaiton Method**. 
+Scroll down and expand **Advanced Connection Options**. Navigate to the **Authentication** tab and select **Username/Password** for the **Authentication Method**. 
 
 Enter `root` into **Username**, `abc123!` into the **Password** and `admin` into the **Authentication Database** field.
 
@@ -162,7 +162,7 @@ Click **Save & Connect** to connect to the MongoDB instance.
 
 #### Studio 3T (formerly known as Robo 3T or Robomongo)
 
-Anoher one we are showing here is [Studio 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
+Another one we are showing here is [Studio 3T](https://robomongo.org/), a desktop application embedding the MongoDB shell. It is available for Windows, Mac and Linux.
 
 ![Alt Image Text](./images/studio3T.png "Studio 3T")
 
@@ -701,7 +701,7 @@ db.movies.updateOne ( {title: 'Fight Club'} , { $set: {rating: 9} } )
 
 > **What you should see:** A result object with `matchedCount: 1` and `modifiedCount: 1`, confirming that the document was found and the `rating` field was updated.
 
-> **What just happened?** MongoDB's `$set` operator only changed the `rating` field — all other fields in the document were preserved exactly as they were. This is unlike a SQL UPDATE which replaces the specified columns but leaves the row structure fixed; with `$set` only the named fields are touched.
+> **What just happened?** MongoDB's `$set` operator only changed the `rating` field, preserving all other fields in the document. While this feels similar to a SQL UPDATE, there is a key difference: because MongoDB is schema-less, using `$set `will dynamically add the field to the document structure if it does not already exist. Additionally, it ensures you only update the specific field rather than accidentally replacing the entire document.
 
 In addition to `$set`, we can leverage other operators to do some nifty things. All update operators work on fields - so your entire document won’t be wiped out. For example, the `$inc` operator is used to increment a field by a certain positive or negative amount. 
 
