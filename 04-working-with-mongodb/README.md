@@ -118,7 +118,7 @@ Select `MongoDB` for the **Connection type** and enter the following values:
 
 Click **Test** to check that connection settings are valid and then click **Connect**. 
 
-The **Cassandra** connection will show up below **CONNECTIONS**. 
+The **MongoDB** connection will show up below **CONNECTIONS**. 
 
 > **What you should see:** The DbGate web UI with the MongoDB connection listed under CONNECTIONS, and the keyspaces visible when the connection is expanded.
 
@@ -358,7 +358,8 @@ You can either generate one yourself or let MongoDB generate a value for you whi
 [ { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_" } ]
 ```
 
-What you’re seeing is the name of the index, the database and collection it was created against and the fields included in the index. 
+What you’re seeing is the name of the index, the database and collection it was created against and the fields included in the index.
+
 
 ## Creating Actor documents in the `persons` collection
 
